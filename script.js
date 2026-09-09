@@ -144,14 +144,18 @@
     // lights whichever of them belongs to the half being shown.
     const sided = Array.from(compare.querySelectorAll('[data-ba-side]'));
 
+    // Where the control rests, which is where both designs are on screen. The
+    // markup sets it — a little off the halfway mark, so the divider lands in
+    // the gutter of the refined page instead of through a word.
+    const resting = Number(range.defaultValue);
+
     const apply = () => {
       const position = Number(range.value);
       compare.style.setProperty('--ba', position + '%');
 
-      // At the halfway mark both sides are showing, in equal measure, so both
-      // stay lit.
+      // At the resting point both sides are showing, so both stay lit.
       for (const el of sided) {
-        const showing = el.dataset.baSide === 'before' ? position >= 50 : position <= 50;
+        const showing = el.dataset.baSide === 'before' ? position >= resting : position <= resting;
         el.classList.toggle('is-active', showing);
         // only the tags are pressable; the readings just follow
         if (el.tagName === 'BUTTON') el.setAttribute('aria-pressed', showing ? 'true' : 'false');

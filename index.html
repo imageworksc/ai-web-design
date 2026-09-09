@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=16">
+<link rel="stylesheet" href="styles.css?v=17">
 </head>
 <body>
 
@@ -441,34 +441,47 @@
                     <span class="is-solid">Start Your AI Website<svg><use href="#i-arrow"/></svg></span>
                     <span class="is-quiet">See How It Works</span>
                   </div>
+                  <!-- the three claims this page's own hero makes, verbatim -->
                   <div class="ma-trust">
-                    <i><svg><use href="#i-check"/></svg></i><b>Building websites since 1997</b>
+                    <span><i><svg><use href="#i-check"/></svg></i><b>AI-powered website design</b></span>
+                    <span><i><svg><use href="#i-check"/></svg></i><b>Award-winning human team</b></span>
+                    <span><i><svg><use href="#i-check"/></svg></i><b>Building websites since 1997</b></span>
                   </div>
                 </div>
+                <!-- The picture is the work: three pages on a stack, the front
+                     one drawn in brand colour so the frame argues the same
+                     thing the reading beside it does. -->
                 <div class="ma-hero__art">
-                  <b>Award-winning team</b>
-                  <span class="ma-badge">
-                    <i><svg><use href="#i-check"/></svg></i>
-                    <u><b>1997</b><span>Building since</span></u>
+                  <b>Our work</b>
+                  <span class="ma-stack">
+                    <i class="ma-sheet ma-sheet--back"></i>
+                    <i class="ma-sheet ma-sheet--mid"></i>
+                    <span class="ma-sheet ma-sheet--front">
+                      <i class="ma-sheet__nav"></i>
+                      <i class="ma-sheet__h"></i>
+                      <i class="ma-sheet__p"></i>
+                      <span class="ma-sheet__tiles"><i></i><i></i><i></i></span>
+                    </span>
                   </span>
                 </div>
               </div>
               <div class="ma-cards">
                 <div class="ms-card">
                   <i><svg><use href="#i-compass"/></svg></i>
-                  <b>Discovery</b><span class="s-b"></span><span class="s-link"></span>
+                  <b>Discovery</b><span class="s-b"></span><span class="s-b s-b--mid"></span><span class="s-b s-b--short"></span><span class="s-link"><em></em><svg><use href="#i-arrow"/></svg></span>
                 </div>
                 <div class="ms-card">
                   <i><svg><use href="#i-layout"/></svg></i>
-                  <b>Homepage First</b><span class="s-b"></span><span class="s-link"></span>
+                  <b>Homepage First</b><span class="s-b"></span><span class="s-b s-b--mid"></span><span class="s-b s-b--short"></span><span class="s-link"><em></em><svg><use href="#i-arrow"/></svg></span>
                 </div>
                 <div class="ms-card">
                   <i><svg><use href="#i-wireframe"/></svg></i>
-                  <b>AI Wireframe</b><span class="s-b"></span><span class="s-link"></span>
+                  <b>AI Wireframe</b><span class="s-b"></span><span class="s-b s-b--mid"></span><span class="s-b s-b--short"></span><span class="s-link"><em></em><svg><use href="#i-arrow"/></svg></span>
                 </div>
               </div>
               <div class="ma-foot">
                 <span class="ma-foot__brand"><i></i><b>ImageWorks Creative</b></span>
+                <span class="ma-foot__nav"><b>Work</b><b>Process</b><b>FAQ</b></span>
                 <div class="ma-form">
                   <span class="f-field">Your email</span>
                   <span class="f-btn">Send</span>
@@ -480,7 +493,7 @@
           <span class="ba-handle" aria-hidden="true"><i></i></span>
 
           <label class="visually-hidden" for="ba-range">How much of the refined design to show</label>
-          <input class="ba-range" id="ba-range" type="range" min="0" max="100" value="50" step="1" data-ba-range>
+          <input class="ba-range" id="ba-range" type="range" min="0" max="100" value="53" step="1" data-ba-range>
           </div>
         </div>
 
@@ -797,6 +810,6 @@
 
 </main>
 
-<script src="script.js?v=16" defer></script>
+<script src="script.js?v=17" defer></script>
 </body>
 </html>

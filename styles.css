@@ -160,6 +160,22 @@ a { color: inherit; }
 }
 .skip-to-content:focus-visible { transform: translateY(0); }
 
+/* Read out, never drawn. The class was on the compare slider's label with no
+   rule behind it — the label was only out of sight because the two drawings
+   were absolute and painted over it, and it took up a flex item's worth of
+   room the moment one of them came back into flow. */
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* --------------------------------------------------------------------------
    LAYOUT
    -------------------------------------------------------------------------- */
@@ -1170,12 +1186,24 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
      are sized against this box — outgrew it as the column narrowed and the
      cards were clipped off the foot. A ratio keeps the box and its contents
      changing together. */
-  aspect-ratio: 7 / 5;
+  /* The ratio is a floor, not a rule. The type inside reaches its clamp
+     minimums before the box has finished narrowing, so past that point the
+     drawing stops shrinking and the ratio alone clipped the footer off it.
+     One grid cell holds two things — a spacer carrying the ratio, and the
+     refined page in flow — so the row settles on whichever is taller. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   border-radius: var(--r);
   overflow: hidden;
   background: var(--white);
   box-shadow: inset 0 0 0 1px var(--border),
               0 1px 3px rgba(20, 40, 80, .07), 0 18px 44px rgba(20, 40, 80, .12);
+}
+/* the spacer: it draws nothing and only ever asks for the height 7:5 implies */
+.ba-stage::before {
+  content: '';
+  grid-area: 1 / 1;
+  aspect-ratio: 7 / 5;
 }
 
 /* The two drawings occupy the same box. Each needs its own ground: without
@@ -1194,10 +1222,16 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    their text sitting on the top edge. :where() carries no specificity, so it
    is a default the components can simply override. */
 :where(.mock) :where(i, b, span) { display: block; }
-/* the refined one is cut at the divider and lies over the first pass */
+/* The refined one is cut at the divider and lies over the first pass. It is
+   also the one in flow — it is the taller of the two and the one carrying
+   words, so it is the one that tells the box how much room it needs. */
 .mock--after {
+  position: relative;
+  inset: auto;
+  grid-area: 1 / 1;
+  min-inline-size: 0;
   z-index: 2;
-  clip-path: inset(0 0 0 var(--ba, 50%));
+  clip-path: inset(0 0 0 var(--ba, 53%));
 }
 
 /* ---- the divider and its grip ---- */
@@ -1205,7 +1239,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   position: absolute;
   top: 0;
   bottom: 0;
-  left: var(--ba, 50%);
+  left: var(--ba, 53%);
   z-index: 3;
   inline-size: 2px;
   margin-left: -1px;
@@ -1474,9 +1508,13 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    where the divider hid all of it at the halfway mark.
    ---------------------------------------------------------------------- */
 .mock--after {
-  --t-small: clamp(6.5px, 0.79cqw, 9.5px);
-  --t-label: clamp(6px, 0.68cqw, 8.5px);
-  --t-title: clamp(8px, 0.97cqw, 11.5px);
+  /* At the old coefficients every one of these sat on its floor at the stage's
+     real width, so the whole page ran at 6–8px: legible enough to prove there
+     are words, too faint to fill anything. A page with words on it is the
+     argument this half is making, so the words are set where they read. */
+  --t-small: clamp(6px, 1.12cqw, 11px);
+  --t-label: clamp(5.5px, 0.95cqw, 9.5px);
+  --t-title: clamp(7px, 1.35cqw, 13px);
 }
 /* Set once and inherited, not pinned onto every b and span: as a selector on
    the elements it outranked the rules that give the two solid buttons their
@@ -1485,7 +1523,15 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .mock--after { color: var(--navy); }
 
 /* ---- the nav ---- */
-.mock--after .mock__nav { gap: clamp(6px, 1.05cqw, 12px); }
+/* The frame scales with the window it is drawn in. Left at fixed pixels it
+   kept its full padding while everything inside it shrank, so at the narrow
+   end the page grew taller than the stage and the footer was cut off. Same
+   values as before at the widths where the stage is widest. */
+.mock--after .mock__chrome { padding: clamp(7px, 1.66cqw, 15px) clamp(10px, 2.29cqw, 21px); }
+.mock--after .mock__nav {
+  gap: clamp(6px, 1.05cqw, 12px);
+  padding: clamp(8px, 1.91cqw, 17px) clamp(11px, 2.55cqw, 23px);
+}
 .ma-brand { display: flex; align-items: center; gap: 6px; flex: none; }
 .ma-brand i {
   inline-size: clamp(9px, 1.18cqw, 13px);
@@ -1524,11 +1570,19 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ma-nav-btn svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
 
 /* ---- the hero: the argument, and the picture that carries it ---- */
-.mock--after .mock__body { gap: clamp(10px, 1.7cqw, 18px); }
-/* The hero takes whatever height is left over, so the image grows and the
-   cards under it keep the size their content wants. The other way round left
-   each card as a tall box with its four lines floating in the middle of it. */
-.ma-hero { display: flex; gap: clamp(12px, 2.36cqw, 24px); align-items: stretch; flex: 1; min-block-size: 0; }
+.mock--after .mock__body {
+  gap: clamp(9px, 1.7cqw, 18px);
+  padding: clamp(13px, 3.31cqw, 30px) clamp(11px, 2.8cqw, 25px);
+}
+/* The hero is sized by what it holds, not by what is left over. Stretched, it
+   centred a short stack of copy in a tall row and put the emptiness where the
+   eye lands first. The leftover height goes to the cards instead, which have
+   the anatomy to use it. */
+/* The hero takes the leftover height and the cards do not. Given to the
+   cards it opened a gap between their last line and their link that nothing
+   filled; given to the hero it makes the picture bigger, which is what a
+   picture is for. */
+.ma-hero { display: flex; gap: clamp(12px, 2.36cqw, 24px); align-items: stretch; flex: 1; }
 .ma-hero__copy {
   flex: 1.15;
   min-width: 0;
@@ -1557,19 +1611,25 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   color: var(--green-ink);
   white-space: nowrap;
 }
+/* The headline is where this page spends its boldness. At the old size it
+   was one more grey-weight line among several and left half its column
+   empty; a hero on a designed page dominates its own band. */
 .ma-h {
-  font-size: clamp(13px, 2.12cqw, 25px);
+  font-size: clamp(12px, 5.2cqw, 46px);
   font-weight: 800;
-  letter-spacing: -.03em;
-  line-height: 1.1;
+  letter-spacing: -.035em;
+  line-height: 1.05;
 }
 .ma-h em { font-style: normal; color: var(--green-ink); }
+/* Deck copy, not nav copy: set at the page's small size it was a 6px hairline
+   under a headline six times its height, which is most of what made the
+   column look empty. Wide enough for two lines, which is a paragraph. */
 .ma-p {
-  font-size: var(--t-small);
+  font-size: clamp(6.5px, 1.5cqw, 15px);
   font-weight: 500;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--muted);
-  max-width: 30ch;
+  max-width: 62ch;
 }
 
 .ma-cta { display: flex; flex-wrap: wrap; gap: clamp(6px, 0.92cqw, 10px); margin-top: 2px; }
@@ -1588,7 +1648,16 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ma-cta .is-quiet { box-shadow: inset 0 0 0 1.5px var(--border); color: var(--navy); }
 .ma-cta svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
 
-.ma-trust { display: flex; align-items: center; gap: 5px; margin-top: 1px; }
+/* The three things this page claims about itself, which are the three things
+   its own hero claims, stacked the way a designed hero stacks them. One line
+   left the column short and the row it sits in half empty. */
+.ma-trust {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.59cqw, 7px);
+  margin-top: clamp(2px, 0.3cqw, 4px);
+}
+.ma-trust > span { display: flex; align-items: center; gap: 5px; }
 .ma-trust i {
   display: grid;
   place-items: center;
@@ -1601,7 +1670,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .ma-trust svg { inline-size: 60%; block-size: 60%; }
 .ma-trust b {
-  font-size: var(--t-label);
+  font-size: var(--t-small);
   font-weight: 700;
   letter-spacing: .04em;
   line-height: 1;
@@ -1615,7 +1684,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   position: relative;
   flex: 1;
   min-inline-size: 0;
-  min-block-size: clamp(96px, 14.4cqw, 156px);
+  /* No ratio: it stretches to the row, and the row is as tall as the copy
+     beside it. Picture and argument end on the same line, which is the
+     alignment a designed hero is built on — and it was the fixed ratio that
+     left a band of empty blue under the copy in the first place. */
   border-radius: var(--r);
   overflow: hidden;
   background:
@@ -1633,48 +1705,61 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1;
   color: rgba(255, 255, 255, .92);
 }
-/* A figure lifted off the image on its own card — the device a designed page
-   uses to put a number where the eye already is, and the thing a first pass
-   never thinks to do. */
-.ma-badge {
+/* What an agency puts in its own hero is the work. Three pages on a stack,
+   cascading out of the top-right corner, and the whole reason the frame is
+   no longer empty: a caption in one corner and a figure in the other left
+   the middle of the picture — where the eye lands — with nothing in it. */
+.ma-stack {
   position: absolute;
-  left: clamp(8px, 1.18cqw, 14px);
-  bottom: clamp(8px, 1.18cqw, 14px);
+  left: 50%;
+  top: 54%;
+  translate: -50% -50%;
+  inline-size: 66%;
+  aspect-ratio: 4 / 3;
+}
+.ma-sheet { position: absolute; border-radius: 3px; }
+/* the two behind are glass, so they read as depth and not as content */
+.ma-sheet--back {
+  left: 17%; top: 0; right: 0; bottom: 27%;
+  background: rgba(255, 255, 255, .13);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
+}
+.ma-sheet--mid {
+  left: 8.5%; top: 11%; right: 8.5%; bottom: 14%;
+  background: rgba(255, 255, 255, .22);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3);
+}
+/* and the one in front is a page: white, lifted, and drawn far enough to
+   read as a layout somebody made */
+.ma-sheet--front {
+  left: 0; top: 24%; right: 17%; bottom: 0;
   display: flex;
-  align-items: center;
-  gap: clamp(5px, .78cqw, 9px);
-  padding: clamp(6px, .92cqw, 11px) clamp(8px, 1.18cqw, 14px);
-  border-radius: var(--r);
+  flex-direction: column;
+  gap: clamp(3px, 0.46cqw, 6px);
+  padding: clamp(5px, 0.79cqw, 9px);
   background: var(--white);
-  box-shadow: 0 6px 18px rgba(10, 30, 60, .28);
+  box-shadow: 0 12px 28px rgba(6, 22, 44, .4);
 }
-.ma-badge i {
+/* Colour is the argument this picture is making, so the bars inside carry
+   brand tints rather than the grey the first pass fills its page with. */
+.ma-sheet i { border-radius: 2px; flex: none; }
+.ma-sheet__nav { inline-size: 38%; block-size: clamp(3px, 0.4cqw, 5px); background: var(--green); }
+.ma-sheet__h { inline-size: 84%; block-size: clamp(5px, 0.72cqw, 8px); background: #4b7fb4; }
+.ma-sheet__p { inline-size: 60%; block-size: clamp(3px, 0.4cqw, 5px); background: #cdddec; }
+.ma-sheet__tiles {
   display: grid;
-  place-items: center;
-  inline-size: clamp(13px, 1.9cqw, 22px);
-  block-size: clamp(13px, 1.9cqw, 22px);
-  border-radius: 50%;
-  background: var(--tint-green);
-  color: var(--green-ink);
-  flex: none;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(3px, 0.46cqw, 6px);
+  flex: 1;
+  min-block-size: clamp(12px, 1.9cqw, 22px);
+  margin-top: auto;
 }
-.ma-badge i svg { inline-size: 58%; block-size: 58%; }
-.ma-badge u { display: flex; flex-direction: column; gap: 2px; text-decoration: none; }
-.ma-badge u b {
-  font-size: clamp(9px, 1.55cqw, 15px);
-  font-weight: 800;
-  letter-spacing: -.02em;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.ma-badge u span {
-  font-size: var(--t-label);
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  line-height: 1;
-  color: var(--faint);
-}
+/* Three washes rather than three greys: the page tints hold up at 40px on a
+   blue ground where --tint-green and --tint-blue both went to paper white. */
+.ma-sheet__tiles i { border-radius: 2px; block-size: auto; }
+.ma-sheet__tiles i:nth-child(1) { background: #d5edbc; }
+.ma-sheet__tiles i:nth-child(2) { background: #c3dcf3; }
+.ma-sheet__tiles i:nth-child(3) { background: #b3c7dd; }
 
 /* ---- three across, so the band reads at any x ---- */
 .ma-cards {
@@ -1687,7 +1772,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ms-card {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* icon, name and copy from the top; the link held at the foot. Centred, the
+     card's parts floated in the middle of whatever height it was given. */
+  justify-content: flex-start;
   gap: clamp(5px, 0.79cqw, 9px);
   padding: clamp(9px, 1.44cqw, 15px);
   border-radius: var(--r);
@@ -1721,8 +1808,29 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .ms-card span { block-size: clamp(4px, 0.55cqw, 6px); border-radius: 3px; background: #cbd5e4; }
 .ms-card .s-b { inline-size: 94%; }
-/* the link is the one line in a card that would be a colour on a real page */
-.ms-card .s-link { inline-size: 40%; background: rgba(18, 102, 181, .5); }
+.ms-card .s-b--mid { inline-size: 82%; }
+.ms-card .s-b--short { inline-size: 64%; }
+/* The link is the one line in a card that would be a colour on a real page,
+   and it sits at the foot with its arrow — a card that says where it goes. */
+.ms-card .s-link {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 0.62cqw, 7px);
+  margin-top: auto;
+  padding-top: clamp(7px, 1.05cqw, 12px);
+  inline-size: auto;
+  block-size: auto;
+  background: none;
+  color: var(--blue);
+}
+.ms-card .s-link em {
+  display: block;
+  inline-size: clamp(26px, 4.4cqw, 44px);
+  block-size: clamp(4px, 0.55cqw, 6px);
+  border-radius: 3px;
+  background: rgba(18, 102, 181, .55);
+}
+.ms-card .s-link svg { inline-size: clamp(8px, 1.15cqw, 12px); block-size: clamp(8px, 1.15cqw, 12px); }
 
 /* ---- the foot: the mark, then a real field with nothing written in it ---- */
 .ma-foot {
@@ -1750,7 +1858,26 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   color: var(--faint);
   white-space: nowrap;
 }
-.ma-form { display: flex; gap: clamp(6px, 1.05cqw, 12px); flex: 1; min-width: 0; align-items: stretch; }
+/* the same three names as the top nav, because a footer repeats the nav */
+.ma-foot__nav { display: flex; gap: clamp(7px, 1.05cqw, 12px); flex: none; min-width: 0; }
+.ma-foot__nav b {
+  font-size: var(--t-label);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--faint);
+  white-space: nowrap;
+}
+/* held to a width rather than given the rest of the row: full-bleed, the one
+   empty box on the page was also the widest thing on it */
+.ma-form {
+  display: flex;
+  gap: clamp(6px, 1.05cqw, 12px);
+  flex: none;
+  inline-size: clamp(150px, 38cqw, 380px);
+  margin-inline-start: auto;
+  min-width: 0;
+  align-items: stretch;
+}
 .f-field {
   flex: 1;
   min-width: 0;
