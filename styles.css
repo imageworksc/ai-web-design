@@ -1490,16 +1490,16 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   background: var(--navy);
 }
 /* --------------------------------------------------------------------------
-   STEPS — the process as stations on a rail
-   The home page's own "How We Do It" component, carried over and set in the
-   page's tokens: each step is a station, the rail fills from the start of the
-   process up to the one you are on, and the copy for that step is read
-   underneath at full size. Four columns of 14.5px paragraphs said the same
-   thing but made the section a wall — this shows the run at a glance and
-   gives whichever step you are reading the whole width.
+   STEPS — "How We Do It", from imageworks-home-2
+   Taken as it stands there: the tab strip is a rail with a station on each
+   step, the strip is recessed and the step you are on comes forward in white,
+   and the panel below is a card holding that step's copy with what it hands
+   over beside it.
 
-   No box around any of it. The stations sit on the band and the rail is the
-   only thing holding them.
+   Two things are set to this page rather than to the source. The colours are
+   the tokens, and the strip is a shade darker than it is there because it
+   sits on the tint band, not on white — the relationship between strip, live
+   tab and panel is what makes the thing read, and that relationship is kept.
    -------------------------------------------------------------------------- */
 .steps { width: 100%; margin-top: 34px; }
 
@@ -1507,38 +1507,47 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  border-radius: var(--r) var(--r) 0 0;
+  background: #eaeff6;
+  border: 1px solid var(--border);
+  /* the rail the stations sit on */
+  box-shadow: inset 0 -2px 0 var(--border);
 }
 .steps-tab {
   position: relative;
   display: flex;
   align-items: center;
   gap: 13px;
-  padding: 2px 14px 28px 0;
+  padding: 18px 22px;
   border: 0;
+  border-right: 1px solid #e0e7f0;
   background: transparent;
   font: inherit;
   text-align: left;
   cursor: pointer;
+  transition: background-color .3s ease;
 }
-.steps-tab:focus-visible { outline: none; box-shadow: var(--ring); border-radius: var(--r); }
+.steps-tab:last-of-type { border-right: 0; }
+.steps-tab:hover { background: #f1f5fa; }
+.steps-tab:focus-visible { outline: 2px solid var(--blue); outline-offset: -3px; }
+.steps-tab.is-active { background: var(--white); }
 
-/* the tile powers up on the step you are on, and stays green behind you */
+/* the tile powers up — brand blue with a glow ring — on the step you are on.
+   The icon inherits currentColor, so the tile is the only thing deciding it. */
 .steps-tile {
   flex: none;
   display: grid;
   place-items: center;
-  inline-size: 46px;
-  block-size: 46px;
-  border-radius: 11px;
-  background: #e8edf4;
-  color: #93a3b8;
-  transition: background-color .4s var(--ease), color .4s var(--ease),
-              transform .4s var(--ease), box-shadow .4s var(--ease);
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: 10px;
+  background: #eef1f6;
+  color: #9aa9bc;
+  transition: background-color .4s ease, color .4s ease,
+              transform .4s var(--ease), box-shadow .4s ease;
 }
-.steps-tile svg { inline-size: 22px; block-size: 22px; }
-.steps-tab:hover .steps-tile { background: var(--tint-blue); color: var(--blue); }
-.steps-tab.is-done .steps-tile { background: var(--tint-green); color: var(--green-ink); }
+.steps-tile svg { inline-size: 20px; block-size: 20px; }
+.steps-tab:hover .steps-tile { background: var(--tint-blue); color: var(--muted); }
 .steps-tab.is-active .steps-tile {
   background: var(--blue);
   color: #fff;
@@ -1552,58 +1561,36 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   font-weight: 800;
   letter-spacing: 1.4px;
   font-variant-numeric: tabular-nums;
-  color: var(--faint);
-  transition: color .3s var(--ease);
+  color: #a8b6c6;
+  transition: color .3s ease;
 }
 .steps-l {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -.1px;
   line-height: 1.25;
-  color: var(--muted);
-  transition: color .3s var(--ease);
+  color: var(--faint);
+  transition: color .3s ease;
 }
 .steps-tab:hover .steps-l { color: var(--navy); }
 .steps-tab.is-active .steps-n { color: var(--green-ink); }
 .steps-tab.is-active .steps-l { color: var(--navy); }
 
-/* ---- the rail, and the station each tab sits on ---- */
-.steps-rail {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  block-size: 2px;
-  border-radius: 1px;
-  background: var(--border);
-}
-/* it fills from the start of the run up to the station you are on: blue over
-   the green of everything already behind you */
-.steps-fill {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: 1;
-  inline-size: 12.5%;
-  block-size: 2px;
-  border-radius: 1px;
-  background: linear-gradient(90deg, var(--green-ink), var(--blue));
-  transition: inline-size .5s var(--ease);
-}
+/* the station on the rail: green once a step is behind you, brand blue with a
+   ring for the one you are on, so it echoes the tile above it */
 .steps-tab::after {
   content: '';
   position: absolute;
   left: 50%;
-  bottom: -4px;
+  bottom: -5px;
   z-index: 2;
-  inline-size: 10px;
-  block-size: 10px;
+  inline-size: 9px;
+  block-size: 9px;
   border-radius: 50%;
   background: #d3dde9;
-  border: 2px solid var(--band-tint);
+  border: 2px solid var(--white);
   transform: translateX(-50%);
-  transition: background-color .35s var(--ease), transform .35s var(--ease),
-              box-shadow .35s var(--ease);
+  transition: background-color .35s ease, transform .35s var(--ease), box-shadow .35s ease;
 }
 .steps-tab.is-done::after { background: var(--green-ink); }
 .steps-tab.is-active::after {
@@ -1611,35 +1598,113 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   transform: translateX(-50%) scale(1.3);
   box-shadow: 0 0 0 4px rgba(18, 102, 181, .16);
 }
+/* the rail fills from the start of the process up to the station you are on */
+.steps-fill {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  z-index: 1;
+  inline-size: 12.5%;
+  block-size: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--green-ink));
+  transition: inline-size .5s var(--ease);
+}
 
 /* ---- the step being read ---- */
-.steps-panels { margin-top: 38px; }
-.steps-title {
-  font-size: clamp(22px, 1.2vw + 18px, 28px);
-  letter-spacing: -.4px;
-  margin-bottom: 14px;
+.steps-panels {
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--r) var(--r);
+  background: var(--white);
+  box-shadow: 0 1px 2px rgba(20, 40, 80, .05), 0 10px 30px rgba(20, 40, 80, .06);
 }
-.steps-body { font-size: 18px; line-height: 1.75; color: var(--muted); max-width: 68ch; }
-.steps-panel + .steps-panel { margin-top: 30px; }
+.steps-panel { padding: clamp(30px, 3.2vw, 46px) clamp(24px, 3vw, 44px) clamp(32px, 3.4vw, 48px); }
+/* the box is as tall as the longest step, so shorter ones would sit high and
+   leave a hole underneath — both columns centre in the space instead */
+.steps-copy, .steps-out { display: flex; flex-direction: column; justify-content: center; }
+.steps-title {
+  margin: 0 0 18px;
+  font-size: clamp(24px, 1.5vw + 18px, 30px);
+  line-height: 1.22;
+  letter-spacing: -.5px;
+  text-wrap: balance;
+}
+.steps-body { font-size: 18px; line-height: 1.7; color: var(--muted); }
+.steps-body + .steps-body { margin-top: 14px; }
 
-/* Every panel is hidden but the current one only once the script has taken
+/* what the step hands over, set behind a rule so it hangs off the story.
+   Green on purpose: blue is the step you are on, green is what it delivers. */
+.steps-out { border-left: 1px solid #eaeff6; padding-left: clamp(24px, 2.8vw, 40px); }
+.steps-out::before {
+  content: "What you get";
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--green-ink);
+  margin-bottom: 16px;
+}
+.steps-list { display: grid; gap: 10px; }
+.steps-list li {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 14px;
+  border: 1px solid #e9eef4;
+  border-radius: 12px;
+  background: #fbfcfe;
+  font-size: 14.5px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--navy);
+  transition: border-color .3s ease, background-color .3s ease,
+              box-shadow .3s ease, transform .35s var(--ease);
+}
+.steps-list li:hover {
+  border-color: #cfe0f2;
+  background: var(--white);
+  box-shadow: 0 8px 20px rgba(20, 40, 80, .08);
+  transform: translateX(3px);
+}
+/* each item carries its own glyph — the icon should say something the line
+   doesn't have to repeat, so a row of identical checks is no use here */
+.steps-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border-radius: 9px;
+  background: var(--tint-green);
+  color: var(--green-ink);
+  transition: background-color .3s ease, transform .35s var(--ease);
+}
+.steps-ic svg { inline-size: 18px; block-size: 18px; }
+.steps-list li:hover .steps-ic { background: #e2f0d3; transform: scale(1.07); }
+
+/* Every panel but the current one is hidden only once the script has taken
    the component over. Without it they stack and the whole process reads
-   straight down the page, which is what should happen if the script never
-   runs — the copy is the point, the tabs are a convenience. */
+   straight down the page — the copy is the point, the tabs are a convenience. */
 [data-steps][data-ready] .steps-panels { display: grid; }
 [data-steps][data-ready] .steps-panel {
   grid-area: 1 / 1;
-  margin-top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  gap: clamp(30px, 3.8vw, 56px);
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
-  transition: opacity .4s var(--ease), transform .45s var(--ease), visibility .4s;
+  transition: opacity .4s ease, transform .45s var(--ease), visibility .4s;
 }
 [data-steps][data-ready] .steps-panel.is-active {
   opacity: 1;
   visibility: visible;
   transform: none;
 }
+/* without the script the panels stack, so they need a rule between them */
+.steps-panel + .steps-panel { border-top: 1px solid var(--border-soft); }
+[data-steps][data-ready] .steps-panel + .steps-panel { border-top: 0; }
 
 /* --------------------------------------------------------------------------
    SPEC ROWS — what a page costs is the time it takes
@@ -2079,16 +2144,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .platform-split { grid-template-columns: 1fr; }
 }
 
+/* the deliverables drop under the story rather than beside it */
+@media (max-width: 980px) {
+  [data-steps][data-ready] .steps-panel { grid-template-columns: 1fr; gap: 32px; }
+  .steps-out { border-left: 0; border-top: 1px solid #eaeff6; padding-left: 0; padding-top: 26px; }
+}
 /* The rail only reads as a rail in one row, so below the width four stations
    can hold it goes two-up and the rail is dropped rather than faked — the
-   home page's own call on the same component. */
+   source's own call on the same component. */
 @media (max-width: 780px) {
-  .steps-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; }
-  .steps-tab { padding-bottom: 0; }
-  .steps-tab::after, .steps-rail, .steps-fill { display: none; }
-  .steps-tile { inline-size: 40px; block-size: 40px; }
-  .steps-tile svg { inline-size: 20px; block-size: 20px; }
-  .steps-panels { margin-top: 28px; }
+  .steps-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps-tab { padding: 14px; gap: 11px; }
+  .steps-tab:nth-of-type(2) { border-right: 0; }
+  .steps-tab:nth-of-type(-n+2) { border-bottom: 1px solid #e0e7f0; }
+  .steps-tile { inline-size: 34px; block-size: 34px; border-radius: 9px; }
+  .steps-tile svg { inline-size: 18px; block-size: 18px; }
+  .steps-l { font-size: 14px; }
+  .steps-tab::after, .steps-fill { display: none; }
 }
 
 /* the closing call centres its buttons */
