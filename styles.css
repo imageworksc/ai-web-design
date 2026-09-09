@@ -1087,14 +1087,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    grey into the brand as a pass runs down them, then settle back.
    -------------------------------------------------------------------------- */
 .hero-shot {
+  /* The draft grey is its own value, not --grey-soft. At #e8edf4 on a white
+     card the blocks were barely there, and the graphic opens on that state
+     for the first second and a half of every cycle — long enough to read as
+     an empty rectangle. This carries. */
+  --draft: #d3dced;
+
   position: relative;
   width: 100%;
   max-width: 360px;
   margin-inline: auto;
   border-radius: var(--r);
   overflow: hidden;
+  /* An edge of its own. The shadow alone let the window dissolve into the
+     hero's wash, which is pale in exactly the same register. */
+  border: 1px solid var(--border);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
-  box-shadow: 0 1px 3px rgba(20, 40, 80, .07), 0 18px 40px rgba(20, 40, 80, .13);
+  box-shadow: 0 2px 6px rgba(20, 40, 80, .08), 0 22px 48px rgba(20, 40, 80, .18);
 }
 /* the green rule the page puts at the head of everything it wants read */
 .hero-shot::before {
@@ -1126,7 +1135,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   margin-left: 10px;
   block-size: 8px;
   border-radius: 4px;
-  background: var(--grey-soft);
+  background: var(--draft);
 }
 
 /* ---- the page inside it ---- */
@@ -1153,7 +1162,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .sb {
   block-size: 8px;
   border-radius: 2px;
-  background: var(--grey-soft);
+  background: var(--draft);
   animation: shotTint 13s var(--ease) infinite;
 }
 .sb--eyebrow { inline-size: 44px; block-size: 6px; --tint: var(--green);     animation-delay: .35s; }
@@ -1167,7 +1176,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   inline-size: 92px;
   margin-top: 6px;
   border-radius: var(--r);
-  background: var(--grey-soft);
+  background: var(--draft);
   --tint: var(--green);
   animation: shotTint 13s var(--ease) 1.2s infinite;
 }
@@ -1176,7 +1185,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   flex: 1;
   block-size: 44px;
   border-radius: var(--r);
-  background: var(--grey-soft);
+  background: var(--draft);
   --tint: var(--tint-blue);
   animation: shotTint 13s var(--ease) infinite;
 }
@@ -1191,9 +1200,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   100%      { top: 100%; opacity: 0; }
 }
 @keyframes shotTint {
-  0%, 4%    { background: var(--grey-soft); }
+  0%, 4%    { background: var(--draft); }
   12%, 82%  { background: var(--tint); }
-  94%, 100% { background: var(--grey-soft); }
+  94%, 100% { background: var(--draft); }
 }
 
 /* Nothing travels, and the page is simply shown finished. */
