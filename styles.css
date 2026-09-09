@@ -1170,7 +1170,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
      are sized against this box — outgrew it as the column narrowed and the
      cards were clipped off the foot. A ratio keeps the box and its contents
      changing together. */
-  aspect-ratio: 8 / 5;
+  aspect-ratio: 7 / 5;
   border-radius: var(--r);
   overflow: hidden;
   background: var(--white);
@@ -1321,17 +1321,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   gap: clamp(20px, 2.2vw, 30px);
   padding-top: 4px;
 }
+/* Each reading follows its own side of the divider: the one you are looking
+   at comes up to full strength and takes its tag's colour on the rule, the
+   other drops back. Dimmed rather than hidden — both stay legible, because
+   the argument is the pair of them. */
 .compare-note {
   font-size: 15.5px;
   line-height: 1.7;
-  color: var(--muted);
+  color: var(--faint);
   padding-left: 16px;
-  /* each carries the colour of the tag for its side, so the pair of them
-     reads against the window without having to be labelled again */
-  border-left: 3px solid var(--grey-soft);
+  border-left: 3px solid var(--border);
+  transition: color .3s var(--ease), border-color .3s var(--ease);
 }
-.compare-note:last-child { border-left-color: var(--green); }
-.compare-note strong { color: var(--navy); font-weight: 700; }
+.compare-note strong { font-weight: 700; color: var(--faint); transition: color .3s var(--ease); }
+.compare-note.is-active { color: var(--muted); }
+.compare-note.is-active strong { color: var(--navy); }
+.compare-note[data-ba-side="before"].is-active { border-left-color: var(--grey-ink); }
+.compare-note[data-ba-side="after"].is-active { border-left-color: var(--green); }
 
 /* ==========================================================================
    what is drawn inside the window — the same two pages as before, at the
@@ -1415,10 +1421,41 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .mock__cell .c-b2 { inline-size: 66%; }
 .mock__cell .c-link { inline-size: 38%; margin-top: 3px; background: #ccd5e2; }
 
-.mock__foot { display: flex; align-items: center; gap: 12px; width: 100%; }
-.mock__foot i { block-size: 7px; border-radius: 3px; background: var(--grey-soft); }
-.mock__foot .f-logo { inline-size: 52px; block-size: 10px; background: #ccd5e2; }
-.mock__foot .f-sp { flex: 1; background: none; }
+/* A strip of figures, and every figure the same figure — the page has the
+   shape of a site that proves something, without proving anything. */
+.mock__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+.mock__stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 10px;
+  border-radius: var(--r);
+  box-shadow: inset 0 0 0 1px var(--border-soft);
+}
+.mock__stats i { inline-size: 42%; block-size: 14px; border-radius: 3px; background: #ccd5e2; }
+.mock__stats span { inline-size: 68%; block-size: 6px; border-radius: 3px; background: var(--grey-soft); }
+
+/* A footer with columns, so it reads as a whole site and not a fragment —
+   and every column the same column, like everything above it. */
+.mock__foot {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-soft);
+}
+.mock__foot div { display: flex; flex-direction: column; gap: 7px; }
+.mock__foot i { block-size: 6px; border-radius: 3px; background: var(--grey-soft); }
+.mock__foot .f-logo { inline-size: 62px; block-size: 11px; background: #ccd5e2; margin-bottom: 2px; }
+.mock__foot .f-l { inline-size: 80%; }
+.mock__foot .f-l--short { inline-size: 54%; }
 /* ---- 2 · after the team ----
    The refined page carries real words and real marks, because that is half of
    what makes a page look designed: the first pass has placeholder blocks
@@ -1488,12 +1525,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* ---- the hero: the argument, and the picture that carries it ---- */
 .mock--after .mock__body { gap: clamp(10px, 1.7cqw, 18px); }
-.ma-hero { display: flex; gap: clamp(12px, 2.36cqw, 24px); align-items: stretch; }
+/* The hero takes whatever height is left over, so the image grows and the
+   cards under it keep the size their content wants. The other way round left
+   each card as a tall box with its four lines floating in the middle of it. */
+.ma-hero { display: flex; gap: clamp(12px, 2.36cqw, 24px); align-items: stretch; flex: 1; min-block-size: 0; }
 .ma-hero__copy {
   flex: 1.15;
   min-width: 0;
   display: flex;
   flex-direction: column;
+  /* the copy sits against the middle of the image rather than hanging from
+     its top edge, now that the row takes the leftover height */
+  justify-content: center;
   align-items: flex-start;
   gap: clamp(6px, 1.02cqw, 11px);
 }
@@ -1579,10 +1622,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
     radial-gradient(115% 85% at 22% 12%, rgba(255, 255, 255, .24), transparent 62%),
     linear-gradient(150deg, #2a6fb0, #143f66);
 }
-.ma-hero__art b {
+.ma-hero__art > b {
   position: absolute;
   left: clamp(8px, 1.18cqw, 14px);
-  bottom: clamp(8px, 1.18cqw, 14px);
+  top: clamp(8px, 1.18cqw, 14px);
   font-size: var(--t-label);
   font-weight: 800;
   letter-spacing: .1em;
@@ -1590,14 +1633,55 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1;
   color: rgba(255, 255, 255, .92);
 }
+/* A figure lifted off the image on its own card — the device a designed page
+   uses to put a number where the eye already is, and the thing a first pass
+   never thinks to do. */
+.ma-badge {
+  position: absolute;
+  left: clamp(8px, 1.18cqw, 14px);
+  bottom: clamp(8px, 1.18cqw, 14px);
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, .78cqw, 9px);
+  padding: clamp(6px, .92cqw, 11px) clamp(8px, 1.18cqw, 14px);
+  border-radius: var(--r);
+  background: var(--white);
+  box-shadow: 0 6px 18px rgba(10, 30, 60, .28);
+}
+.ma-badge i {
+  display: grid;
+  place-items: center;
+  inline-size: clamp(13px, 1.9cqw, 22px);
+  block-size: clamp(13px, 1.9cqw, 22px);
+  border-radius: 50%;
+  background: var(--tint-green);
+  color: var(--green-ink);
+  flex: none;
+}
+.ma-badge i svg { inline-size: 58%; block-size: 58%; }
+.ma-badge u { display: flex; flex-direction: column; gap: 2px; text-decoration: none; }
+.ma-badge u b {
+  font-size: clamp(9px, 1.55cqw, 15px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.ma-badge u span {
+  font-size: var(--t-label);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--faint);
+}
 
 /* ---- three across, so the band reads at any x ---- */
 .ma-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(8px, 1.44cqw, 15px);
-  flex: 1;
-  min-block-size: 0;
+  flex: none;
 }
 /* white with a hairline, the way a card on a real page is */
 .ms-card {
@@ -1608,7 +1692,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   padding: clamp(9px, 1.44cqw, 15px);
   border-radius: var(--r);
   background: var(--white);
-  box-shadow: inset 0 0 0 1px var(--border);
+  /* a hairline and a little depth under it: the first pass has flat panels,
+     and depth is one of the things somebody decides to add */
+  box-shadow: inset 0 0 0 1px var(--border), 0 3px 10px rgba(20, 40, 80, .06);
   min-width: 0;
 }
 .ms-card i {
@@ -1638,8 +1724,33 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 /* the link is the one line in a card that would be a colour on a real page */
 .ms-card .s-link { inline-size: 40%; background: rgba(18, 102, 181, .5); }
 
-/* ---- the foot: a real field, with nothing written in it yet ---- */
-.ma-form { display: flex; gap: clamp(6px, 1.05cqw, 12px); width: 100%; align-items: stretch; }
+/* ---- the foot: the mark, then a real field with nothing written in it ---- */
+.ma-foot {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.6cqw, 20px);
+  width: 100%;
+  padding-top: clamp(9px, 1.3cqw, 15px);
+  border-top: 1px solid var(--border-soft);
+}
+.ma-foot__brand { display: flex; align-items: center; gap: 6px; flex: none; }
+.ma-foot__brand i {
+  inline-size: clamp(8px, 1.05cqw, 12px);
+  block-size: clamp(8px, 1.05cqw, 12px);
+  border-radius: 50%;
+  background: var(--green);
+  flex: none;
+}
+.ma-foot__brand b {
+  font-size: var(--t-label);
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--faint);
+  white-space: nowrap;
+}
+.ma-form { display: flex; gap: clamp(6px, 1.05cqw, 12px); flex: 1; min-width: 0; align-items: stretch; }
 .f-field {
   flex: 1;
   min-width: 0;

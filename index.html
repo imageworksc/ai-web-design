@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=15">
+<link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
 
@@ -397,14 +397,21 @@
               <span class="mb mb--l2"></span>
               <span class="mb mb--l3"></span>
               <div class="mb-cta"><span></span><span></span></div>
+              <div class="mock__stats">
+                <div><i></i><span></span></div>
+                <div><i></i><span></span></div>
+                <div><i></i><span></span></div>
+              </div>
               <div class="mock__grid">
                 <div class="mock__cell"><i></i><span class="c-title"></span><span class="c-b1"></span><span class="c-b2"></span><span class="c-link"></span></div>
                 <div class="mock__cell"><i></i><span class="c-title"></span><span class="c-b1"></span><span class="c-b2"></span><span class="c-link"></span></div>
                 <div class="mock__cell"><i></i><span class="c-title"></span><span class="c-b1"></span><span class="c-b2"></span><span class="c-link"></span></div>
               </div>
               <div class="mock__foot">
-                <i class="f-logo"></i><i class="f-sp"></i>
-                <i class="f-l"></i><i class="f-l"></i><i class="f-l"></i>
+                <div><i class="f-logo"></i><i class="f-l"></i><i class="f-l--short"></i></div>
+                <div><i class="f-l"></i><i class="f-l"></i><i class="f-l--short"></i></div>
+                <div><i class="f-l"></i><i class="f-l"></i><i class="f-l--short"></i></div>
+                <div><i class="f-l"></i><i class="f-l"></i><i class="f-l--short"></i></div>
               </div>
             </div>
           </div>
@@ -438,7 +445,13 @@
                     <i><svg><use href="#i-check"/></svg></i><b>Building websites since 1997</b>
                   </div>
                 </div>
-                <div class="ma-hero__art"><b>Award-winning team</b></div>
+                <div class="ma-hero__art">
+                  <b>Award-winning team</b>
+                  <span class="ma-badge">
+                    <i><svg><use href="#i-check"/></svg></i>
+                    <u><b>1997</b><span>Building since</span></u>
+                  </span>
+                </div>
               </div>
               <div class="ma-cards">
                 <div class="ms-card">
@@ -454,9 +467,12 @@
                   <b>AI Wireframe</b><span class="s-b"></span><span class="s-link"></span>
                 </div>
               </div>
-              <div class="ma-form">
-                <span class="f-field">Your email</span>
-                <span class="f-btn">Send</span>
+              <div class="ma-foot">
+                <span class="ma-foot__brand"><i></i><b>ImageWorks Creative</b></span>
+                <div class="ma-form">
+                  <span class="f-field">Your email</span>
+                  <span class="f-btn">Send</span>
+                </div>
               </div>
             </div>
           </div>
@@ -468,9 +484,11 @@
           </div>
         </div>
 
+        <!-- Each reading carries the side it belongs to, so it lights with the
+             divider the same way its tag does. -->
         <div class="ba-notes">
-          <p class="compare-note">Fast, functional, and generic. Even spacing, default type, stock structure — the look every AI-built site shares.</p>
-          <p class="compare-note"><strong>Intentional and custom.</strong> Real hierarchy, brand-driven color and type, and a layout shaped around what the customer actually needs to see.</p>
+          <p class="compare-note is-active" data-ba-side="before">Fast, functional, and generic. Even spacing, default type, stock structure — the look every AI-built site shares.</p>
+          <p class="compare-note is-active" data-ba-side="after"><strong>Intentional and custom.</strong> Real hierarchy, brand-driven color and type, and a layout shaped around what the customer actually needs to see.</p>
         </div>
       </div>
     </div>
@@ -779,6 +797,6 @@
 
 </main>
 
-<script src="script.js?v=15" defer></script>
+<script src="script.js?v=16" defer></script>
 </body>
 </html>

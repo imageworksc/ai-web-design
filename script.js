@@ -140,25 +140,28 @@
     const range = compare.querySelector('[data-ba-range]');
     if (!range) return;
 
-    const tags = Array.from(compare.querySelectorAll('[data-ba-side]'));
+    // Both the two tags and the two readings declare a side, so one pass
+    // lights whichever of them belongs to the half being shown.
+    const sided = Array.from(compare.querySelectorAll('[data-ba-side]'));
 
     const apply = () => {
       const position = Number(range.value);
       compare.style.setProperty('--ba', position + '%');
 
-      // Each tag lights while its side is the one being shown. At the halfway
-      // mark both are, in equal measure, so both stay lit.
-      for (const tag of tags) {
-        const showing = tag.dataset.baSide === 'before' ? position >= 50 : position <= 50;
-        tag.classList.toggle('is-active', showing);
-        tag.setAttribute('aria-pressed', showing ? 'true' : 'false');
+      // At the halfway mark both sides are showing, in equal measure, so both
+      // stay lit.
+      for (const el of sided) {
+        const showing = el.dataset.baSide === 'before' ? position >= 50 : position <= 50;
+        el.classList.toggle('is-active', showing);
+        // only the tags are pressable; the readings just follow
+        if (el.tagName === 'BUTTON') el.setAttribute('aria-pressed', showing ? 'true' : 'false');
       }
     };
 
     range.addEventListener('input', apply);
 
-    // and each throws the divider to its own end
-    for (const tag of tags) {
+    // and each tag throws the divider to its own end
+    for (const tag of sided.filter((el) => el.tagName === 'BUTTON')) {
       tag.addEventListener('click', () => {
         range.value = tag.dataset.baSide === 'before' ? range.max : range.min;
         apply();
