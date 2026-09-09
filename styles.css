@@ -1824,16 +1824,17 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    Taken from Custom Web Design, where it is the home's testimonial header
    reused. This page has one section that wants it.
    -------------------------------------------------------------------------- */
+/* The source sets this to 720px, which its own three-word heading clears.
+   "Questions We Get Asked Every Week" does not, and broke to two lines in a
+   box narrower than the list underneath it. Matched to the list's 860 instead,
+   so the header and the questions share one measure. */
 .sec-head {
   text-align: center;
-  max-width: 720px;
+  max-width: 860px;
   margin: 0 auto 50px;
   padding-inline: var(--gutter);
 }
 .sec-head h2 { max-width: none; }
-/* the source's header is the heading alone; this one keeps the page's eyebrow
-   above it, which then needs the gap the stack would have given it */
-.sec-head .eyebrow { margin-bottom: 14px; }
 
 /* --------------------------------------------------------------------------
    FAQ
