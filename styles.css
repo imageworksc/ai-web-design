@@ -1735,15 +1735,91 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    The band re-points the tokens, so the panel is built from light on the
    ground rather than from a white card dropped onto it.
    -------------------------------------------------------------------------- */
+/* Stretch, not start. The argument runs longer than the plate, so a plate
+   sized to its own content left a hole under it the width of the column. It
+   now takes the row's height and distributes what it holds: the figure at the
+   head, the qualification at the foot under a hairline — the way the source
+   ends its own answer block. */
 .price {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   gap: clamp(32px, 4vw, 56px);
-  align-items: start;
+  align-items: stretch;
   width: 100%;
   margin-top: 6px;
 }
 .price-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+
+/* The turn from what the rate is to what it buys. A rule across the band
+   rather than a heading left floating between two blocks. */
+.price-turn {
+  width: 100%;
+  margin-top: clamp(18px, 2.4vw, 30px);
+  padding-top: clamp(24px, 2.8vw, 34px);
+  border-top: 1px solid var(--border);
+}
+.price-turn h3 { font-size: clamp(20px, 1.1vw + 16px, 24px); letter-spacing: -.3px; }
+
+/* ---- what the one rate buys ----
+   Four tiles instead of four ruled rows. On the deep ground a hairline list
+   ran the full 1180 and read as thin; tiles give the team the same weight the
+   figure beside it has. Each takes the green rule the page wipes under every
+   other card. */
+.team {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  margin-top: 4px;
+}
+.team-tile {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: clamp(22px, 2.2vw, 28px) clamp(20px, 2vw, 24px);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .06);
+  transition: transform .4s var(--ease), background-color .4s var(--ease);
+}
+.team-tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .45s var(--ease);
+}
+.team-tile:hover { transform: translateY(-4px); background: rgba(255, 255, 255, .10); }
+.team-tile:hover::before { transform: scaleX(1); }
+.team-tile .chip { transition: background-color .35s var(--ease); }
+.team-tile:hover .chip { background: var(--green); color: #14300a; }
+.team-tile h4 { font-size: 16.5px; font-weight: 800; letter-spacing: -.01em; line-height: 1.3; }
+.team-tile p { font-size: 14.5px; line-height: 1.6; color: var(--text, var(--muted)); }
+
+/* They land one after another, the way the ruled lists do elsewhere. */
+@media (prefers-reduced-motion: no-preference) {
+  .is-revealed .team-tile {
+    animation: team-in .55s var(--ease) backwards;
+    animation-delay: calc(var(--i) * .08s + .2s);
+  }
+}
+@keyframes team-in { from { opacity: 0; transform: translateY(14px); } }
+.team-tile:nth-child(1) { --i: 0; }
+.team-tile:nth-child(2) { --i: 1; }
+.team-tile:nth-child(3) { --i: 2; }
+.team-tile:nth-child(4) { --i: 3; }
+
+@media (prefers-reduced-motion: reduce) {
+  .team-tile { transition: none; }
+  .team-tile:hover { transform: none; }
+}
 
 /* The deep band re-points its tokens but never its own colour, so anything
    inside it that takes plain body ink — the ruled list does — came through
@@ -1754,6 +1830,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
   padding: clamp(28px, 3vw, 38px);
   border-radius: var(--r);
   border: 1px solid var(--border);
@@ -1762,6 +1842,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   transition: transform .4s var(--ease), background-color .4s var(--ease);
 }
 .rate > * { position: relative; z-index: 1; }
+.rate__head { transition: transform .4s var(--ease); }
+.rate:hover .rate__head { transform: translateY(-3px); }
 .rate::after {
   content: '';
   position: absolute;
@@ -1779,9 +1861,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   align-items: baseline;
   gap: 2px;
   color: #fff;
-  transition: transform .4s var(--ease);
 }
-.rate:hover .rate__fig { transform: translateY(-3px); }
 .rate__fig i {
   font-style: normal;
   font-size: 28px;
@@ -1805,18 +1885,25 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   color: var(--green);
 }
 .rate__sub {
-  margin-top: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
   font-size: 15px;
   line-height: 1.65;
   color: var(--text, var(--muted));
 }
 
-@media (max-width: 900px) { .price { grid-template-columns: 1fr; } }
+@media (max-width: 900px) {
+  .price { grid-template-columns: 1fr; }
+  .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .team { grid-template-columns: 1fr; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .rate, .rate__fig { transition: none; }
+  .rate, .rate__head { transition: none; }
   .rate:hover { transform: none; }
-  .rate:hover .rate__fig { transform: none; }
+  .rate:hover .rate__head { transform: none; }
 }
 
 /* --------------------------------------------------------------------------

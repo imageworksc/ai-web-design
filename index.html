@@ -481,20 +481,41 @@
         </div>
 
         <div class="rate">
-          <p class="rate__fig"><i>$</i><b>175</b></p>
-          <p class="rate__label">Per hour, one team</p>
+          <!-- figure and label are one object, or the plate's space-between
+               would push them apart to the ends of the column -->
+          <div class="rate__head">
+            <p class="rate__fig"><i>$</i><b>175</b></p>
+            <p class="rate__label">Per hour, one team</p>
+          </div>
           <p class="rate__sub">No package price, no padded scope. You pay for the hours your website actually takes.</p>
         </div>
       </div>
 
-      <div class="sub">
+      <!-- The turn: what the rate is, then what it buys. -->
+      <div class="price-turn">
         <h3>One rate, a full team</h3>
       </div>
-      <ul class="signals signals--wide w-full">
-        <li><span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="signal-text"><strong>Designers, creatives, and illustrators.</strong> The people who make sure it doesn't look generated.</span></li>
-        <li><span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="signal-text"><strong>Copywriters and marketing experts.</strong> Messaging built for clarity, conversions, SEO, and AI search.</span></li>
-        <li><span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="signal-text"><strong>Developers.</strong> Clean builds on the platform that fits the site.</span></li>
-        <li><span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="signal-text"><strong>A dedicated project manager.</strong> Keeps the process moving and keeps you informed.</span></li>
+      <ul class="team">
+        <li class="team-tile">
+          <span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+          <h4>Designers, creatives, and illustrators</h4>
+          <p>The people who make sure it doesn't look generated.</p>
+        </li>
+        <li class="team-tile">
+          <span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+          <h4>Copywriters and marketing experts</h4>
+          <p>Messaging built for clarity, conversions, SEO, and AI search.</p>
+        </li>
+        <li class="team-tile">
+          <span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+          <h4>Developers</h4>
+          <p>Clean builds on the platform that fits the site.</p>
+        </li>
+        <li class="team-tile">
+          <span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+          <h4>A dedicated project manager</h4>
+          <p>Keeps the process moving and keeps you informed.</p>
+        </li>
       </ul>
     </div>
   </section>
