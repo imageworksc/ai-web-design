@@ -1259,7 +1259,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
      equalises them for free — and one running taller than the other is the
      single difference between them that is not part of the argument. */
   flex: none;
-  block-size: 404px;
+  block-size: 448px;
   margin-top: 18px;
   border-radius: var(--r);
   overflow: hidden;
@@ -1301,7 +1301,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   border-bottom: 1px solid var(--border-soft);
 }
 .mock__nav i { flex: none; border-radius: 2px; }
-.n-sp { flex: 1 !important; }
+/* the spacer is a gap, not a part: it has to opt out of whatever fill the
+   rail gives its children, or it draws as a bar of its own */
+.n-sp { flex: 1 !important; background: none !important; box-shadow: none !important; }
 
 .mock__body { flex: 1; display: flex; flex-direction: column; padding: 16px 14px; }
 
@@ -1323,7 +1325,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .mb--l1 { inline-size: 68%; }
 .mb--l2 { inline-size: 88%; }
 .mb--l3 { inline-size: 88%; }
-.mb--btn { block-size: 26px; inline-size: 104px; border-radius: var(--r); background: #d5dce7; }
+/* two calls that are the same call twice — a page with no view about which
+   thing it wants you to do */
+.mb-cta { display: flex; gap: 9px; }
+.mb-cta span { block-size: 25px; inline-size: 78px; border-radius: var(--r); background: #d5dce7; }
 
 .mock__grid {
   display: grid;
@@ -1335,7 +1340,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   padding: 13px 10px;
   border-radius: var(--r);
   background: #f4f6fa;
@@ -1346,12 +1351,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   border-radius: 50%;
   background: var(--grey-soft);
 }
-.mock__cell span { block-size: 5px; border-radius: 2px; background: var(--grey-soft); }
-.mock__cell span:nth-of-type(1) { inline-size: 82%; }
-.mock__cell span:nth-of-type(2) { inline-size: 56%; }
+.mock__cell span { block-size: 4px; border-radius: 2px; background: var(--grey-soft); }
+.mock__cell .c-title { block-size: 6px; inline-size: 74%; background: #ccd5e2; }
+.mock__cell .c-b1 { inline-size: 88%; }
+.mock__cell .c-b2 { inline-size: 66%; }
+.mock__cell .c-link { inline-size: 38%; margin-top: 2px; background: #ccd5e2; }
 
-.mock__foot { display: flex; gap: 10px; width: 100%; }
-.mock__foot i { flex: 1; block-size: 6px; border-radius: 2px; background: var(--grey-soft); }
+/* a footer, and the same grey as everything above it */
+.mock__foot { display: flex; align-items: center; gap: 8px; width: 100%; }
+.mock__foot i { block-size: 5px; border-radius: 2px; background: var(--grey-soft); }
+.mock__foot .f-logo { inline-size: 36px; block-size: 7px; background: #ccd5e2; }
+.mock__foot .f-sp { flex: 1; background: none; }
+.mock__foot .f-l { inline-size: 24px; }
 
 /* ---- 2 · after the team ----
    A mark and a call in the nav, sizes decided rather than inherited, and a
@@ -1369,6 +1380,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .mock--after .n-link--a { inline-size: 24px; }
 .mock--after .n-link--b { inline-size: 32px; }
 .mock--after .n-link--c { inline-size: 19px; }
+/* a quiet second action beside the call, outlined rather than filled */
+.mock--after .n-ghost { inline-size: 34px; block-size: 19px; box-shadow: inset 0 0 0 1.5px var(--border); }
 .mock--after .n-btn { inline-size: 46px; block-size: 19px; background: var(--green); }
 
 .mock--after .mock__body { align-items: flex-start; gap: 8px; }
@@ -1392,6 +1405,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ma-cta span { block-size: 24px; border-radius: var(--r); }
 .ma-cta span:nth-child(1) { inline-size: 92px; background: var(--green); }
 .ma-cta span:nth-child(2) { inline-size: 70px; box-shadow: inset 0 0 0 1.5px var(--border); }
+
+/* the credentials rail the real hero carries under its buttons */
+.ma-trust { display: flex; gap: 13px; margin-top: 3px; }
+.ma-trust span { display: flex; align-items: center; gap: 4px; }
+.ma-trust i {
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--tint-green);
+  box-shadow: inset 0 0 0 1.3px var(--green);
+}
+.ma-trust b { inline-size: 30px; block-size: 4px; border-radius: 2px; background: #cbd5e4; }
 
 /* the feature area takes whatever height is left, so the drawing fills its
    window instead of trailing off */
@@ -1444,8 +1469,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .ms-card:nth-child(2) i { background: var(--tint-blue); box-shadow: inset 0 0 0 1.5px var(--blue); }
 .ms-card span { block-size: 4px; border-radius: 2px; background: #cbd5e4; }
-.ms-card span:nth-of-type(1) { inline-size: 78%; background: #a3b3c8; }
-.ms-card span:nth-of-type(2) { inline-size: 52%; }
+.ms-card .s-title { block-size: 5px; inline-size: 76%; background: #a3b3c8; }
+.ms-card .s-b { inline-size: 92%; }
+/* the link is the one line in the card that would be a colour on a real page */
+.ms-card .s-link { inline-size: 34%; margin-top: 1px; background: rgba(18, 102, 181, .5); }
 
 /* the field is the one with nothing written in it yet */
 .ma-form { display: flex; gap: 8px; width: 100%; margin-top: 10px; }
