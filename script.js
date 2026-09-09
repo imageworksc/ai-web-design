@@ -62,3 +62,61 @@ function setupReveals() {
 }
 
 setupReveals();
+
+/* --------------------------------------------------------------------------
+   The process, as stations on a rail. Each tab shows its own step and fills
+   the rail up to itself; everything behind it stays green.
+
+   The stylesheet only hides the inactive panels once `data-ready` is set
+   here, so if this never runs the four steps simply stack and the process
+   reads straight down the page. The copy is the point; the tabs are a
+   convenience.
+   -------------------------------------------------------------------------- */
+function setupSteps() {
+  const steps = document.querySelector('[data-steps]');
+  if (!steps) return;
+
+  const tabs = Array.from(steps.querySelectorAll('[role="tab"]'));
+  if (!tabs.length) return;
+
+  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
+  if (panels.some((panel) => !panel)) return;
+
+  const fill = steps.querySelector('[data-steps-fill]');
+  steps.setAttribute('data-ready', 'true');
+
+  const select = (i) => {
+    tabs.forEach((tab, n) => {
+      const on = n === i;
+      tab.classList.toggle('is-active', on);
+      tab.classList.toggle('is-done', n < i);
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      panels[n].classList.toggle('is-active', on);
+    });
+    // the rail runs to the centre of the station, which is where its node sits
+    if (fill) fill.style.width = (((i + 0.5) / tabs.length) * 100) + '%';
+  };
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(i));
+    tab.addEventListener('keydown', (event) => {
+      const last = tabs.length - 1;
+      let next = null;
+
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = i === last ? 0 : i + 1;
+      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = i === 0 ? last : i - 1;
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = last;
+      if (next === null) return;
+
+      event.preventDefault();
+      select(next);
+      tabs[next].focus();
+    });
+  });
+
+  select(0);
+}
+
+setupSteps();

@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 
@@ -369,42 +369,52 @@
       <h2 class="sec-title sec-title--wide" id="process-title">Our AI Website Design Process</h2>
       <p class="lead">We start with real people learning your business, goals, audience, and how you want customers to see you.</p>
 
-      <div class="flow">
-        <ol class="flow-row">
-          <li class="step">
-            <span class="step-mark" aria-hidden="true"><svg><use href="#i-compass"/></svg></span>
-            <div class="step-text">
-              <p class="step-n">01</p>
-              <h3>Discovery &amp; Strategy</h3>
-              <p>We start with a discovery meeting to learn your business, your goals, your audience, and how you want customers to see you. Before any design happens, we agree on what the site needs to accomplish — who it's talking to, what it should get them to do, and how we'll know it worked. From there our team develops the homepage story around clarity, conversions, SEO, and AI search.</p>
-            </div>
-          </li>
-          <li class="step">
-            <span class="step-mark" aria-hidden="true"><svg><use href="#i-layout"/></svg></span>
-            <div class="step-text">
-              <p class="step-n">02</p>
-              <h3>Homepage First</h3>
-              <p>We build the homepage before anything else, because it becomes the design system for the rest of the website. The messaging, colors, fonts, layout styles, buttons, spacing, and section patterns all get decided here — and every later page inherits them. Get the homepage right and the rest of the site stays consistent and moves faster. Skip this step and every page becomes its own argument.</p>
-            </div>
-          </li>
-          <li class="step">
-            <span class="step-mark" aria-hidden="true"><svg><use href="#i-wireframe"/></svg></span>
-            <div class="step-text">
-              <p class="step-n">03</p>
-              <h3>AI Wireframe</h3>
-              <p>With the strategy and homepage direction set, we use AI to build the advanced structure, layouts, and early styling — fast. This is where AI does its best work: turning a clear plan into a working, interactive draft in a fraction of the usual time, so you're reacting to something real instead of a flat mockup. It's a starting point built on decisions we've already made, not a guess.</p>
-            </div>
-          </li>
-          <li class="step">
-            <span class="step-mark" aria-hidden="true"><svg><use href="#i-sliders"/></svg></span>
-            <div class="step-text">
-              <p class="step-n">04</p>
-              <h3>Choose Your Finish</h3>
-              <p>Keep it primarily AI-built for speed and lower cost, or move it to our custom design team for deeper customization and a more unique look. Either way, the design system established on the homepage carries through the whole site.</p>
-            </div>
-          </li>
-        </ol>
+      <!-- The home page's "How We Do It": each step is a station, the rail
+           fills up to the one you are on, and that step's copy is read
+           underneath at full width. Without the script the panels stack and
+           the process reads straight down the page. -->
+      <div class="steps" data-steps>
+        <div class="steps-tabs" role="tablist" aria-label="Our AI website design process">
+          <button type="button" class="steps-tab is-active" role="tab" id="st-1" aria-controls="sp-1" aria-selected="true">
+            <span class="steps-tile" aria-hidden="true"><svg><use href="#i-compass"/></svg></span>
+            <span class="steps-txt"><span class="steps-n">01</span><span class="steps-l">Discovery &amp; Strategy</span></span>
+          </button>
+          <button type="button" class="steps-tab" role="tab" id="st-2" aria-controls="sp-2" aria-selected="false" tabindex="-1">
+            <span class="steps-tile" aria-hidden="true"><svg><use href="#i-layout"/></svg></span>
+            <span class="steps-txt"><span class="steps-n">02</span><span class="steps-l">Homepage First</span></span>
+          </button>
+          <button type="button" class="steps-tab" role="tab" id="st-3" aria-controls="sp-3" aria-selected="false" tabindex="-1">
+            <span class="steps-tile" aria-hidden="true"><svg><use href="#i-wireframe"/></svg></span>
+            <span class="steps-txt"><span class="steps-n">03</span><span class="steps-l">AI Wireframe</span></span>
+          </button>
+          <button type="button" class="steps-tab" role="tab" id="st-4" aria-controls="sp-4" aria-selected="false" tabindex="-1">
+            <span class="steps-tile" aria-hidden="true"><svg><use href="#i-sliders"/></svg></span>
+            <span class="steps-txt"><span class="steps-n">04</span><span class="steps-l">Choose Your Finish</span></span>
+          </button>
+          <span class="steps-rail" aria-hidden="true"></span>
+          <span class="steps-fill" data-steps-fill aria-hidden="true"></span>
+        </div>
+
+        <div class="steps-panels">
+          <div class="steps-panel is-active" role="tabpanel" id="sp-1" aria-labelledby="st-1">
+            <h3 class="steps-title">Discovery &amp; Strategy</h3>
+            <p class="steps-body">We start with a discovery meeting to learn your business, your goals, your audience, and how you want customers to see you. Before any design happens, we agree on what the site needs to accomplish — who it's talking to, what it should get them to do, and how we'll know it worked. From there our team develops the homepage story around clarity, conversions, SEO, and AI search.</p>
+          </div>
+          <div class="steps-panel" role="tabpanel" id="sp-2" aria-labelledby="st-2">
+            <h3 class="steps-title">Homepage First</h3>
+            <p class="steps-body">We build the homepage before anything else, because it becomes the design system for the rest of the website. The messaging, colors, fonts, layout styles, buttons, spacing, and section patterns all get decided here — and every later page inherits them. Get the homepage right and the rest of the site stays consistent and moves faster. Skip this step and every page becomes its own argument.</p>
+          </div>
+          <div class="steps-panel" role="tabpanel" id="sp-3" aria-labelledby="st-3">
+            <h3 class="steps-title">AI Wireframe</h3>
+            <p class="steps-body">With the strategy and homepage direction set, we use AI to build the advanced structure, layouts, and early styling — fast. This is where AI does its best work: turning a clear plan into a working, interactive draft in a fraction of the usual time, so you're reacting to something real instead of a flat mockup. It's a starting point built on decisions we've already made, not a guess.</p>
+          </div>
+          <div class="steps-panel" role="tabpanel" id="sp-4" aria-labelledby="st-4">
+            <h3 class="steps-title">Choose Your Finish</h3>
+            <p class="steps-body">Keep it primarily AI-built for speed and lower cost, or move it to our custom design team for deeper customization and a more unique look. Either way, the design system established on the homepage carries through the whole site.</p>
+          </div>
+        </div>
       </div>
+
 
       <div class="plate">
         <p><strong>For many businesses, that homepage may be all they need</strong> — a strong one-page website they can launch quickly and affordably.</p>
@@ -602,6 +612,6 @@
 
 </main>
 
-<script src="script.js?v=4" defer></script>
+<script src="script.js?v=5" defer></script>
 </body>
 </html>
