@@ -144,7 +144,12 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="styles.css">
+<!-- The version is bumped whenever styles.css or script.js changes. Pages
+     serves both with Cache-Control: max-age=600, so without it a browser
+     holding a ten-minute-old stylesheet renders new markup against old rules
+     — which looks like nothing changed, or worse, like the page is broken. A
+     name it has never fetched cannot be answered from cache. -->
+<link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
 
@@ -589,6 +594,6 @@
 
 </main>
 
-<script src="script.js" defer></script>
+<script src="script.js?v=3" defer></script>
 </body>
 </html>
