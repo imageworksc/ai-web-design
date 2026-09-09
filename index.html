@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
 
@@ -294,25 +294,36 @@
         </div>
       </div>
 
-      <!-- The three things a design system hands over, in a column narrow
-           enough that the copy beside it keeps the width its credentials
-           need to hold one line. -->
+      <!-- The three beats this page is about, and only this page: the machine
+           is told what to build, it returns options rather than an answer,
+           and a person decides what gets through. The typeface, palette and
+           component tiles belong to the branding and web-design pages;
+           repeating them here would say nothing about AI.
+
+           The column is narrow enough that the copy beside it keeps the width
+           its credentials need to hold one line. -->
       <div class="hkit" aria-hidden="true">
         <div class="hkit-t">
-          <p class="hkit-label">Typeface</p>
-          <span class="hkit-aa">Aa</span>
-          <p class="hkit-name">Plus Jakarta Sans</p>
+          <p class="hkit-label">Prompt</p>
+          <div class="ai-prompt">
+            <span class="ai-prompt__mark"><svg><use href="#i-spark"/></svg></span>
+            <span class="ai-prompt__line"></span>
+            <i class="ai-prompt__caret"></i>
+          </div>
         </div>
         <div class="hkit-t">
-          <p class="hkit-label">Palette</p>
-          <ul class="hkit-pal"><li></li><li></li><li></li><li></li></ul>
+          <p class="hkit-label">Variants</p>
+          <ul class="ai-vars">
+            <li><i></i><i></i><i></i></li>
+            <li><i></i><i></i><i></i></li>
+            <li><i></i><i></i><i></i></li>
+          </ul>
         </div>
         <div class="hkit-t">
-          <p class="hkit-label">Components</p>
-          <ul class="hkit-parts">
-            <li class="hk-btn">Button</li>
-            <li class="hk-tag">Tag</li>
-            <li class="hk-field"></li>
+          <p class="hkit-label">Human pass</p>
+          <ul class="ai-pass">
+            <li class="is-yes"><span><svg><use href="#i-check"/></svg></span><i></i></li>
+            <li class="is-no"><span><svg><use href="#i-x"/></svg></span><i></i></li>
           </ul>
         </div>
       </div>
@@ -712,6 +723,6 @@
 
 </main>
 
-<script src="script.js?v=7" defer></script>
+<script src="script.js?v=8" defer></script>
 </body>
 </html>

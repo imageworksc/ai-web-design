@@ -1137,63 +1137,115 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .hkit-t:hover .hkit-label { color: var(--navy); }
 
-/* ---- 1 · the specimen. One variable face, so it runs its own axis. ---- */
-.hkit-aa {
-  display: block;
-  margin-top: 2px;
-  font-size: 34px;
-  line-height: 1.05;
-  letter-spacing: -.05em;
-  color: var(--navy);
-  animation: hkitWeight 23s ease-in-out -7s infinite;
-  transform-origin: left center;
-  transition: transform .4s var(--ease);
-}
-.hkit-t:hover .hkit-aa { animation-play-state: paused; transform: scale(1.05); }
-.hkit-name { font-size: 10px; font-weight: 700; color: var(--ink); }
-@keyframes hkitWeight {
-  0%, 7%    { font-weight: 300; }
-  43%, 57%  { font-weight: 800; }
-  93%, 100% { font-weight: 300; }
-}
-
-/* ---- 2 · the palette ---- */
-.hkit-pal { display: flex; gap: 6px; margin-top: 9px; }
-.hkit-pal li {
-  flex: 1;
+/* ---- 1 · the prompt going in ----
+   The instruction types itself out and the caret keeps blinking. Nothing on
+   the branding or web-design pages has one, because neither of them is about
+   a machine being told what to build. */
+.ai-prompt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  margin-top: 9px;
+  padding-inline: 9px;
   block-size: 30px;
   border-radius: var(--r);
-  background: var(--c);
-  box-shadow: inset 0 0 0 1px rgba(20, 40, 80, .07);
-  transition: flex-grow .45s var(--ease);
+  box-shadow: inset 0 0 0 1.5px var(--border);
 }
-.hkit-pal li:nth-child(1) { --c: #143c66; }
-.hkit-pal li:nth-child(2) { --c: #1266b5; }
-.hkit-pal li:nth-child(3) { --c: #80c34a; }
-.hkit-pal li:nth-child(4) { --c: #5c9a2e; }
-.hkit-pal li:hover { flex-grow: 2.2; }
+.ai-prompt__mark { flex: none; display: grid; place-items: center; color: var(--green-ink); }
+.ai-prompt__mark svg { inline-size: 14px; block-size: 14px; }
+.ai-prompt__line {
+  block-size: 5px;
+  border-radius: 2px;
+  background: #cbd5e4;
+  inline-size: 0;
+  animation: aiType 11s var(--ease) infinite;
+}
+.ai-prompt__caret {
+  flex: none;
+  inline-size: 1.5px;
+  block-size: 13px;
+  background: var(--blue);
+  animation: aiCaret 1.1s steps(2, start) infinite;
+}
+@keyframes aiType {
+  0%        { inline-size: 0; }
+  38%, 74%  { inline-size: 100%; }
+  96%, 100% { inline-size: 0; }
+}
+@keyframes aiCaret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
-/* ---- 3 · the components the styles get applied to ---- */
-.hkit-parts { display: flex; align-items: center; gap: 7px; margin-top: 10px; }
-.hkit-parts li {
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: .06em;
-  line-height: 1;
+/* ---- 2 · what it returns: options, not an answer ----
+   Three layouts, and the green ring visits each in turn — the machine hands
+   over choices and somebody still has to make the choice. */
+.ai-vars { display: flex; gap: 7px; margin-top: 9px; }
+.ai-vars li {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  block-size: 52px;
+  padding: 6px;
   border-radius: var(--r);
-  transition: transform .3s var(--ease);
+  background: #f4f6fa;
+  box-shadow: inset 0 0 0 1px var(--border-soft);
 }
-.hkit-parts li:hover { transform: translateY(-2px); }
-.hk-btn { padding: 8px 11px; background: var(--green); color: #fff; }
-.hk-tag { padding: 7px 9px; background: var(--tint-blue); color: var(--blue); text-transform: uppercase; }
-/* the field is the one with nothing written in it yet */
-.hk-field { flex: 1; block-size: 24px; box-shadow: inset 0 0 0 1.5px var(--border); }
+.ai-vars li i { display: block; border-radius: 1px; background: #ccd5e2; }
+/* each option is laid out differently, or they are not options */
+.ai-vars li:nth-child(1) i:nth-child(1) { block-size: 12px; }
+.ai-vars li:nth-child(1) i:nth-child(2) { flex: 1; }
+.ai-vars li:nth-child(1) i:nth-child(3) { block-size: 6px; inline-size: 70%; }
+.ai-vars li:nth-child(2) { flex-direction: row; }
+.ai-vars li:nth-child(2) i:nth-child(1) { inline-size: 12px; }
+.ai-vars li:nth-child(2) i:nth-child(2) { flex: 1; }
+.ai-vars li:nth-child(2) i:nth-child(3) { display: none; }
+/* the third puts its weight at the foot, or it reads as the first one again */
+.ai-vars li:nth-child(3) i:nth-child(1) { block-size: 6px; inline-size: 62%; }
+.ai-vars li:nth-child(3) i:nth-child(2) { block-size: 6px; }
+.ai-vars li:nth-child(3) i:nth-child(3) { flex: 1; }
+
+.ai-vars li::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1.5px var(--green);
+  opacity: 0;
+  animation: aiPick 12s var(--ease) infinite;
+}
+.ai-vars li:nth-child(2)::after { animation-delay: -8s; }
+.ai-vars li:nth-child(3)::after { animation-delay: -4s; }
+@keyframes aiPick { 0% { opacity: 0; } 3%, 27% { opacity: 1; } 31%, 100% { opacity: 0; } }
+
+/* ---- 3 · the pass a person makes over it ----
+   One line kept and one line refused. The page's own FAQ puts it exactly
+   there: what a website turns out to be comes down to the team reviewing it,
+   and what they refuse to let through. */
+.ai-pass { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+.ai-pass li { display: flex; align-items: center; gap: 9px; }
+.ai-pass span {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 18px;
+  block-size: 18px;
+  border-radius: 50%;
+}
+.ai-pass span svg { inline-size: 10px; block-size: 10px; }
+.ai-pass i { display: block; block-size: 5px; border-radius: 2px; }
+.ai-pass .is-yes span { background: var(--tint-green); color: var(--green-ink); }
+.ai-pass .is-yes i { inline-size: 76%; background: #bfcbdb; }
+.ai-pass .is-no span { background: var(--danger-soft); color: var(--danger-ink); }
+.ai-pass .is-no i { inline-size: 52%; background: #dfe5ee; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hkit-aa { animation: none; font-weight: 800; }
-  .hkit-t, .hkit-pal li, .hkit-parts li { transition: none; }
-  .hkit-t:hover { transform: none; }
+  .ai-prompt__line { animation: none; inline-size: 100%; }
+  .ai-prompt__caret { animation: none; }
+  .ai-vars li::after { animation: none; }
+  .ai-vars li:nth-child(2)::after { opacity: 1; }
 }
+
 
 /* Measured rather than guessed: the credentials run 658px, not the ~594 I
    first estimated, and at 1001px the copy column is 655 — it broke by three
