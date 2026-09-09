@@ -1241,56 +1241,155 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .compare-note strong { color: var(--navy); font-weight: 700; }
 
-/* ---- the two drawings ---- */
+/* ---- the two drawings ----
+   Both are the same window at the same size, so the only thing that differs
+   between them is the design inside — which is the whole point of the
+   section. Each one is built to demonstrate the sentence printed under it
+   rather than to be decoration: the first has no size contrast, even
+   spacing, a centred axis and three identical cards; the second has a
+   headline four times the height of its body copy, a ranged-left axis, brand
+   colour, and a feature block that is deliberately not the same size as what
+   sits beside it.
+   ---------------------------------------------------------------------- */
 .mock {
-  margin-top: 18px;
-  padding: 14px 15px 16px;
-  border-radius: var(--r);
-  background: #fbfcfe;
-  box-shadow: inset 0 0 0 1px var(--border-soft);
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  min-block-size: 232px;
+  /* Fixed, not a minimum. The two drawings sit in separate grid columns, so
+     nothing equalises them for free — and one holding more than the other is
+     the one difference between them that is not part of the argument. */
+  flex: none;
+  block-size: 330px;
+  margin-top: 18px;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--border);
 }
-.mock i, .mock span, .mock b { display: block; }
-.mock__bar { block-size: 9px; border-radius: 2px; background: var(--grey-soft); }
-/* the card row sits on the floor of both drawings, so the two pages are
-   read against the same baseline */
-.mock__row { display: flex; gap: 8px; margin-top: auto; }
-.mock__row span { flex: 1; block-size: 46px; border-radius: var(--r); background: var(--grey-soft); }
-.mock__btn { block-size: 20px; inline-size: 78px; border-radius: var(--r); background: #d5dce7; }
+.mock i, .mock b, .mock span { display: block; }
 
-/* the draft: one weight, one grey, everything the same distance apart. The
-   widths are named rather than counted off with nth-of-type — the two mocks
-   hold a different run of elements, and a positional selector would land on
-   the wrong one in the second. */
-.mock__bar--lead  { inline-size: 64%; block-size: 13px; }
-.mock__bar--full  { inline-size: 90%; }
-.mock__bar--mid   { inline-size: 74%; }
-.mock__bar--copy  { inline-size: 88%; }
-.mock__bar--short { inline-size: 58%; }
+/* the window, identical on both */
+.mock__chrome {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  padding: 10px 13px;
+  background: #fbfcfe;
+  border-bottom: 1px solid var(--border-soft);
+}
+.mock__chrome i {
+  flex: none;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.mock__chrome span {
+  flex: 1;
+  margin-left: 9px;
+  block-size: 7px;
+  border-radius: 4px;
+  background: var(--grey-soft);
+}
+.mock__body { flex: 1; display: flex; flex-direction: column; padding: 20px 18px; }
 
-/* the same page after a designer: a real first line, a green call, and three
-   cards that are no longer identical */
-.mock--after { background: #fff; box-shadow: inset 0 0 0 1px var(--border); }
-.mock--after .mock__eyebrow {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 7.5px; font-weight: 800; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--green-ink);
+/* ---- 1 · the first pass ----
+   One weight, one grey, one distance, centred. Nothing in it is bigger than
+   anything else, which is what "default type, stock structure" looks like
+   when you draw it.
+   ---------------------------------------------------------------------- */
+/* space-between rather than a gap: every element ends up exactly as far from
+   its neighbour as every other, which is the "even spacing" the sentence
+   under the drawing is complaining about, drawn literally. */
+.mock--before .mock__body { align-items: center; justify-content: space-between; }
+.mock--before .mock__grid { margin-top: 0; padding-top: 0; }
+.mock--before .mb--btn { margin-top: 0; }
+.mb { block-size: 9px; border-radius: 2px; background: var(--grey-soft); }
+.mb--l1 { inline-size: 70%; }
+.mb--l2 { inline-size: 88%; }
+.mb--l3 { inline-size: 88%; }
+.mb--btn {
+  block-size: 26px;
+  inline-size: 104px;
+  margin-top: 4px;
+  border-radius: var(--r);
+  background: #d5dce7;
 }
-.mock--after .mock__eyebrow::before {
-  content: ''; inline-size: 5px; block-size: 5px;
-  border-radius: 50%; background: var(--green); flex: none;
+/* three cards that are the same card three times */
+.mock__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 16px;
 }
-.mock--after .mock__h { block-size: 15px; inline-size: 82%; border-radius: 2px; background: var(--navy); }
-.mock--after .mock__h + .mock__h { inline-size: 46%; margin-top: -3px; background: var(--green-ink); }
-.mock--after .mock__bar { background: #cfd8e6; }
-.mock--after .mock__btn { background: var(--green); inline-size: 86px; }
-.mock--after .mock__row { align-items: flex-end; }
-.mock--after .mock__row span { background: var(--tint-blue); box-shadow: inset 0 0 0 1px var(--chip-blue); }
-.mock--after .mock__row span:nth-child(1) { block-size: 58px; flex: 1.4; background: var(--navy); box-shadow: none; }
-.mock--after .mock__row span:nth-child(3) { block-size: 38px; }
+.mock__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 10px;
+  border-radius: var(--r);
+  background: #f4f6fa;
+}
+.mock__cell i {
+  inline-size: 18px;
+  block-size: 18px;
+  border-radius: 50%;
+  background: var(--grey-soft);
+}
+.mock__cell span { block-size: 5px; border-radius: 2px; background: var(--grey-soft); }
+.mock__cell span:nth-of-type(1) { inline-size: 82%; }
+.mock__cell span:nth-of-type(2) { inline-size: 56%; }
+
+/* ---- 2 · after the team ----
+   Ranged left, and the sizes are decided rather than inherited: the headline
+   runs at 18px against 6px body copy, the eyebrow marks the section, the
+   call is the brand green, and the foot is a feature block with two smaller
+   things beside it instead of three of the same thing.
+   ---------------------------------------------------------------------- */
+.mock--after .mock__body { align-items: flex-start; gap: 10px; }
+.ma-eyebrow { display: flex; align-items: center; gap: 5px; }
+.ma-eyebrow i {
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.ma-eyebrow b { inline-size: 44px; block-size: 5px; border-radius: 2px; background: var(--green-ink); }
+
+.ma { border-radius: 2px; }
+.ma--h1  { block-size: 18px; inline-size: 88%; background: var(--navy); }
+.ma--h2  { block-size: 18px; inline-size: 56%; background: var(--green-ink); margin-top: -2px; }
+.ma--copy  { block-size: 6px; inline-size: 92%; background: #cbd5e4; margin-top: 4px; }
+.ma--copy2 { block-size: 6px; inline-size: 64%; background: #cbd5e4; }
+
+.ma-cta { display: flex; gap: 8px; margin-top: 6px; }
+.ma-cta span { block-size: 26px; border-radius: var(--r); }
+.ma-cta span:nth-child(1) { inline-size: 96px; background: var(--green); }
+.ma-cta span:nth-child(2) { inline-size: 74px; box-shadow: inset 0 0 0 1.5px var(--border); }
+
+.mock__split {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 18px;
+}
+.ma-feature {
+  flex: 1.6;
+  block-size: 84px;
+  border-radius: var(--r);
+  background: linear-gradient(150deg, var(--blue), var(--navy));
+}
+.ma-side { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.ma-side span {
+  flex: 1;
+  border-radius: var(--r);
+  background: var(--tint-blue);
+  box-shadow: inset 0 0 0 1px var(--chip-blue);
+}
 
 /* --------------------------------------------------------------------------
    FLOW — the four steps, on a rail
