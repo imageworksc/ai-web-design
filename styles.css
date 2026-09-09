@@ -760,7 +760,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
   .compare { grid-template-columns: 1fr; }
-  .platform-split { grid-template-columns: 1fr; }
   /* the aside has nothing to stay beside once the list drops below it */
   .cms-split { grid-template-columns: 1fr; }
   .cms-aside { position: static; }
@@ -1698,11 +1697,15 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 
 /* --------------------------------------------------------------------------
-   PLATFORM SPLIT — one panel, two halves
+   PLATFORM — the two options, one under the other
+   Side by side they were two columns of a comparison and each had to wrap its
+   case in half the width. Stacked, every option gets the full measure: the
+   mark and the name held on the left, the case for it on the right, a rule
+   between them, and the phase colour carried up the outer edge instead of
+   across the top — a 3px line at the head of a row that wide reads as a
+   divider, not as an accent.
    -------------------------------------------------------------------------- */
 .platform-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   width: 100%;
   margin-top: 8px;
   border-radius: var(--r);
@@ -1712,23 +1715,26 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .platform-half {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  padding: clamp(28px, 3vw, 40px);
-  border-top: 3px solid var(--border);
+  display: grid;
+  grid-template-columns: 52px minmax(0, 240px) minmax(0, 1fr);
+  gap: clamp(18px, 2vw, 30px);
+  /* stretch, so the rule between name and case runs the height of the row
+     rather than stopping wherever the shorter column happens to end */
+  align-items: stretch;
+  padding: clamp(26px, 2.8vw, 36px) clamp(24px, 2.6vw, 38px);
+  border-left: 3px solid var(--border);
   transition: background-color .35s var(--ease);
 }
-.platform-half:first-child { border-right: 1px solid var(--border-soft); }
-.platform-half--small { border-top-color: var(--green); }
-.platform-half--large { border-top-color: var(--blue); }
+.platform-half + .platform-half { border-top: 1px solid var(--border-soft); }
+.platform-half--small { border-left-color: var(--green); }
+.platform-half--large { border-left-color: var(--blue); }
 .platform-half:hover { background: var(--tint-blue); }
 .platform-half--small:hover { background: var(--tint-green); }
 
 .platform-icon {
   display: grid;
   place-items: center;
+  align-self: start;
   inline-size: 48px;
   block-size: 48px;
   border-radius: 50%;
@@ -1741,6 +1747,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .platform-half--small .platform-icon { background: var(--tint-green); color: var(--green-ink); }
 .platform-half:hover .platform-icon { background: var(--navy); color: #fff; transform: scale(1.08); }
 
+/* who it is for, and what it is */
+.platform-name { display: flex; flex-direction: column; gap: 9px; padding-top: 2px; }
 .platform-badge {
   font-size: 11px;
   font-weight: 800;
@@ -1749,14 +1757,28 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1;
   color: var(--faint);
 }
-.platform-half h3 { font-size: 22px; letter-spacing: -.3px; }
-.platform-half p { font-size: 16.5px; line-height: 1.7; color: var(--muted); max-width: 44ch; }
+.platform-half h3 { font-size: 22px; letter-spacing: -.3px; line-height: 1.25; }
 
-@media (max-width: 900px) {
-  .platform-half:first-child {
-    border-right: 0;
-    border-bottom: 1px solid var(--border-soft);
+/* the case for it, behind a rule so the name reads as the label of a column
+   rather than as the first line of the paragraph */
+.platform-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: clamp(18px, 2vw, 30px);
+  border-left: 1px solid var(--border-soft);
+}
+.platform-half p { font-size: 16.5px; line-height: 1.7; color: var(--muted); max-width: 62ch; }
+
+/* Under the width three tracks can hold, the row turns and comes down: mark,
+   then name, then the case, and the rule goes with the column it divided. */
+@media (max-width: 820px) {
+  .platform-half {
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
+  .platform-name { padding-top: 0; }
+  .platform-copy { padding-left: 0; border-left: 0; }
 }
 
 /* --------------------------------------------------------------------------
@@ -2071,7 +2093,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
   .compare { grid-template-columns: 1fr; }
-  .platform-split { grid-template-columns: 1fr; }
 }
 
 /* the deliverables drop under the story rather than beside it */
