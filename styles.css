@@ -1047,8 +1047,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .hero-sub { font-size: 18px; line-height: 1.75; max-width: 720px; }
 .sec-title { font-size: clamp(26px, 3vw, 38px); line-height: 1.15; letter-spacing: -.5px; }
-/* the statement head takes the same emphasis the section titles do */
-.stmt-title em { font-style: normal; color: var(--green-ink); }
 /* The separator trails the credential it follows rather than leading the next
    one, so a wrapped line starts on a word instead of on a rule. */
 .hero-points li + li::before { content: none; }
@@ -1087,6 +1085,87 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    what they were fighting for against a two-column grid.
    -------------------------------------------------------------------------- */
 .hero-points { font-size: 14.5px; }
+
+/* The reference sizes its hero to hold a headline, a paragraph, a credentials
+   pane and two buttons. With the pane and the graphic both gone this one has
+   less to hold, and the leftover height was landing as a gap between the
+   buttons and the card under them — close to 200px of it. The floor comes
+   down, and the foot of the band is trimmed harder than its head, because
+   what follows now opens on a card rather than on a heading. */
+.hero {
+  min-height: min(56vh, 470px);
+  padding-block: clamp(48px, 5vw, 76px) clamp(26px, 2.8vw, 40px);
+}
+
+/* The reference declares this next to its own answer plate, which is past the
+   point the shared block above was cut from — so the class has been carried in
+   the markup since the first commit with no rule behind it, and the section
+   has been taking a full band's 108px on top of the hero's own foot. The
+   band keeps its full measure at the bottom, where the next section starts
+   cold. */
+.band--lift { padding-block-start: clamp(36px, 4.4vw, 60px); }
+
+/* --------------------------------------------------------------------------
+   THE ANSWER — the reference's plate, carrying this page's argument
+   Same construction "What Is Branding?" gets: one card, centred in the band,
+   holding the claim, the sentence that carries it, and the line that closes
+   it under a hairline. The copy inside stays ranged left, which is what it
+   needs to be read.
+   -------------------------------------------------------------------------- */
+.answer-block { display: block; }
+
+.answer-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 820px;
+  margin-inline: auto;
+  padding: clamp(26px, 3vw, 38px);
+  border-radius: var(--r);
+  border-top: 3px solid var(--blue);
+  background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
+  box-shadow: var(--shadow-card);
+}
+.answer-card__title {
+  font-size: clamp(21px, 1vw + 17px, 28px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+  color: var(--navy);
+  max-width: none;
+  margin-bottom: clamp(14px, 1.4vw, 20px);
+}
+.answer-card__title em { font-style: normal; color: var(--green-ink); }
+
+/* Set in body ink rather than navy: the four marked terms are navy and bold,
+   and they only stand out from the sentence if the sentence is not. */
+.answer-card__def {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.75;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.answer-card__turn {
+  margin-top: 16px;
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+/* At the foot, under a hairline, the way the reference's own plate ends —
+   except here the foot is the line the whole section is built to land. */
+.answer-card__close {
+  margin-top: clamp(20px, 2.2vw, 28px);
+  padding-top: clamp(20px, 2.2vw, 28px);
+  border-top: 1px solid var(--border);
+  font-size: clamp(18px, .6vw + 16px, 20px);
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: -.01em;
+  color: var(--navy);
+}
+
+/* the link lines up with the card's left edge rather than the band's */
+.answer-more { max-width: 820px; margin: 22px auto 0; }
 
 /* --------------------------------------------------------------------------
    THE PLATE — a card holding one short, quotable answer
