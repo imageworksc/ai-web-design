@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
 
@@ -376,9 +376,11 @@
            invisibly over the stage: draggable, focusable, and operable from
            the keyboard. -->
       <div class="ba" data-ba>
+        <!-- Buttons, not captions: each throws the divider to its own end, and
+             each lights while its side is the one being shown. -->
         <div class="ba-labels">
-          <span class="ba-tag ba-tag--before">AI first pass</span>
-          <span class="ba-tag ba-tag--after">After our team</span>
+          <button type="button" class="ba-tag ba-tag--before is-active" data-ba-side="before" aria-pressed="true">AI first pass</button>
+          <button type="button" class="ba-tag ba-tag--after is-active" data-ba-side="after" aria-pressed="true">After our team</button>
         </div>
         <div class="ba-stage">
           <div class="mock mock--before" aria-hidden="true">
@@ -415,23 +417,25 @@
               <i class="n-ghost"></i><i class="n-btn"></i>
             </div>
             <div class="mock__body">
-              <span class="ma-eyebrow"><i></i><b></b></span>
-              <span class="ma ma--h1"></span>
-              <span class="ma ma--h2"></span>
-              <span class="ma ma--copy"></span>
-              <span class="ma ma--copy2"></span>
-              <div class="ma-cta"><span></span><span></span></div>
-              <div class="ma-trust">
-                <span><i></i><b></b></span>
-                <span><i></i><b></b></span>
-                <span><i></i><b></b></span>
-              </div>
-              <div class="mock__split">
-                <div class="ma-feature"></div>
-                <div class="ma-side">
-                  <div class="ms-card"><i></i><span class="s-title"></span><span class="s-b"></span><span class="s-link"></span></div>
-                  <div class="ms-card"><i></i><span class="s-title"></span><span class="s-b"></span><span class="s-link"></span></div>
+              <div class="ma-hero">
+                <div class="ma-hero__copy">
+                  <span class="ma-eyebrow"><i></i><b></b></span>
+                  <span class="ma ma--h1"></span>
+                  <span class="ma ma--h2"></span>
+                  <span class="ma ma--copy"></span>
+                  <span class="ma ma--copy2"></span>
+                  <div class="ma-cta"><span></span><span></span></div>
+                  <div class="ma-trust">
+                    <span><i></i><b></b></span>
+                    <span><i></i><b></b></span>
+                  </div>
                 </div>
+                <div class="ma-hero__art"></div>
+              </div>
+              <div class="ma-cards">
+                <div class="ms-card"><i></i><span class="s-title"></span><span class="s-b"></span><span class="s-link"></span></div>
+                <div class="ms-card"><i></i><span class="s-title"></span><span class="s-b"></span><span class="s-link"></span></div>
+                <div class="ms-card"><i></i><span class="s-title"></span><span class="s-b"></span><span class="s-link"></span></div>
               </div>
               <div class="ma-form"><i class="f-field"></i><i class="f-btn"></i></div>
             </div>
@@ -754,6 +758,6 @@
 
 </main>
 
-<script src="script.js?v=12" defer></script>
+<script src="script.js?v=13" defer></script>
 </body>
 </html>

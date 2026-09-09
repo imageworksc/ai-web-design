@@ -1258,17 +1258,38 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   gap: 16px;
   margin-bottom: 12px;
 }
+/* They are buttons, not captions: each one throws the divider to its own end,
+   and each lights while its side is the one you are looking at. Outlined and
+   grey when it is not, so the pair reads as a state and not as decoration. */
 .ba-tag {
+  border: 0;
+  font: inherit;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: .16em;
   text-transform: uppercase;
   line-height: 1;
-  padding: 8px 11px;
+  padding: 9px 12px;
   border-radius: var(--r);
+  cursor: pointer;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--border);
+  color: var(--faint);
+  transition: background-color .25s var(--ease), color .25s var(--ease),
+              box-shadow .25s var(--ease);
 }
-.ba-tag--before { background: var(--grey-soft); color: var(--grey-ink); }
-.ba-tag--after { background: var(--tint-green); color: var(--green-ink); }
+.ba-tag:hover { color: var(--navy); box-shadow: inset 0 0 0 1px #c3d6ea; }
+.ba-tag:focus-visible { outline: none; box-shadow: var(--ring); }
+.ba-tag--before.is-active {
+  background: var(--grey-soft);
+  color: var(--grey-ink);
+  box-shadow: inset 0 0 0 1px transparent;
+}
+.ba-tag--after.is-active {
+  background: var(--tint-green);
+  color: var(--green-ink);
+  box-shadow: inset 0 0 0 1px transparent;
+}
 
 /* the two readings, under the window they belong to */
 .ba-notes {
@@ -1367,10 +1388,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .mock__foot .f-logo { inline-size: 52px; block-size: 10px; background: #ccd5e2; }
 .mock__foot .f-sp { flex: 1; background: none; }
 .mock__foot .f-l { inline-size: 35px; }
-
 /* ---- 2 · after the team ----
    Ranged left, sizes decided rather than inherited, and colour kept for the
-   things that would actually carry it. */
+   things that would actually carry it.
+
+   Laid out so that any vertical slice of it still reads as a designed page.
+   The first arrangement put the eyebrow, the headline, both calls and the
+   credentials hard against the left edge, so with the divider at the halfway
+   mark every one of them sat behind it and the right half was a picture and
+   two cards. The hero is a two-column now — the argument on the left, its
+   image on the right — and the cards run three across the full width, so
+   there is something of the design in every band and at every x.
+   ---------------------------------------------------------------------- */
 .mock--after .n-dot {
   inline-size: 13px;
   block-size: 13px;
@@ -1385,7 +1414,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .mock--after .n-ghost { inline-size: 50px; block-size: 27px; box-shadow: inset 0 0 0 1.5px var(--border); }
 .mock--after .n-btn { inline-size: 66px; block-size: 27px; background: var(--green); }
 
-.mock--after .mock__body { align-items: flex-start; gap: 12px; }
+.mock--after .mock__body { gap: 16px; }
+
+/* ---- the hero: the argument, and the picture that carries it ---- */
+.ma-hero { display: flex; gap: 22px; align-items: stretch; }
+.ma-hero__copy {
+  flex: 1.15;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 11px;
+}
 .ma-eyebrow { display: flex; align-items: center; gap: 7px; }
 .ma-eyebrow i { inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--green); }
 .ma-eyebrow b { inline-size: 64px; block-size: 7px; border-radius: 3px; background: var(--green-ink); }
@@ -1393,17 +1433,17 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ma { border-radius: 3px; }
 /* tone, not hue: the second line is the same navy at half strength, so the
    hierarchy is carried by weight the way it is in type */
-.ma--h1 { block-size: 23px; inline-size: 86%; background: var(--navy); margin-top: 3px; }
-.ma--h2 { block-size: 23px; inline-size: 54%; background: rgba(20, 60, 102, .46); }
-.ma--copy { block-size: 7px; inline-size: 90%; background: #cbd5e4; margin-top: 5px; }
-.ma--copy2 { block-size: 7px; inline-size: 62%; background: #cbd5e4; }
+.ma--h1 { block-size: 22px; inline-size: 92%; background: var(--navy); }
+.ma--h2 { block-size: 22px; inline-size: 58%; background: rgba(20, 60, 102, .46); }
+.ma--copy { block-size: 7px; inline-size: 96%; background: #cbd5e4; margin-top: 4px; }
+.ma--copy2 { block-size: 7px; inline-size: 68%; background: #cbd5e4; }
 
-.ma-cta { display: flex; gap: 12px; margin-top: 6px; }
-.ma-cta span { block-size: 35px; border-radius: var(--r); }
-.ma-cta span:nth-child(1) { inline-size: 132px; background: var(--green); }
-.ma-cta span:nth-child(2) { inline-size: 100px; box-shadow: inset 0 0 0 1.5px var(--border); }
+.ma-cta { display: flex; gap: 12px; margin-top: 5px; }
+.ma-cta span { block-size: 34px; border-radius: var(--r); }
+.ma-cta span:nth-child(1) { inline-size: 124px; background: var(--green); }
+.ma-cta span:nth-child(2) { inline-size: 94px; box-shadow: inset 0 0 0 1.5px var(--border); }
 
-.ma-trust { display: flex; gap: 18px; margin-top: 5px; }
+.ma-trust { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 3px; }
 .ma-trust span { display: flex; align-items: center; gap: 6px; }
 .ma-trust i {
   inline-size: 11px;
@@ -1412,20 +1452,20 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   background: var(--tint-green);
   box-shadow: inset 0 0 0 1.6px var(--green);
 }
-.ma-trust b { inline-size: 43px; block-size: 6px; border-radius: 3px; background: #cbd5e4; }
+.ma-trust b { inline-size: 40px; block-size: 6px; border-radius: 3px; background: #cbd5e4; }
 
-.mock__split { display: flex; gap: 15px; width: 100%; flex: 1; min-block-size: 0; margin-top: 12px; }
 /* the one filled area on the page, and the light off its top-left corner is
    what keeps it reading as a photograph rather than a rectangle of brand blue */
-.ma-feature {
+.ma-hero__art {
   position: relative;
-  flex: 1.55;
+  flex: 1;
+  min-block-size: 150px;
   border-radius: var(--r);
   background:
     radial-gradient(115% 85% at 22% 12%, rgba(255, 255, 255, .24), transparent 62%),
     linear-gradient(150deg, #2a6fb0, #143f66);
 }
-.ma-feature::after {
+.ma-hero__art::after {
   content: '';
   position: absolute;
   left: 16px;
@@ -1435,35 +1475,43 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   border-radius: 3px;
   background: rgba(255, 255, 255, .6);
 }
-.ma-side { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+
+/* ---- three across, so the band reads at any x ---- */
+.ma-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  flex: 1;
+  min-block-size: 0;
+}
 /* white with a hairline, the way a card on a real page is */
 .ms-card {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-  padding: 14px;
+  padding: 15px;
   border-radius: var(--r);
   background: var(--white);
   box-shadow: inset 0 0 0 1px var(--border);
 }
 .ms-card i {
-  inline-size: 20px;
-  block-size: 20px;
-  border-radius: 4px;
+  inline-size: 22px;
+  block-size: 22px;
+  border-radius: 5px;
   background: var(--tint-green);
   box-shadow: inset 0 0 0 1.6px var(--green);
 }
 .ms-card:nth-child(2) i { background: var(--tint-blue); box-shadow: inset 0 0 0 1.6px var(--blue); }
+.ms-card:nth-child(3) i { background: var(--chip-navy); box-shadow: inset 0 0 0 1.6px var(--navy); }
 .ms-card span { block-size: 6px; border-radius: 3px; background: #cbd5e4; }
-.ms-card .s-title { block-size: 7px; inline-size: 76%; background: #a3b3c8; }
-.ms-card .s-b { inline-size: 92%; }
+.ms-card .s-title { block-size: 8px; inline-size: 78%; background: #a3b3c8; }
+.ms-card .s-b { inline-size: 94%; }
 /* the link is the one line in a card that would be a colour on a real page */
-.ms-card .s-link { inline-size: 34%; margin-top: 2px; background: rgba(18, 102, 181, .5); }
+.ms-card .s-link { inline-size: 40%; margin-top: 2px; background: rgba(18, 102, 181, .5); }
 
 /* the field is the one with nothing written in it yet */
-.ma-form { display: flex; gap: 12px; width: 100%; margin-top: 14px; }
+.ma-form { display: flex; gap: 12px; width: 100%; }
 .f-field {
   flex: 1;
   block-size: 31px;
