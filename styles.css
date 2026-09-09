@@ -1170,7 +1170,12 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   flex-direction: column;
   background: var(--white);
 }
-.mock i, .mock b, .mock span { display: block; }
+/* Bare i, b and span inside a drawing are shapes, so they need to be blocks.
+   Written flat this outranked every component rule that gives one of them a
+   display of its own — the field and the send button came out as blocks with
+   their text sitting on the top edge. :where() carries no specificity, so it
+   is a default the components can simply override. */
+:where(.mock) :where(i, b, span) { display: block; }
 /* the refined one is cut at the divider and lies over the first pass */
 .mock--after {
   z-index: 2;
@@ -1387,100 +1392,183 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .mock__foot i { block-size: 7px; border-radius: 3px; background: var(--grey-soft); }
 .mock__foot .f-logo { inline-size: 52px; block-size: 10px; background: #ccd5e2; }
 .mock__foot .f-sp { flex: 1; background: none; }
-.mock__foot .f-l { inline-size: 35px; }
 /* ---- 2 · after the team ----
-   Ranged left, sizes decided rather than inherited, and colour kept for the
-   things that would actually carry it.
+   The refined page carries real words and real marks, because that is half of
+   what makes a page look designed: the first pass has placeholder blocks
+   where its content should be, and this one does not. Every string in it is
+   taken from this page — its own headline, its own calls, its own process
+   step names — so nothing here is copy that had to be invented for a
+   drawing.
 
-   Laid out so that any vertical slice of it still reads as a designed page.
-   The first arrangement put the eyebrow, the headline, both calls and the
-   credentials hard against the left edge, so with the divider at the halfway
-   mark every one of them sat behind it and the right half was a picture and
-   two cards. The hero is a two-column now — the argument on the left, its
-   image on the right — and the cards run three across the full width, so
-   there is something of the design in every band and at every x.
+   It is sized in vw between floors and ceilings rather than in fixed pixels,
+   so the whole page inside the window scales with the window and the type
+   never drops below the size it stops being type at.
+
+   Laid out so any vertical slice still reads as a designed page: the hero is
+   a two-column, argument left and image right, and the cards run three
+   across. The first arrangement put everything hard against the left edge,
+   where the divider hid all of it at the halfway mark.
    ---------------------------------------------------------------------- */
-.mock--after .n-dot {
-  inline-size: 13px;
-  block-size: 13px;
-  border-radius: 50% !important;
-  background: var(--green);
+.mock--after {
+  --t-small: clamp(6.5px, .6vw, 9.5px);
+  --t-label: clamp(6px, .52vw, 8.5px);
+  --t-title: clamp(8px, .74vw, 11.5px);
 }
-.mock--after .n-word { inline-size: 58px; block-size: 13px; background: var(--navy); }
-.mock--after .n-link { block-size: 7px; background: #cbd5e4; }
-.mock--after .n-link--a { inline-size: 35px; }
-.mock--after .n-link--b { inline-size: 46px; }
-.mock--after .n-link--c { inline-size: 28px; }
-.mock--after .n-ghost { inline-size: 50px; block-size: 27px; box-shadow: inset 0 0 0 1.5px var(--border); }
-.mock--after .n-btn { inline-size: 66px; block-size: 27px; background: var(--green); }
+/* Set once and inherited, not pinned onto every b and span: as a selector on
+   the elements it outranked the rules that give the two solid buttons their
+   white, and they came out navy on navy. Inheritance loses to any declared
+   rule, which is exactly what is wanted here. */
+.mock--after { color: var(--navy); }
 
-.mock--after .mock__body { gap: 16px; }
+/* ---- the nav ---- */
+.mock--after .mock__nav { gap: clamp(6px, .8vw, 12px); }
+.ma-brand { display: flex; align-items: center; gap: 6px; flex: none; }
+.ma-brand i {
+  inline-size: clamp(9px, .9vw, 13px);
+  block-size: clamp(9px, .9vw, 13px);
+  border-radius: 50%;
+  background: var(--green);
+  flex: none;
+}
+.ma-brand b {
+  font-size: clamp(8px, .78vw, 12px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.ma-nav-link {
+  font-size: var(--t-small);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.ma-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: clamp(5px, .55vw, 8px) clamp(7px, .8vw, 12px);
+  border-radius: var(--r);
+  background: var(--green);
+  color: #fff;
+  font-size: var(--t-small);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+.ma-nav-btn svg { inline-size: clamp(7px, .62vw, 10px); block-size: clamp(7px, .62vw, 10px); }
 
 /* ---- the hero: the argument, and the picture that carries it ---- */
-.ma-hero { display: flex; gap: 22px; align-items: stretch; }
+.mock--after .mock__body { gap: clamp(10px, 1.3vw, 18px); }
+.ma-hero { display: flex; gap: clamp(12px, 1.8vw, 24px); align-items: stretch; }
 .ma-hero__copy {
   flex: 1.15;
   min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 11px;
+  gap: clamp(6px, .78vw, 11px);
 }
-.ma-eyebrow { display: flex; align-items: center; gap: 7px; }
-.ma-eyebrow i { inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--green); }
-.ma-eyebrow b { inline-size: 64px; block-size: 7px; border-radius: 3px; background: var(--green-ink); }
+.ma-eyebrow { display: flex; align-items: center; gap: 5px; }
+.ma-eyebrow i {
+  inline-size: clamp(5px, .5vw, 7px);
+  block-size: clamp(5px, .5vw, 7px);
+  border-radius: 50%;
+  background: var(--green);
+  flex: none;
+}
+.ma-eyebrow b {
+  font-size: var(--t-label);
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--green-ink);
+  white-space: nowrap;
+}
+.ma-h {
+  font-size: clamp(13px, 1.62vw, 25px);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+}
+.ma-h em { font-style: normal; color: var(--green-ink); }
+.ma-p {
+  font-size: var(--t-small);
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 30ch;
+}
 
-.ma { border-radius: 3px; }
-/* tone, not hue: the second line is the same navy at half strength, so the
-   hierarchy is carried by weight the way it is in type */
-.ma--h1 { block-size: 22px; inline-size: 92%; background: var(--navy); }
-.ma--h2 { block-size: 22px; inline-size: 58%; background: rgba(20, 60, 102, .46); }
-.ma--copy { block-size: 7px; inline-size: 96%; background: #cbd5e4; margin-top: 4px; }
-.ma--copy2 { block-size: 7px; inline-size: 68%; background: #cbd5e4; }
+.ma-cta { display: flex; flex-wrap: wrap; gap: clamp(6px, .7vw, 10px); margin-top: 2px; }
+.ma-cta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: clamp(6px, .72vw, 11px) clamp(8px, 1vw, 15px);
+  border-radius: var(--r);
+  font-size: var(--t-small);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+.ma-cta .is-solid { background: var(--green); color: #fff; }
+.ma-cta .is-quiet { box-shadow: inset 0 0 0 1.5px var(--border); color: var(--navy); }
+.ma-cta svg { inline-size: clamp(7px, .62vw, 10px); block-size: clamp(7px, .62vw, 10px); }
 
-.ma-cta { display: flex; gap: 12px; margin-top: 5px; }
-.ma-cta span { block-size: 34px; border-radius: var(--r); }
-.ma-cta span:nth-child(1) { inline-size: 124px; background: var(--green); }
-.ma-cta span:nth-child(2) { inline-size: 94px; box-shadow: inset 0 0 0 1.5px var(--border); }
-
-.ma-trust { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 3px; }
-.ma-trust span { display: flex; align-items: center; gap: 6px; }
+.ma-trust { display: flex; align-items: center; gap: 5px; margin-top: 1px; }
 .ma-trust i {
-  inline-size: 11px;
-  block-size: 11px;
+  display: grid;
+  place-items: center;
+  inline-size: clamp(9px, .92vw, 14px);
+  block-size: clamp(9px, .92vw, 14px);
   border-radius: 50%;
   background: var(--tint-green);
-  box-shadow: inset 0 0 0 1.6px var(--green);
+  color: var(--green-ink);
+  flex: none;
 }
-.ma-trust b { inline-size: 40px; block-size: 6px; border-radius: 3px; background: #cbd5e4; }
+.ma-trust svg { inline-size: 60%; block-size: 60%; }
+.ma-trust b {
+  font-size: var(--t-label);
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1;
+  color: var(--muted);
+  white-space: nowrap;
+}
 
 /* the one filled area on the page, and the light off its top-left corner is
    what keeps it reading as a photograph rather than a rectangle of brand blue */
 .ma-hero__art {
   position: relative;
   flex: 1;
-  min-block-size: 150px;
+  min-inline-size: 0;
+  min-block-size: clamp(96px, 11vw, 156px);
   border-radius: var(--r);
+  overflow: hidden;
   background:
     radial-gradient(115% 85% at 22% 12%, rgba(255, 255, 255, .24), transparent 62%),
     linear-gradient(150deg, #2a6fb0, #143f66);
 }
-.ma-hero__art::after {
-  content: '';
+.ma-hero__art b {
   position: absolute;
-  left: 16px;
-  bottom: 16px;
-  inline-size: 78px;
-  block-size: 8px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, .6);
+  left: clamp(8px, .9vw, 14px);
+  bottom: clamp(8px, .9vw, 14px);
+  font-size: var(--t-label);
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: rgba(255, 255, 255, .92);
 }
 
 /* ---- three across, so the band reads at any x ---- */
 .ma-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 15px;
+  gap: clamp(8px, 1.1vw, 15px);
   flex: 1;
   min-block-size: 0;
 }
@@ -1489,47 +1577,84 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 8px;
-  padding: 15px;
+  gap: clamp(5px, .6vw, 9px);
+  padding: clamp(9px, 1.1vw, 15px);
   border-radius: var(--r);
   background: var(--white);
   box-shadow: inset 0 0 0 1px var(--border);
+  min-width: 0;
 }
 .ms-card i {
-  inline-size: 22px;
-  block-size: 22px;
+  display: grid;
+  place-items: center;
+  inline-size: clamp(15px, 1.6vw, 23px);
+  block-size: clamp(15px, 1.6vw, 23px);
   border-radius: 5px;
   background: var(--tint-green);
-  box-shadow: inset 0 0 0 1.6px var(--green);
+  color: var(--green-ink);
+  flex: none;
 }
-.ms-card:nth-child(2) i { background: var(--tint-blue); box-shadow: inset 0 0 0 1.6px var(--blue); }
-.ms-card:nth-child(3) i { background: var(--chip-navy); box-shadow: inset 0 0 0 1.6px var(--navy); }
-.ms-card span { block-size: 6px; border-radius: 3px; background: #cbd5e4; }
-.ms-card .s-title { block-size: 8px; inline-size: 78%; background: #a3b3c8; }
+.ms-card i svg { inline-size: 62%; block-size: 62%; }
+.ms-card:nth-child(2) i { background: var(--tint-blue); color: var(--blue); }
+.ms-card:nth-child(3) i { background: var(--chip-navy); color: var(--navy); }
+.ms-card b {
+  font-size: var(--t-title);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ms-card span { block-size: clamp(4px, .42vw, 6px); border-radius: 3px; background: #cbd5e4; }
 .ms-card .s-b { inline-size: 94%; }
 /* the link is the one line in a card that would be a colour on a real page */
-.ms-card .s-link { inline-size: 40%; margin-top: 2px; background: rgba(18, 102, 181, .5); }
+.ms-card .s-link { inline-size: 40%; background: rgba(18, 102, 181, .5); }
 
-/* the field is the one with nothing written in it yet */
-.ma-form { display: flex; gap: 12px; width: 100%; }
+/* ---- the foot: a real field, with nothing written in it yet ---- */
+.ma-form { display: flex; gap: clamp(6px, .8vw, 12px); width: 100%; align-items: stretch; }
 .f-field {
   flex: 1;
-  block-size: 31px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding-inline: clamp(8px, .9vw, 14px);
+  block-size: clamp(21px, 2.2vw, 31px);
   border-radius: var(--r);
   box-shadow: inset 0 0 0 1.5px var(--border);
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--faint);
+  white-space: nowrap;
+  overflow: hidden;
 }
 .f-btn {
   flex: none;
-  inline-size: 82px;
-  block-size: 31px;
+  display: grid;
+  place-items: center;
+  padding-inline: clamp(10px, 1.2vw, 18px);
+  block-size: clamp(21px, 2.2vw, 31px);
   border-radius: var(--r);
   background: var(--navy);
+  color: #fff;
+  font-size: var(--t-small);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Below the width the third card can carry a word, the page drops it — the
+   way a real one would, rather than squeezing three into the room for two. */
+@media (max-width: 700px) {
+  .ms-card:nth-child(3) { display: none; }
+  .ma-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mock--after .ma-nav-link:nth-of-type(3) { display: none; }
 }
 
 @media (max-width: 760px) {
   .ba-notes { grid-template-columns: 1fr; gap: 16px; }
   .ba-handle i { inline-size: 34px; block-size: 34px; }
-  .ba-tag { top: 54px; font-size: 10px; padding: 7px 9px; }
+  .ba-tag { font-size: 10px; padding: 8px 10px; }
 }
 
 /* --------------------------------------------------------------------------
