@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=14">
+<link rel="stylesheet" href="styles.css?v=15">
 </head>
 <body>
 
@@ -378,11 +378,12 @@
       <div class="ba" data-ba>
         <!-- Buttons, not captions: each throws the divider to its own end, and
              each lights while its side is the one being shown. -->
-        <div class="ba-labels">
-          <button type="button" class="ba-tag ba-tag--before is-active" data-ba-side="before" aria-pressed="true">AI first pass</button>
-          <button type="button" class="ba-tag ba-tag--after is-active" data-ba-side="after" aria-pressed="true">After our team</button>
-        </div>
-        <div class="ba-stage">
+        <div class="ba-main">
+          <div class="ba-labels">
+            <button type="button" class="ba-tag ba-tag--before is-active" data-ba-side="before" aria-pressed="true">AI first pass</button>
+            <button type="button" class="ba-tag ba-tag--after is-active" data-ba-side="after" aria-pressed="true">After our team</button>
+          </div>
+          <div class="ba-stage">
           <div class="mock mock--before" aria-hidden="true">
             <div class="mock__chrome"><i></i><i></i><i></i><span></span></div>
             <div class="mock__nav">
@@ -464,6 +465,7 @@
 
           <label class="visually-hidden" for="ba-range">How much of the refined design to show</label>
           <input class="ba-range" id="ba-range" type="range" min="0" max="100" value="50" step="1" data-ba-range>
+          </div>
         </div>
 
         <div class="ba-notes">
@@ -777,6 +779,6 @@
 
 </main>
 
-<script src="script.js?v=14" defer></script>
+<script src="script.js?v=15" defer></script>
 </body>
 </html>

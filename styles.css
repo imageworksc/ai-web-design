@@ -1147,12 +1147,30 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    One window instead of two also means twice the width, so everything inside
    is drawn about half again as large as it was.
    -------------------------------------------------------------------------- */
-.ba { width: 100%; margin-top: 8px; }
+/* The window takes the left of the band and the two readings stand in a
+   column beside it, each behind the rule of the side it belongs to. Under the
+   window they were a wide two-up that had nothing to do with the drawing
+   above them; here each one sits at the height of the thing it describes. */
+.ba {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(230px, 25%, 310px);
+  gap: clamp(22px, 2.8vw, 46px);
+  align-items: start;
+  width: 100%;
+  margin-top: 8px;
+}
 
 .ba-stage {
   position: relative;
   isolation: isolate;
-  block-size: clamp(400px, 46vw, 580px);
+  /* the drawings inside are sized against this box, not against the viewport,
+     so they keep their proportions whatever the column comes out at */
+  container-type: inline-size;
+  /* A proportion, not a height. Against a fixed height the drawings — which
+     are sized against this box — outgrew it as the column narrowed and the
+     cards were clipped off the foot. A ratio keeps the box and its contents
+     changing together. */
+  aspect-ratio: 8 / 5;
   border-radius: var(--r);
   overflow: hidden;
   background: var(--white);
@@ -1296,14 +1314,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   box-shadow: inset 0 0 0 1px transparent;
 }
 
-/* the two readings, under the window they belong to */
+/* the two readings, in a column beside the window */
 .ba-notes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(20px, 3vw, 44px);
-  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.2vw, 30px);
+  padding-top: 4px;
 }
-.compare-note { font-size: 16px; line-height: 1.7; color: var(--muted); }
+.compare-note {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--muted);
+  padding-left: 16px;
+  /* each carries the colour of the tag for its side, so the pair of them
+     reads against the window without having to be labelled again */
+  border-left: 3px solid var(--grey-soft);
+}
+.compare-note:last-child { border-left-color: var(--green); }
 .compare-note strong { color: var(--navy); font-weight: 700; }
 
 /* ==========================================================================
@@ -1410,9 +1437,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    where the divider hid all of it at the halfway mark.
    ---------------------------------------------------------------------- */
 .mock--after {
-  --t-small: clamp(6.5px, .6vw, 9.5px);
-  --t-label: clamp(6px, .52vw, 8.5px);
-  --t-title: clamp(8px, .74vw, 11.5px);
+  --t-small: clamp(6.5px, 0.79cqw, 9.5px);
+  --t-label: clamp(6px, 0.68cqw, 8.5px);
+  --t-title: clamp(8px, 0.97cqw, 11.5px);
 }
 /* Set once and inherited, not pinned onto every b and span: as a selector on
    the elements it outranked the rules that give the two solid buttons their
@@ -1421,17 +1448,17 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .mock--after { color: var(--navy); }
 
 /* ---- the nav ---- */
-.mock--after .mock__nav { gap: clamp(6px, .8vw, 12px); }
+.mock--after .mock__nav { gap: clamp(6px, 1.05cqw, 12px); }
 .ma-brand { display: flex; align-items: center; gap: 6px; flex: none; }
 .ma-brand i {
-  inline-size: clamp(9px, .9vw, 13px);
-  block-size: clamp(9px, .9vw, 13px);
+  inline-size: clamp(9px, 1.18cqw, 13px);
+  block-size: clamp(9px, 1.18cqw, 13px);
   border-radius: 50%;
   background: var(--green);
   flex: none;
 }
 .ma-brand b {
-  font-size: clamp(8px, .78vw, 12px);
+  font-size: clamp(8px, 1.02cqw, 12px);
   font-weight: 800;
   letter-spacing: -.02em;
   line-height: 1;
@@ -1448,7 +1475,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   align-items: center;
   gap: 4px;
   flex: none;
-  padding: clamp(5px, .55vw, 8px) clamp(7px, .8vw, 12px);
+  padding: clamp(5px, 0.72cqw, 8px) clamp(7px, 1.05cqw, 12px);
   border-radius: var(--r);
   background: var(--green);
   color: #fff;
@@ -1457,23 +1484,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1;
   white-space: nowrap;
 }
-.ma-nav-btn svg { inline-size: clamp(7px, .62vw, 10px); block-size: clamp(7px, .62vw, 10px); }
+.ma-nav-btn svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
 
 /* ---- the hero: the argument, and the picture that carries it ---- */
-.mock--after .mock__body { gap: clamp(10px, 1.3vw, 18px); }
-.ma-hero { display: flex; gap: clamp(12px, 1.8vw, 24px); align-items: stretch; }
+.mock--after .mock__body { gap: clamp(10px, 1.7cqw, 18px); }
+.ma-hero { display: flex; gap: clamp(12px, 2.36cqw, 24px); align-items: stretch; }
 .ma-hero__copy {
   flex: 1.15;
   min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: clamp(6px, .78vw, 11px);
+  gap: clamp(6px, 1.02cqw, 11px);
 }
 .ma-eyebrow { display: flex; align-items: center; gap: 5px; }
 .ma-eyebrow i {
-  inline-size: clamp(5px, .5vw, 7px);
-  block-size: clamp(5px, .5vw, 7px);
+  inline-size: clamp(5px, 0.65cqw, 7px);
+  block-size: clamp(5px, 0.65cqw, 7px);
   border-radius: 50%;
   background: var(--green);
   flex: none;
@@ -1488,7 +1515,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   white-space: nowrap;
 }
 .ma-h {
-  font-size: clamp(13px, 1.62vw, 25px);
+  font-size: clamp(13px, 2.12cqw, 25px);
   font-weight: 800;
   letter-spacing: -.03em;
   line-height: 1.1;
@@ -1502,12 +1529,12 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   max-width: 30ch;
 }
 
-.ma-cta { display: flex; flex-wrap: wrap; gap: clamp(6px, .7vw, 10px); margin-top: 2px; }
+.ma-cta { display: flex; flex-wrap: wrap; gap: clamp(6px, 0.92cqw, 10px); margin-top: 2px; }
 .ma-cta span {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: clamp(6px, .72vw, 11px) clamp(8px, 1vw, 15px);
+  padding: clamp(6px, 0.94cqw, 11px) clamp(8px, 1.31cqw, 15px);
   border-radius: var(--r);
   font-size: var(--t-small);
   font-weight: 800;
@@ -1516,14 +1543,14 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .ma-cta .is-solid { background: var(--green); color: #fff; }
 .ma-cta .is-quiet { box-shadow: inset 0 0 0 1.5px var(--border); color: var(--navy); }
-.ma-cta svg { inline-size: clamp(7px, .62vw, 10px); block-size: clamp(7px, .62vw, 10px); }
+.ma-cta svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
 
 .ma-trust { display: flex; align-items: center; gap: 5px; margin-top: 1px; }
 .ma-trust i {
   display: grid;
   place-items: center;
-  inline-size: clamp(9px, .92vw, 14px);
-  block-size: clamp(9px, .92vw, 14px);
+  inline-size: clamp(9px, 1.2cqw, 14px);
+  block-size: clamp(9px, 1.2cqw, 14px);
   border-radius: 50%;
   background: var(--tint-green);
   color: var(--green-ink);
@@ -1545,7 +1572,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   position: relative;
   flex: 1;
   min-inline-size: 0;
-  min-block-size: clamp(96px, 11vw, 156px);
+  min-block-size: clamp(96px, 14.4cqw, 156px);
   border-radius: var(--r);
   overflow: hidden;
   background:
@@ -1554,8 +1581,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .ma-hero__art b {
   position: absolute;
-  left: clamp(8px, .9vw, 14px);
-  bottom: clamp(8px, .9vw, 14px);
+  left: clamp(8px, 1.18cqw, 14px);
+  bottom: clamp(8px, 1.18cqw, 14px);
   font-size: var(--t-label);
   font-weight: 800;
   letter-spacing: .1em;
@@ -1568,7 +1595,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ma-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(8px, 1.1vw, 15px);
+  gap: clamp(8px, 1.44cqw, 15px);
   flex: 1;
   min-block-size: 0;
 }
@@ -1577,8 +1604,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: clamp(5px, .6vw, 9px);
-  padding: clamp(9px, 1.1vw, 15px);
+  gap: clamp(5px, 0.79cqw, 9px);
+  padding: clamp(9px, 1.44cqw, 15px);
   border-radius: var(--r);
   background: var(--white);
   box-shadow: inset 0 0 0 1px var(--border);
@@ -1587,8 +1614,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ms-card i {
   display: grid;
   place-items: center;
-  inline-size: clamp(15px, 1.6vw, 23px);
-  block-size: clamp(15px, 1.6vw, 23px);
+  inline-size: clamp(15px, 2.09cqw, 23px);
+  block-size: clamp(15px, 2.09cqw, 23px);
   border-radius: 5px;
   background: var(--tint-green);
   color: var(--green-ink);
@@ -1606,20 +1633,20 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.ms-card span { block-size: clamp(4px, .42vw, 6px); border-radius: 3px; background: #cbd5e4; }
+.ms-card span { block-size: clamp(4px, 0.55cqw, 6px); border-radius: 3px; background: #cbd5e4; }
 .ms-card .s-b { inline-size: 94%; }
 /* the link is the one line in a card that would be a colour on a real page */
 .ms-card .s-link { inline-size: 40%; background: rgba(18, 102, 181, .5); }
 
 /* ---- the foot: a real field, with nothing written in it yet ---- */
-.ma-form { display: flex; gap: clamp(6px, .8vw, 12px); width: 100%; align-items: stretch; }
+.ma-form { display: flex; gap: clamp(6px, 1.05cqw, 12px); width: 100%; align-items: stretch; }
 .f-field {
   flex: 1;
   min-width: 0;
   display: flex;
   align-items: center;
-  padding-inline: clamp(8px, .9vw, 14px);
-  block-size: clamp(21px, 2.2vw, 31px);
+  padding-inline: clamp(8px, 1.18cqw, 14px);
+  block-size: clamp(21px, 2.88cqw, 31px);
   border-radius: var(--r);
   box-shadow: inset 0 0 0 1.5px var(--border);
   font-size: var(--t-small);
@@ -1632,8 +1659,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   flex: none;
   display: grid;
   place-items: center;
-  padding-inline: clamp(10px, 1.2vw, 18px);
-  block-size: clamp(21px, 2.2vw, 31px);
+  padding-inline: clamp(10px, 1.57cqw, 18px);
+  block-size: clamp(21px, 2.88cqw, 31px);
   border-radius: var(--r);
   background: var(--navy);
   color: #fff;
@@ -1651,10 +1678,16 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .mock--after .ma-nav-link:nth-of-type(3) { display: none; }
 }
 
+/* Below the width the column beside it can carry a sentence, the readings go
+   back under the window. */
+@media (max-width: 900px) {
+  .ba { grid-template-columns: 1fr; gap: 24px; }
+  .ba-notes { padding-top: 0; }
+}
 @media (max-width: 760px) {
-  .ba-notes { grid-template-columns: 1fr; gap: 16px; }
   .ba-handle i { inline-size: 34px; block-size: 34px; }
   .ba-tag { font-size: 10px; padding: 8px 10px; }
+  .compare-note { font-size: 15px; }
 }
 
 /* --------------------------------------------------------------------------
