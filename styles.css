@@ -1133,38 +1133,132 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .answer-more { max-width: 820px; margin: 22px auto 0; }
 
 /* --------------------------------------------------------------------------
-   COMPARE — the draft as it arrives, and the same page after a team
-   Two cards, and the one that wins the argument is the one that carries the
-   colour. Each holds a drawing of a page rather than a screenshot, so the
-   difference being described is the thing on screen.
+   BEFORE / AFTER — one window, wiped
+   Two drawings side by side asked the reader to hold one in mind while
+   looking at the other. They are the same window now, stacked, with the
+   refined page clipped to the right of a divider you can drag: the two
+   states meet on the same pixels, so the difference is read rather than
+   remembered.
+
+   The divider is a real range input lying over the stage — invisible, but
+   focusable, keyboard-operable and announced. Without the script it sits at
+   the halfway mark the stylesheet sets, so both designs are still on screen.
+
+   One window instead of two also means twice the width, so everything inside
+   is drawn about half again as large as it was.
    -------------------------------------------------------------------------- */
-.compare {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(18px, 2.2vw, 26px);
-  width: 100%;
-  margin-top: 8px;
-}
-.compare-col {
+.ba { width: 100%; margin-top: 8px; }
+
+.ba-stage {
   position: relative;
+  isolation: isolate;
+  block-size: clamp(400px, 46vw, 580px);
+  border-radius: var(--r);
   overflow: hidden;
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--border),
+              0 1px 3px rgba(20, 40, 80, .07), 0 18px 44px rgba(20, 40, 80, .12);
+}
+
+/* The two drawings occupy the same box. Each needs its own ground: without
+   one the top layer is transparent wherever its own design leaves a gap, and
+   the page underneath shows through the holes. */
+.mock {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  padding: clamp(22px, 2.4vw, 28px);
-  border-radius: var(--r);
-  border-top: 3px solid var(--grey-soft);
-  background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
-  box-shadow: var(--shadow-flat);
-  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+  background: var(--white);
 }
-.compare-col--after {
-  border-top-color: var(--green);
-  box-shadow: var(--shadow-card);
+.mock i, .mock b, .mock span { display: block; }
+/* the refined one is cut at the divider and lies over the first pass */
+.mock--after {
+  z-index: 2;
+  clip-path: inset(0 0 0 var(--ba, 50%));
 }
-.compare-col:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
 
-.compare-tag {
-  align-self: flex-start;
+/* ---- the divider and its grip ---- */
+.ba-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ba, 50%);
+  z-index: 3;
+  inline-size: 2px;
+  margin-left: -1px;
+  background: var(--green);
+  pointer-events: none;
+}
+.ba-handle i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 0 0 2px var(--green), 0 6px 18px rgba(20, 40, 80, .22);
+}
+/* two chevrons pointing out of the grip, drawn rather than fetched */
+.ba-handle i::before,
+.ba-handle i::after {
+  content: '';
+  inline-size: 7px;
+  block-size: 7px;
+  border: 2px solid var(--green-ink);
+  border-right: 0;
+  border-bottom: 0;
+  position: absolute;
+}
+.ba-handle i::before { rotate: -45deg; left: 11px; }
+.ba-handle i::after { rotate: 135deg; right: 11px; }
+
+/* The control itself: full-bleed over the stage so the whole thing is
+   draggable, invisible so the drawings are what you see, and still a range
+   input so it answers to the keyboard and to a screen reader. */
+.ba-range {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+/* a hairline thumb, so the value maps to the pointer without an inset */
+.ba-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  inline-size: 2px;
+  block-size: 100%;
+  background: transparent;
+}
+.ba-range::-moz-range-thumb {
+  inline-size: 2px;
+  block-size: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.ba:has(.ba-range:focus-visible) .ba-handle i { box-shadow: var(--ring), 0 6px 18px rgba(20, 40, 80, .22); }
+
+/* Which side is which. Above the window rather than inside it: laid over the
+   drawings they landed on the nav rail, and there is no height in a page
+   thumbnail that is reliably empty in both designs at once. */
+.ba-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.ba-tag {
   font-size: 11px;
   font-weight: 800;
   letter-spacing: .16em;
@@ -1172,202 +1266,157 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1;
   padding: 8px 11px;
   border-radius: var(--r);
-  background: var(--grey-soft);
-  color: var(--grey-ink);
 }
-.compare-col--after .compare-tag { background: var(--tint-green); color: var(--green-ink); }
+.ba-tag--before { background: var(--grey-soft); color: var(--grey-ink); }
+.ba-tag--after { background: var(--tint-green); color: var(--green-ink); }
 
-.compare-note {
-  margin-top: 20px;
-  font-size: 15.5px;
-  line-height: 1.7;
-  color: var(--muted);
+/* the two readings, under the window they belong to */
+.ba-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 44px);
+  margin-top: 22px;
 }
+.compare-note { font-size: 16px; line-height: 1.7; color: var(--muted); }
 .compare-note strong { color: var(--navy); font-weight: 700; }
 
-/* ---- the two drawings ----
-   Built the way Custom Web Design builds its hero kit: real parts rather than
-   bars — a nav with links and a call, buttons, cards with an icon, an image
-   block, a form field. Both are the same window at the same height, so the
-   only thing that differs is the design inside, which is the whole point of
-   the section. Each demonstrates the sentence printed under it: the first has
-   no size contrast, one grey, a centred axis, evenly spread rows and three
-   identical cards; the second has a headline three times its body copy, a
-   ranged-left axis, brand colour, and a feature block deliberately not the
-   same size as what sits beside it.
-   ---------------------------------------------------------------------- */
-.mock {
-  display: flex;
-  flex-direction: column;
-  /* Fixed, not a minimum. The two sit in separate grid columns, so nothing
-     equalises them for free — and one running taller than the other is the
-     single difference between them that is not part of the argument. */
-  flex: none;
-  block-size: 448px;
-  margin-top: 18px;
-  border-radius: var(--r);
-  overflow: hidden;
-  background: var(--white);
-  box-shadow: inset 0 0 0 1px var(--border);
-}
-.mock i, .mock b, .mock span { display: block; }
-
-/* the window and its nav rail, identical scaffolding on both */
+/* ==========================================================================
+   what is drawn inside the window — the same two pages as before, at the
+   size the wider stage can carry
+   ========================================================================== */
 .mock__chrome {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
   flex: none;
-  padding: 9px 12px;
+  padding: 13px 18px;
   background: #fbfcfe;
   border-bottom: 1px solid var(--border-soft);
 }
 .mock__chrome i {
   flex: none;
-  inline-size: 6px;
-  block-size: 6px;
+  inline-size: 8px;
+  block-size: 8px;
   border-radius: 50%;
   background: var(--border);
 }
 .mock__chrome span {
   flex: 1;
-  margin-left: 9px;
-  block-size: 7px;
-  border-radius: 4px;
+  margin-left: 13px;
+  block-size: 10px;
+  border-radius: 5px;
   background: var(--grey-soft);
 }
 .mock__nav {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 10px;
   flex: none;
-  padding: 10px 13px;
+  padding: 15px 20px;
   border-bottom: 1px solid var(--border-soft);
 }
 .mock__nav i { flex: none; border-radius: 2px; }
-/* the spacer is a gap, not a part: it has to opt out of whatever fill the
-   rail gives its children, or it draws as a bar of its own */
 .n-sp { flex: 1 !important; background: none !important; box-shadow: none !important; }
-
-.mock__body { flex: 1; display: flex; flex-direction: column; padding: 16px 14px; }
+.mock__body { flex: 1; display: flex; flex-direction: column; padding: 26px 22px; }
 
 /* ---- 1 · the first pass ----
-   Four nav links the same width, one grey, one weight, and rows spread with
-   space-between so every element sits exactly as far from its neighbour as
-   every other. That is "even spacing, default type, stock structure" drawn
-   rather than asserted.
-   ---------------------------------------------------------------------- */
-.mock--before .mock__nav i { block-size: 6px; background: var(--grey-soft); }
-/* the mark needs to read as separate from the links, or the whole rail runs
-   together as one strip of grey */
-.mock--before .n-logo { inline-size: 40px; block-size: 9px; background: #ccd5e2; margin-right: 7px; }
-.mock--before .n-link { inline-size: 26px; }
-.mock--before .n-btn  { inline-size: 42px; block-size: 17px; background: #d5dce7; }
+   One grey, one weight, a centred axis, and rows spread so every element sits
+   exactly as far from its neighbour as every other. */
+.mock--before .mock__nav i { block-size: 9px; background: var(--grey-soft); }
+.mock--before .n-logo { inline-size: 58px; block-size: 13px; background: #ccd5e2; margin-right: 10px; }
+.mock--before .n-link { inline-size: 38px; }
+.mock--before .n-btn { inline-size: 62px; block-size: 26px; background: #d5dce7; }
 
 .mock--before .mock__body { align-items: center; justify-content: space-between; }
-.mb { block-size: 9px; border-radius: 2px; background: var(--grey-soft); }
+.mb { block-size: 13px; border-radius: 3px; background: var(--grey-soft); }
 .mb--l1 { inline-size: 68%; }
 .mb--l2 { inline-size: 88%; }
 .mb--l3 { inline-size: 88%; }
-/* two calls that are the same call twice — a page with no view about which
-   thing it wants you to do */
-.mb-cta { display: flex; gap: 9px; }
-.mb-cta span { block-size: 25px; inline-size: 78px; border-radius: var(--r); background: #d5dce7; }
+.mb-cta { display: flex; gap: 13px; }
+.mb-cta span { block-size: 36px; inline-size: 114px; border-radius: var(--r); background: #d5dce7; }
 
 .mock__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 15px;
   width: 100%;
 }
 .mock__cell {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 13px 10px;
+  gap: 9px;
+  padding: 19px 15px;
   border-radius: var(--r);
   background: #f4f6fa;
 }
 .mock__cell i {
-  inline-size: 18px;
-  block-size: 18px;
+  inline-size: 26px;
+  block-size: 26px;
   border-radius: 50%;
   background: var(--grey-soft);
 }
-.mock__cell span { block-size: 4px; border-radius: 2px; background: var(--grey-soft); }
-.mock__cell .c-title { block-size: 6px; inline-size: 74%; background: #ccd5e2; }
+.mock__cell span { block-size: 6px; border-radius: 3px; background: var(--grey-soft); }
+.mock__cell .c-title { block-size: 9px; inline-size: 74%; background: #ccd5e2; }
 .mock__cell .c-b1 { inline-size: 88%; }
 .mock__cell .c-b2 { inline-size: 66%; }
-.mock__cell .c-link { inline-size: 38%; margin-top: 2px; background: #ccd5e2; }
+.mock__cell .c-link { inline-size: 38%; margin-top: 3px; background: #ccd5e2; }
 
-/* a footer, and the same grey as everything above it */
-.mock__foot { display: flex; align-items: center; gap: 8px; width: 100%; }
-.mock__foot i { block-size: 5px; border-radius: 2px; background: var(--grey-soft); }
-.mock__foot .f-logo { inline-size: 36px; block-size: 7px; background: #ccd5e2; }
+.mock__foot { display: flex; align-items: center; gap: 12px; width: 100%; }
+.mock__foot i { block-size: 7px; border-radius: 3px; background: var(--grey-soft); }
+.mock__foot .f-logo { inline-size: 52px; block-size: 10px; background: #ccd5e2; }
 .mock__foot .f-sp { flex: 1; background: none; }
-.mock__foot .f-l { inline-size: 24px; }
+.mock__foot .f-l { inline-size: 35px; }
 
 /* ---- 2 · after the team ----
-   A mark and a call in the nav, sizes decided rather than inherited, and a
-   foot that is one feature block with two real cards beside it and a form
-   under it — the components the styles actually get applied to.
-   ---------------------------------------------------------------------- */
+   Ranged left, sizes decided rather than inherited, and colour kept for the
+   things that would actually carry it. */
 .mock--after .n-dot {
-  inline-size: 9px;
-  block-size: 9px;
+  inline-size: 13px;
+  block-size: 13px;
   border-radius: 50% !important;
   background: var(--green);
 }
-.mock--after .n-word { inline-size: 40px; block-size: 9px; background: var(--navy); }
-.mock--after .n-link { block-size: 5px; background: #cbd5e4; }
-.mock--after .n-link--a { inline-size: 24px; }
-.mock--after .n-link--b { inline-size: 32px; }
-.mock--after .n-link--c { inline-size: 19px; }
-/* a quiet second action beside the call, outlined rather than filled */
-.mock--after .n-ghost { inline-size: 34px; block-size: 19px; box-shadow: inset 0 0 0 1.5px var(--border); }
-.mock--after .n-btn { inline-size: 46px; block-size: 19px; background: var(--green); }
+.mock--after .n-word { inline-size: 58px; block-size: 13px; background: var(--navy); }
+.mock--after .n-link { block-size: 7px; background: #cbd5e4; }
+.mock--after .n-link--a { inline-size: 35px; }
+.mock--after .n-link--b { inline-size: 46px; }
+.mock--after .n-link--c { inline-size: 28px; }
+.mock--after .n-ghost { inline-size: 50px; block-size: 27px; box-shadow: inset 0 0 0 1.5px var(--border); }
+.mock--after .n-btn { inline-size: 66px; block-size: 27px; background: var(--green); }
 
-.mock--after .mock__body { align-items: flex-start; gap: 8px; }
-.ma-eyebrow { display: flex; align-items: center; gap: 5px; }
-.ma-eyebrow i { inline-size: 5px; block-size: 5px; border-radius: 50%; background: var(--green); }
-.ma-eyebrow b { inline-size: 44px; block-size: 5px; border-radius: 2px; background: var(--green-ink); }
+.mock--after .mock__body { align-items: flex-start; gap: 12px; }
+.ma-eyebrow { display: flex; align-items: center; gap: 7px; }
+.ma-eyebrow i { inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--green); }
+.ma-eyebrow b { inline-size: 64px; block-size: 7px; border-radius: 3px; background: var(--green-ink); }
 
-.ma { border-radius: 2px; }
-/* Tone, not hue. The second line of the headline was a second saturated
-   colour at full width, which put two solid brand blocks side by side and
-   read as a swatch board rather than as type. It is the same navy at half
-   strength now, so the hierarchy is carried by weight the way it is on a
-   real page — and the colour is left for the things that would actually
-   carry it: the mark, the eyebrow and the calls. */
-.ma--h1 { block-size: 16px; inline-size: 86%; background: var(--navy); margin-top: 2px; }
-.ma--h2 { block-size: 16px; inline-size: 54%; background: rgba(20, 60, 102, .46); }
-.ma--copy { block-size: 5px; inline-size: 90%; background: #cbd5e4; margin-top: 3px; }
-.ma--copy2 { block-size: 5px; inline-size: 62%; background: #cbd5e4; }
+.ma { border-radius: 3px; }
+/* tone, not hue: the second line is the same navy at half strength, so the
+   hierarchy is carried by weight the way it is in type */
+.ma--h1 { block-size: 23px; inline-size: 86%; background: var(--navy); margin-top: 3px; }
+.ma--h2 { block-size: 23px; inline-size: 54%; background: rgba(20, 60, 102, .46); }
+.ma--copy { block-size: 7px; inline-size: 90%; background: #cbd5e4; margin-top: 5px; }
+.ma--copy2 { block-size: 7px; inline-size: 62%; background: #cbd5e4; }
 
-.ma-cta { display: flex; gap: 8px; margin-top: 4px; }
-.ma-cta span { block-size: 24px; border-radius: var(--r); }
-.ma-cta span:nth-child(1) { inline-size: 92px; background: var(--green); }
-.ma-cta span:nth-child(2) { inline-size: 70px; box-shadow: inset 0 0 0 1.5px var(--border); }
+.ma-cta { display: flex; gap: 12px; margin-top: 6px; }
+.ma-cta span { block-size: 35px; border-radius: var(--r); }
+.ma-cta span:nth-child(1) { inline-size: 132px; background: var(--green); }
+.ma-cta span:nth-child(2) { inline-size: 100px; box-shadow: inset 0 0 0 1.5px var(--border); }
 
-/* the credentials rail the real hero carries under its buttons */
-.ma-trust { display: flex; gap: 13px; margin-top: 3px; }
-.ma-trust span { display: flex; align-items: center; gap: 4px; }
+.ma-trust { display: flex; gap: 18px; margin-top: 5px; }
+.ma-trust span { display: flex; align-items: center; gap: 6px; }
 .ma-trust i {
-  inline-size: 8px;
-  block-size: 8px;
+  inline-size: 11px;
+  block-size: 11px;
   border-radius: 50%;
   background: var(--tint-green);
-  box-shadow: inset 0 0 0 1.3px var(--green);
+  box-shadow: inset 0 0 0 1.6px var(--green);
 }
-.ma-trust b { inline-size: 30px; block-size: 4px; border-radius: 2px; background: #cbd5e4; }
+.ma-trust b { inline-size: 43px; block-size: 6px; border-radius: 3px; background: #cbd5e4; }
 
-/* the feature area takes whatever height is left, so the drawing fills its
-   window instead of trailing off */
-.mock__split { display: flex; gap: 10px; width: 100%; flex: 1; min-block-size: 0; margin-top: 8px; }
-/* The one filled area, and the only one — an image is the thing on a page
-   that is allowed to be a solid mass. The light off the top-left keeps it
-   reading as a photograph rather than as a rectangle of brand blue. */
+.mock__split { display: flex; gap: 15px; width: 100%; flex: 1; min-block-size: 0; margin-top: 12px; }
+/* the one filled area on the page, and the light off its top-left corner is
+   what keeps it reading as a photograph rather than a rectangle of brand blue */
 .ma-feature {
   position: relative;
   flex: 1.55;
@@ -1376,63 +1425,65 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
     radial-gradient(115% 85% at 22% 12%, rgba(255, 255, 255, .24), transparent 62%),
     linear-gradient(150deg, #2a6fb0, #143f66);
 }
-/* a caption sitting on the image, the way one does */
 .ma-feature::after {
   content: '';
   position: absolute;
-  left: 11px;
-  bottom: 11px;
-  inline-size: 54px;
-  block-size: 6px;
-  border-radius: 2px;
+  left: 16px;
+  bottom: 16px;
+  inline-size: 78px;
+  block-size: 8px;
+  border-radius: 3px;
   background: rgba(255, 255, 255, .6);
 }
-.ma-side { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-/* White with a hairline, the way a card on a real page is. Filled with tint
-   they were two more blocks of colour competing with the image beside them;
-   emptied, the image is allowed to be the one thing that carries weight. */
+.ma-side { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+/* white with a hairline, the way a card on a real page is */
 .ms-card {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 6px;
-  padding: 10px;
+  gap: 8px;
+  padding: 14px;
   border-radius: var(--r);
   background: var(--white);
   box-shadow: inset 0 0 0 1px var(--border);
 }
-/* the icon is the one element in the card that would be coloured, and it is
-   outlined rather than filled */
 .ms-card i {
-  inline-size: 14px;
-  block-size: 14px;
-  border-radius: 3px;
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: 4px;
   background: var(--tint-green);
-  box-shadow: inset 0 0 0 1.5px var(--green);
+  box-shadow: inset 0 0 0 1.6px var(--green);
 }
-.ms-card:nth-child(2) i { background: var(--tint-blue); box-shadow: inset 0 0 0 1.5px var(--blue); }
-.ms-card span { block-size: 4px; border-radius: 2px; background: #cbd5e4; }
-.ms-card .s-title { block-size: 5px; inline-size: 76%; background: #a3b3c8; }
+.ms-card:nth-child(2) i { background: var(--tint-blue); box-shadow: inset 0 0 0 1.6px var(--blue); }
+.ms-card span { block-size: 6px; border-radius: 3px; background: #cbd5e4; }
+.ms-card .s-title { block-size: 7px; inline-size: 76%; background: #a3b3c8; }
 .ms-card .s-b { inline-size: 92%; }
-/* the link is the one line in the card that would be a colour on a real page */
-.ms-card .s-link { inline-size: 34%; margin-top: 1px; background: rgba(18, 102, 181, .5); }
+/* the link is the one line in a card that would be a colour on a real page */
+.ms-card .s-link { inline-size: 34%; margin-top: 2px; background: rgba(18, 102, 181, .5); }
 
 /* the field is the one with nothing written in it yet */
-.ma-form { display: flex; gap: 8px; width: 100%; margin-top: 10px; }
+.ma-form { display: flex; gap: 12px; width: 100%; margin-top: 14px; }
 .f-field {
   flex: 1;
-  block-size: 22px;
+  block-size: 31px;
   border-radius: var(--r);
   box-shadow: inset 0 0 0 1.5px var(--border);
 }
 .f-btn {
   flex: none;
-  inline-size: 58px;
-  block-size: 22px;
+  inline-size: 82px;
+  block-size: 31px;
   border-radius: var(--r);
   background: var(--navy);
 }
+
+@media (max-width: 760px) {
+  .ba-notes { grid-template-columns: 1fr; gap: 16px; }
+  .ba-handle i { inline-size: 34px; block-size: 34px; }
+  .ba-tag { top: 54px; font-size: 10px; padding: 7px 9px; }
+}
+
 /* --------------------------------------------------------------------------
    STEPS — "How We Do It", from imageworks-home-2
    Taken as it stands there: the tab strip is a rail with a station on each

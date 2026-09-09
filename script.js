@@ -128,8 +128,27 @@
   }
 
   /* ------------------------------------------------------------------------
-     3 · BOOT
+     3 · THE BEFORE / AFTER WIPE
+     The divider's position is one custom property, and the range input is the
+     only thing that sets it. The stylesheet defaults it to the halfway mark,
+     so if this never runs both designs are still on screen — just fixed.
+     ------------------------------------------------------------------------ */
+  function setupCompare() {
+    const compare = document.querySelector('[data-ba]');
+    if (!compare) return;
+
+    const range = compare.querySelector('[data-ba-range]');
+    if (!range) return;
+
+    const apply = () => compare.style.setProperty('--ba', range.value + '%');
+    range.addEventListener('input', apply);
+    apply();
+  }
+
+  /* ------------------------------------------------------------------------
+     4 · BOOT
      ------------------------------------------------------------------------ */
   setupReveals();
   setupSteps();
+  setupCompare();
 }());
