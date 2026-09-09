@@ -1820,72 +1820,130 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 
 /* --------------------------------------------------------------------------
-   FAQ — native <details>, ruled the way the signals are
+   SECTION HEAD — the centred header the FAQ band is introduced with
+   Taken from Custom Web Design, where it is the home's testimonial header
+   reused. This page has one section that wants it.
    -------------------------------------------------------------------------- */
-.faq { width: 100%; max-width: 820px; margin-top: 8px; }
-.faq-item { border-bottom: 1px solid var(--border); }
-.faq-item:first-child { border-top: 1px solid var(--border); }
+.sec-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 50px;
+  padding-inline: var(--gutter);
+}
+.sec-head h2 { max-width: none; }
+/* the source's header is the heading alone; this one keeps the page's eyebrow
+   above it, which then needs the gap the stack would have given it */
+.sec-head .eyebrow { margin-bottom: 14px; }
+
+/* --------------------------------------------------------------------------
+   FAQ
+   Lifted whole from Custom Web Design
+   (imageworksc.github.io/Custom-Web-Design), so the two pages answer
+   questions the same way: quiet hairlines closed, a card on open, and an
+   outlined chevron that fills in and flips. No script — `name` on the
+   details makes the accordion exclusive and ::details-content animates the
+   height where the browser supports it.
+   -------------------------------------------------------------------------- */
+.faq {
+  width: 100%;
+  max-width: 860px;
+  margin-inline: auto;
+}
+
+/* Closed rows are quiet hairlines; the open one lifts out of the list and
+   becomes a card, using the same recipe as every other card on the page. */
+.faq-item {
+  border-top: 1px solid var(--border);
+  border-radius: var(--r);
+  transition: background .3s var(--ease), box-shadow .3s var(--ease),
+              border-color .2s var(--ease);
+}
+.faq-item:last-child { border-bottom: 1px solid var(--border); }
+.faq-item[open] {
+  background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
+  box-shadow: var(--shadow-card);
+  border-top-color: transparent;
+}
+/* Only the rules touching the open card are hidden — the shorthand would also
+   drop the list's closing edge when the last item is the open one. */
+.faq-item[open] + .faq-item { border-top-color: transparent; }
+.faq-item[open]:last-child { border-bottom-color: transparent; }
+
 .faq-item summary {
-  position: relative;
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
   list-style: none;
   cursor: pointer;
-  padding: 22px 0;
-  padding-right: 44px;
-  font-size: 18px;
+  padding: 22px 8px;
+  font-size: var(--step-1);
   font-weight: 700;
-  line-height: 1.4;
   color: var(--navy);
-  transition: color .2s var(--ease);
+  line-height: 1.4;
+  transition: color .2s var(--ease), padding .3s var(--ease);
 }
 .faq-item summary::-webkit-details-marker { display: none; }
 .faq-item summary:hover { color: var(--blue); }
+.faq-item[open] summary { padding-inline: 26px; color: var(--blue); }
 
-/* the sign, drawn as two rules so the cross turns into a minus */
-.faq-sign {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  translate: 0 -50%;
-  inline-size: 26px;
-  block-size: 26px;
-  border-radius: 50%;
-  background: var(--tint-green);
+/* An outlined chevron that fills in and flips — the page already speaks in
+   arrows, so the marker uses that vocabulary instead of a plus in a circle. */
+.faq-mark {
   flex: none;
-  transition: background-color .25s var(--ease), rotate .3s var(--ease);
+  display: grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  color: var(--green-ink);
+  transition: transform .35s var(--ease), background-color .25s var(--ease),
+              border-color .25s var(--ease), color .25s var(--ease);
 }
-.faq-sign::before,
-.faq-sign::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  background: var(--green-ink);
-  border-radius: 1px;
+.faq-item summary:hover .faq-mark {
+  border-color: var(--green);
+  background: var(--tint-green);
 }
-/* Open turns the sign a quarter and drops the horizontal stroke, so the bar
-   left standing is the upright one — rotated flat, it reads as a minus. */
-.faq-sign::before { inline-size: 11px; block-size: 2px; transition: opacity .25s var(--ease); }
-.faq-sign::after  { inline-size: 2px; block-size: 11px; }
-.faq-item[open] .faq-sign { background: var(--green); rotate: 90deg; }
-.faq-item[open] .faq-sign::before { opacity: 0; }
-.faq-item[open] .faq-sign::after { background: #14300a; }
-.faq-item summary:hover .faq-sign { background: #d9ecc4; }
+.faq-item[open] .faq-mark {
+  transform: rotate(180deg);
+  background: var(--green);
+  border-color: var(--green);
+  color: #143c1f;
+}
 
-.faq-item > p {
-  padding: 0 44px 24px 0;
-  font-size: 17px;
+.faq-answer {
+  padding: 0 26px 28px;
+  font-size: var(--step-0);
   line-height: 1.75;
   color: var(--muted);
-  max-width: 72ch;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .faq-item[open] > p { animation: faq-in .4s var(--ease); }
+.faq-answer p { max-width: 68ch; }
+/* Every answer on this page is a single paragraph, so this changes nothing
+   today — it is here so a second one does not run into the first. */
+.faq-answer p + p { margin-top: 16px; }
+
+/* The answer settles in wherever it opens — this works with or without the
+   height transition below. */
+.faq-item[open] .faq-answer { animation: faq-in .42s var(--ease) both; }
+@keyframes faq-in {
+  from { opacity: 0; transform: translateY(-7px); }
 }
-@keyframes faq-in { from { opacity: 0; transform: translateY(-6px); } }
+
+/* Smooth height where the browser supports it, a clean snap where it doesn't.
+   No JS involved either way. */
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size .34s var(--ease),
+                content-visibility .34s allow-discrete;
+    transition-behavior: allow-discrete;
+  }
+  .faq-item[open]::details-content { block-size: auto; }
+}
 
 /* --------------------------------------------------------------------------
    SUBHEAD — a short titled note inside a band
@@ -1919,8 +1977,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .step-num { font-size: 13px; border-width: 4px; }
   .step-body { padding: 17px 19px; }
   .step-body h3 { font-size: 17px; }
-  .faq-item summary { font-size: 17px; }
-  .faq-item > p { font-size: 16px; }
 }
 
 /* the closing call centres its buttons */

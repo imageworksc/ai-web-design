@@ -162,6 +162,9 @@
       <line x1="5" y1="12" x2="19" y2="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
       <polyline points="12 5 19 12 12 19" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24">
+      <polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
     <!-- AI Website Design additions: the page's four service marks, drawn at
          the same weight as the set above. -->
     <symbol id="i-page" viewBox="0 0 24 24">
@@ -501,31 +504,46 @@
   </section>
 
   <!-- 8 · FAQ ------------------------------------------------------------- -->
-  <section class="band" aria-labelledby="faq-title">
-    <div class="wrap stack reveal">
+  <!-- The Custom Web Design page's FAQ, whole: centred header, hairline rows
+       that become a card on open, and a chevron that fills in and flips.
+       `name` makes the accordion exclusive with no script behind it. -->
+  <section class="band band--tint-b" id="faqs" aria-labelledby="faq-title">
+    <div class="sec-head reveal">
       <p class="eyebrow">Before you call</p>
-      <h2 class="sec-title sec-title--wide" id="faq-title">Questions We Get Asked Every Week</h2>
+      <h2 class="sec-title" id="faq-title">Questions We Get Asked Every Week</h2>
+    </div>
 
-      <div class="faq">
-        <details class="faq-item" open>
-          <summary>Can AI build me a good website?<span class="faq-sign" aria-hidden="true"></span></summary>
-          <p>Yes — but the quality depends on who is using it. AI will produce a website quickly no matter who is at the keyboard. Whether that website is any good comes down to the team reviewing it, and what they refuse to let through.</p>
+    <div class="wrap">
+      <div class="faq reveal">
+        <details class="faq-item" name="ai-faq">
+          <summary>Can AI build me a good website?<span class="faq-mark" aria-hidden="true"><svg width="16" height="16"><use href="#i-chevron"/></svg></span></summary>
+          <div class="faq-answer">
+            <p>Yes — but the quality depends on who is using it. AI will produce a website quickly no matter who is at the keyboard. Whether that website is any good comes down to the team reviewing it, and what they refuse to let through.</p>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary>How much does an AI website cost?<span class="faq-sign" aria-hidden="true"></span></summary>
-          <p>We work at a single team rate of $175 per hour rather than a package price, because we have no honest way to price your website before we understand it. A simple AI-assisted site can be built very efficiently. A highly customized one costs more because it takes more hours.</p>
+        <details class="faq-item" name="ai-faq">
+          <summary>How much does an AI website cost?<span class="faq-mark" aria-hidden="true"><svg width="16" height="16"><use href="#i-chevron"/></svg></span></summary>
+          <div class="faq-answer">
+            <p>We work at a single team rate of $175 per hour rather than a package price, because we have no honest way to price your website before we understand it. A simple AI-assisted site can be built very efficiently. A highly customized one costs more because it takes more hours.</p>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary>Will my site look like every other AI-built site?<span class="faq-sign" aria-hidden="true"></span></summary>
-          <p>Only if someone stops at the first output. That sameness is a symptom of nobody editing the result. Our design team takes the AI wireframe and pushes it until it looks like your business and not a template.</p>
+        <details class="faq-item" name="ai-faq">
+          <summary>Will my site look like every other AI-built site?<span class="faq-mark" aria-hidden="true"><svg width="16" height="16"><use href="#i-chevron"/></svg></span></summary>
+          <div class="faq-answer">
+            <p>Only if someone stops at the first output. That sameness is a symptom of nobody editing the result. Our design team takes the AI wireframe and pushes it until it looks like your business and not a template.</p>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary>Do I have to build the whole website at once?<span class="faq-sign" aria-hidden="true"></span></summary>
-          <p>No. Many businesses launch with a strong one-page website and add pages later. Once the homepage and design system are established, additional pages move much faster.</p>
+        <details class="faq-item" name="ai-faq">
+          <summary>Do I have to build the whole website at once?<span class="faq-mark" aria-hidden="true"><svg width="16" height="16"><use href="#i-chevron"/></svg></span></summary>
+          <div class="faq-answer">
+            <p>No. Many businesses launch with a strong one-page website and add pages later. Once the homepage and design system are established, additional pages move much faster.</p>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary>What platform will my website be built on?<span class="faq-sign" aria-hidden="true"></span></summary>
-          <p>Smaller sites can deploy on a fast, modern AI-friendly stack. Larger sites with blogs, forms, integrations, and ongoing content management are better served by a CMS like WordPress or Drupal, so you can publish yourself without coming back to us for every edit.</p>
+        <details class="faq-item" name="ai-faq">
+          <summary>What platform will my website be built on?<span class="faq-mark" aria-hidden="true"><svg width="16" height="16"><use href="#i-chevron"/></svg></span></summary>
+          <div class="faq-answer">
+            <p>Smaller sites can deploy on a fast, modern AI-friendly stack. Larger sites with blogs, forms, integrations, and ongoing content management are better served by a CMS like WordPress or Drupal, so you can publish yourself without coming back to us for every edit.</p>
+          </div>
         </details>
       </div>
     </div>
