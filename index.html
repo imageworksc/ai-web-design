@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
 
@@ -276,7 +276,7 @@
       <span class="hero-wash__b"></span>
       <span class="hero-wash__s"></span>
     </div>
-    <div class="wrap hero-inner">
+    <div class="wrap hero-inner ai-hero">
       <div class="hero-main">
         <!-- The break is set rather than left to the measure: the headline
              reads as two named things, and where it turns should not depend
@@ -291,6 +291,29 @@
         <div class="btn-row">
           <a class="btn btn--solid" href="#start">Start Your AI Website<svg class="icon" width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           <a class="btn btn--quiet" href="#process">See How It Works</a>
+        </div>
+      </div>
+
+      <!-- The three things a design system hands over, in a column narrow
+           enough that the copy beside it keeps the width its credentials
+           need to hold one line. -->
+      <div class="hkit" aria-hidden="true">
+        <div class="hkit-t">
+          <p class="hkit-label">Typeface</p>
+          <span class="hkit-aa">Aa</span>
+          <p class="hkit-name">Plus Jakarta Sans</p>
+        </div>
+        <div class="hkit-t">
+          <p class="hkit-label">Palette</p>
+          <ul class="hkit-pal"><li></li><li></li><li></li><li></li></ul>
+        </div>
+        <div class="hkit-t">
+          <p class="hkit-label">Components</p>
+          <ul class="hkit-parts">
+            <li class="hk-btn">Button</li>
+            <li class="hk-tag">Tag</li>
+            <li class="hk-field"></li>
+          </ul>
         </div>
       </div>
     </div>
@@ -689,6 +712,6 @@
 
 </main>
 
-<script src="script.js?v=6" defer></script>
+<script src="script.js?v=7" defer></script>
 </body>
 </html>

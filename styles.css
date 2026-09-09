@@ -1077,14 +1077,132 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* --------------------------------------------------------------------------
    HERO — one column, no graphic
-   The window that stood beside the copy is gone. The hero is the copy alone
-   now, which is how the reference page opens too: the washes carry the
-   right-hand side, so the band does not read as half empty.
+   A narrow column of parts sits beside the copy: the typeface, the palette
+   and the components the styles get applied to — the three things a design
+   system hands over, which is what the homepage step of this page's own
+   process is about.
 
-   With the full measure back, the three credentials hold one line, which is
-   what they were fighting for against a two-column grid.
+   The column is sized so the copy keeps the width its credentials need. That
+   run measures about 594px at 14.5px, so the graphic is held to a fixed
+   230-290px and the copy takes everything left; below 1000px, where the two
+   together stop clearing it, the graphic drops under the copy instead.
    -------------------------------------------------------------------------- */
 .hero-points { font-size: 14.5px; }
+
+.ai-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(230px, 20vw, 290px);
+  gap: clamp(36px, 3.6vw, 52px);
+  align-items: center;
+  width: 100%;
+}
+
+.hkit { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+
+/* ---- the shared tile, as the source builds it ---- */
+.hkit-t {
+  position: relative;
+  overflow: hidden;
+  padding: 13px 15px;
+  border-radius: var(--r);
+  background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
+  box-shadow: 0 1px 3px rgba(20, 40, 80, .07), 0 12px 28px rgba(20, 40, 80, .1);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.hkit-t::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  z-index: 3;
+  block-size: 3px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .45s var(--ease);
+}
+.hkit-t:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1px 3px rgba(20, 40, 80, .08), 0 20px 40px rgba(20, 40, 80, .16);
+}
+.hkit-t:hover::before { transform: scaleX(1); }
+
+.hkit-label {
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  transition: color .35s var(--ease);
+}
+.hkit-t:hover .hkit-label { color: var(--navy); }
+
+/* ---- 1 · the specimen. One variable face, so it runs its own axis. ---- */
+.hkit-aa {
+  display: block;
+  margin-top: 2px;
+  font-size: 34px;
+  line-height: 1.05;
+  letter-spacing: -.05em;
+  color: var(--navy);
+  animation: hkitWeight 23s ease-in-out -7s infinite;
+  transform-origin: left center;
+  transition: transform .4s var(--ease);
+}
+.hkit-t:hover .hkit-aa { animation-play-state: paused; transform: scale(1.05); }
+.hkit-name { font-size: 10px; font-weight: 700; color: var(--ink); }
+@keyframes hkitWeight {
+  0%, 7%    { font-weight: 300; }
+  43%, 57%  { font-weight: 800; }
+  93%, 100% { font-weight: 300; }
+}
+
+/* ---- 2 · the palette ---- */
+.hkit-pal { display: flex; gap: 6px; margin-top: 9px; }
+.hkit-pal li {
+  flex: 1;
+  block-size: 30px;
+  border-radius: var(--r);
+  background: var(--c);
+  box-shadow: inset 0 0 0 1px rgba(20, 40, 80, .07);
+  transition: flex-grow .45s var(--ease);
+}
+.hkit-pal li:nth-child(1) { --c: #143c66; }
+.hkit-pal li:nth-child(2) { --c: #1266b5; }
+.hkit-pal li:nth-child(3) { --c: #80c34a; }
+.hkit-pal li:nth-child(4) { --c: #5c9a2e; }
+.hkit-pal li:hover { flex-grow: 2.2; }
+
+/* ---- 3 · the components the styles get applied to ---- */
+.hkit-parts { display: flex; align-items: center; gap: 7px; margin-top: 10px; }
+.hkit-parts li {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  line-height: 1;
+  border-radius: var(--r);
+  transition: transform .3s var(--ease);
+}
+.hkit-parts li:hover { transform: translateY(-2px); }
+.hk-btn { padding: 8px 11px; background: var(--green); color: #fff; }
+.hk-tag { padding: 7px 9px; background: var(--tint-blue); color: var(--blue); text-transform: uppercase; }
+/* the field is the one with nothing written in it yet */
+.hk-field { flex: 1; block-size: 24px; box-shadow: inset 0 0 0 1.5px var(--border); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hkit-aa { animation: none; font-weight: 800; }
+  .hkit-t, .hkit-pal li, .hkit-parts li { transition: none; }
+  .hkit-t:hover { transform: none; }
+}
+
+/* Measured rather than guessed: the credentials run 658px, not the ~594 I
+   first estimated, and at 1001px the copy column is 655 — it broke by three
+   pixels. The stack starts at 1060, where the column still leaves the copy
+   just over 710. */
+@media (max-width: 1060px) {
+  .ai-hero { grid-template-columns: 1fr; gap: 36px; }
+  .hkit { max-width: 340px; }
+}
 
 /* The reference sizes its hero to hold a headline, a paragraph, a credentials
    pane and two buttons. With the pane and the graphic both gone this one has
