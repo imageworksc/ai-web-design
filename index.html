@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=10">
+<link rel="stylesheet" href="styles.css?v=11">
 </head>
 <body>
 
@@ -307,22 +307,29 @@
           <p class="hkit-label">Prompt</p>
           <div class="ai-prompt">
             <span class="ai-prompt__mark"><svg><use href="#i-spark"/></svg></span>
-            <span class="ai-prompt__line"></span>
-            <i class="ai-prompt__caret"></i>
+            <span class="ai-prompt__body">
+              <span class="ai-prompt__line ai-prompt__line--1"></span>
+              <span class="ai-prompt__row">
+                <span class="ai-prompt__line ai-prompt__line--2"></span>
+                <i class="ai-prompt__caret"></i>
+              </span>
+            </span>
+            <span class="ai-prompt__send"><svg><use href="#i-arrow"/></svg></span>
           </div>
         </div>
         <div class="hkit-t">
           <p class="hkit-label">Variants</p>
           <ul class="ai-vars">
-            <li><i></i><i></i><i></i></li>
-            <li><i></i><i></i><i></i></li>
-            <li><i></i><i></i><i></i></li>
+            <li><b></b><span class="ai-vars__set"><i></i><i></i><i></i></span></li>
+            <li><b></b><span class="ai-vars__set"><i></i><i></i><i></i></span></li>
+            <li><b></b><span class="ai-vars__set"><i></i><i></i><i></i></span></li>
           </ul>
         </div>
         <div class="hkit-t">
           <p class="hkit-label">Human pass</p>
           <ul class="ai-pass">
             <li class="is-yes"><span><svg><use href="#i-check"/></svg></span><i></i></li>
+            <li class="is-edit"><span><svg><use href="#i-sliders"/></svg></span><i></i></li>
             <li class="is-no"><span><svg><use href="#i-x"/></svg></span><i></i></li>
           </ul>
         </div>
@@ -734,6 +741,6 @@
 
 </main>
 
-<script src="script.js?v=10" defer></script>
+<script src="script.js?v=11" defer></script>
 </body>
 </html>

@@ -906,46 +906,63 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t:hover .hkit-label { color: var(--navy); }
 
 /* ---- 1 · the prompt going in ----
-   The instruction types itself out and the caret keeps blinking. Nothing on
-   the branding or web-design pages has one, because neither of them is about
-   a machine being told what to build. */
+   Two lines of instruction typing themselves out in turn, a caret that keeps
+   blinking after the second, and the send beside them. Nothing on the
+   branding or web-design pages has one, because neither of them is about a
+   machine being told what to build. */
 .ai-prompt {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   overflow: hidden;
   margin-top: 9px;
-  padding-inline: 9px;
-  block-size: 30px;
+  padding: 9px;
   border-radius: var(--r);
   box-shadow: inset 0 0 0 1.5px var(--border);
 }
-.ai-prompt__mark { flex: none; display: grid; place-items: center; color: var(--green-ink); }
+.ai-prompt__mark { flex: none; display: grid; place-items: center; block-size: 14px; color: var(--green-ink); }
 .ai-prompt__mark svg { inline-size: 14px; block-size: 14px; }
+.ai-prompt__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; padding-top: 4px; }
+.ai-prompt__row { display: flex; align-items: center; gap: 3px; }
 .ai-prompt__line {
   block-size: 5px;
   border-radius: 2px;
   background: #cbd5e4;
   inline-size: 0;
-  animation: aiType 11s var(--ease) infinite;
+  animation: aiType 13s var(--ease) infinite;
 }
+/* the second line only starts once the first has run */
+.ai-prompt__line--2 { animation-delay: 1.7s; background: #d7dfea; }
 .ai-prompt__caret {
   flex: none;
   inline-size: 1.5px;
-  block-size: 13px;
+  block-size: 11px;
   background: var(--blue);
   animation: aiCaret 1.1s steps(2, start) infinite;
 }
+/* the send, which is the only thing in the field that is a control */
+.ai-prompt__send {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: var(--r);
+  background: var(--green);
+  color: #fff;
+}
+.ai-prompt__send svg { inline-size: 11px; block-size: 11px; }
 @keyframes aiType {
   0%        { inline-size: 0; }
-  38%, 74%  { inline-size: 100%; }
+  32%, 76%  { inline-size: 100%; }
   96%, 100% { inline-size: 0; }
 }
 @keyframes aiCaret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
 /* ---- 2 · what it returns: options, not an answer ----
-   Three layouts, and the green ring visits each in turn — the machine hands
-   over choices and somebody still has to make the choice. */
+   Three layouts, each with its own nav rail and its own arrangement under it,
+   and the green ring visits each in turn — the machine hands over choices and
+   somebody still has to make the choice. */
 .ai-vars { display: flex; gap: 7px; margin-top: 9px; }
 .ai-vars li {
   position: relative;
@@ -953,24 +970,32 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   display: flex;
   flex-direction: column;
   gap: 4px;
-  block-size: 52px;
-  padding: 6px;
+  block-size: 56px;
+  padding: 5px;
   border-radius: var(--r);
   background: #f4f6fa;
   box-shadow: inset 0 0 0 1px var(--border-soft);
 }
+/* every option is a page, so every option gets a nav */
+.ai-vars li b {
+  display: block;
+  block-size: 4px;
+  border-radius: 1px;
+  background: #b6c4d6;
+}
 .ai-vars li i { display: block; border-radius: 1px; background: #ccd5e2; }
+.ai-vars__set { display: flex; flex-direction: column; gap: 4px; flex: 1; min-block-size: 0; }
 /* each option is laid out differently, or they are not options */
-.ai-vars li:nth-child(1) i:nth-child(1) { block-size: 12px; }
+.ai-vars li:nth-child(1) i:nth-child(1) { block-size: 11px; }
 .ai-vars li:nth-child(1) i:nth-child(2) { flex: 1; }
-.ai-vars li:nth-child(1) i:nth-child(3) { block-size: 6px; inline-size: 70%; }
-.ai-vars li:nth-child(2) { flex-direction: row; }
-.ai-vars li:nth-child(2) i:nth-child(1) { inline-size: 12px; }
+.ai-vars li:nth-child(1) i:nth-child(3) { block-size: 5px; inline-size: 70%; }
+.ai-vars li:nth-child(2) .ai-vars__set { flex-direction: row; }
+.ai-vars li:nth-child(2) i:nth-child(1) { inline-size: 11px; }
 .ai-vars li:nth-child(2) i:nth-child(2) { flex: 1; }
 .ai-vars li:nth-child(2) i:nth-child(3) { display: none; }
 /* the third puts its weight at the foot, or it reads as the first one again */
-.ai-vars li:nth-child(3) i:nth-child(1) { block-size: 6px; inline-size: 62%; }
-.ai-vars li:nth-child(3) i:nth-child(2) { block-size: 6px; }
+.ai-vars li:nth-child(3) i:nth-child(1) { block-size: 5px; inline-size: 62%; }
+.ai-vars li:nth-child(3) i:nth-child(2) { block-size: 5px; }
 .ai-vars li:nth-child(3) i:nth-child(3) { flex: 1; }
 
 .ai-vars li::after {
@@ -987,9 +1012,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 @keyframes aiPick { 0% { opacity: 0; } 3%, 27% { opacity: 1; } 31%, 100% { opacity: 0; } }
 
 /* ---- 3 · the pass a person makes over it ----
-   One line kept and one line refused. The page's own FAQ puts it exactly
-   there: what a website turns out to be comes down to the team reviewing it,
-   and what they refuse to let through. */
+   Three verdicts, not one: a line kept, a line adjusted, a line refused. The
+   page's own FAQ puts it exactly there — what a website turns out to be comes
+   down to the team reviewing it, and what they refuse to let through. */
 .ai-pass { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
 .ai-pass li { display: flex; align-items: center; gap: 9px; }
 .ai-pass span {
@@ -1003,9 +1028,11 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ai-pass span svg { inline-size: 10px; block-size: 10px; }
 .ai-pass i { display: block; block-size: 5px; border-radius: 2px; }
 .ai-pass .is-yes span { background: var(--tint-green); color: var(--green-ink); }
-.ai-pass .is-yes i { inline-size: 76%; background: #bfcbdb; }
+.ai-pass .is-yes i { inline-size: 80%; background: #bfcbdb; }
+.ai-pass .is-edit span { background: var(--tint-blue); color: var(--blue); }
+.ai-pass .is-edit i { inline-size: 62%; background: #cbd5e4; }
 .ai-pass .is-no span { background: var(--danger-soft); color: var(--danger-ink); }
-.ai-pass .is-no i { inline-size: 52%; background: #dfe5ee; }
+.ai-pass .is-no i { inline-size: 44%; background: #dfe5ee; }
 
 @media (prefers-reduced-motion: reduce) {
   .ai-prompt__line { animation: none; inline-size: 100%; }
