@@ -1534,37 +1534,41 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    The number is the node and the card hangs off it. The rail is drawn behind
    the numbers, which carry a thick white border so it passes cleanly under.
    -------------------------------------------------------------------------- */
-.flow { --node: 62px; --step-gap: 44px; width: 100%; margin-top: 14px; }
-.flow__rail { display: flex; flex-direction: column; gap: var(--step-gap); }
-.step { position: relative; display: flex; align-items: flex-start; gap: clamp(20px, 2.2vw, 32px); }
+.flow { --node: 56px; --gap: clamp(20px, 2.2vw, 30px); width: 100%; margin-top: 34px; }
+.flow-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap);
+}
+.step { position: relative; }
 
-/* The rail is drawn a segment at a time rather than as one rule down the
-   column. A single rule has to be told where to stop, and where the last node
-   sits depends on how tall the last card happens to be — so it hung past the
-   final number as a loose end. Each step now carries the piece that reaches
-   the one below it, and the run finishes on the last node by construction. */
+/* The connector is drawn a segment at a time rather than as one rule across
+   the row. A single rule would have to guess where the first and last nodes
+   sit, and that depends on the gap; each step instead carries the piece that
+   reaches the one after it, running from its own node's edge to the next
+   column's, so it lands exactly whatever the columns measure. */
 .step::before {
   content: '';
   position: absolute;
-  top: calc(var(--node) / 2);
-  bottom: calc(var(--step-gap) * -1);
-  left: calc(var(--node) / 2 - 1px);
-  inline-size: 2px;
+  top: calc(var(--node) / 2 - 1px);
+  left: var(--node);
+  right: calc(var(--gap) * -1);
+  block-size: 2px;
   border-radius: 1px;
 }
 .step:last-child::before { content: none; }
-.step:nth-child(1)::before { background: linear-gradient(180deg, var(--green), var(--blue)); }
+.step:nth-child(1)::before { background: linear-gradient(90deg, var(--green), var(--blue)); }
 .step:nth-child(2)::before { background: var(--blue); }
-.step:nth-child(3)::before { background: linear-gradient(180deg, var(--blue), var(--navy)); }
+.step:nth-child(3)::before { background: linear-gradient(90deg, var(--blue), var(--navy)); }
 
-/* The node is the icon. It sits on the band's own white so the rail runs
-   behind it and comes out at its foot, and it carries the phase colour the
-   rail is passing through at that point: green into the discovery end, blue
-   through the middle, navy at the finish. */
+/* The node is the icon, and it carries the phase colour the connector is
+   passing through at that point: green into the discovery end, blue through
+   the middle, navy at the finish. */
 .step-mark {
   position: relative;
   z-index: 1;
   flex: none;
+  margin-bottom: 22px;
   display: grid;
   place-items: center;
   inline-size: var(--node);
@@ -1594,39 +1598,41 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .step:nth-child(3):hover .step-mark { background: var(--blue); color: #fff; }
 .step:nth-child(4):hover .step-mark { background: var(--navy); color: #fff; }
 
-/* No card. The copy sits on the band, held only by the rail beside it. */
-.step-text { flex: 1; padding-top: 4px; }
+/* No card. The copy sits on the band under its own node, at the size a
+   four-across column can carry — the run is read left to right now, not
+   scrolled through. */
+.step-text { flex: 1; }
 .step-n {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: .04em;
   line-height: 1;
   color: var(--faint);
-  margin-bottom: 10px;
+  margin-bottom: 9px;
   transition: color .35s var(--ease);
 }
 .step:hover .step-n { color: var(--navy); }
 .step-text h3 {
-  font-size: clamp(20px, 1.1vw + 16px, 23px);
-  letter-spacing: -.3px;
+  font-size: clamp(17px, .5vw + 15px, 19px);
+  letter-spacing: -.2px;
+  line-height: 1.25;
   margin-bottom: 10px;
 }
 .step-text p {
-  font-size: 16.5px;
-  line-height: 1.75;
+  font-size: 14.5px;
+  line-height: 1.65;
   color: var(--muted);
-  max-width: 66ch;
 }
 
-/* The steps land one after another, the way the ruled lists do. */
+/* The steps land one after another, left to right. */
 @media (prefers-reduced-motion: no-preference) {
   .is-revealed .step {
     animation: step-in .55s var(--ease) backwards;
     animation-delay: calc(var(--i) * .09s + .18s);
   }
 }
-@keyframes step-in { from { opacity: 0; transform: translateX(-12px); } }
+@keyframes step-in { from { opacity: 0; transform: translateY(14px); } }
 @media (prefers-reduced-motion: reduce) {
   .step-mark { transition: none; }
   .step:hover .step-mark { transform: none; }
@@ -2074,10 +2080,26 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .platform-split { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 640px) {
-  .flow { --node: 50px; --step-gap: 34px; }
-  .step-mark svg { inline-size: 22px; block-size: 22px; }
-  .step-text p { font-size: 16px; }
+/* Below the width four columns can carry, the run turns and comes down the
+   left instead — the same construction, rotated a quarter. */
+@media (max-width: 1000px) {
+  .flow { --node: 52px; --gap: 34px; margin-top: 22px; }
+  .flow-row { grid-template-columns: 1fr; }
+  .step { display: flex; align-items: flex-start; gap: 20px; }
+  .step-mark { margin-bottom: 0; }
+  .step-mark svg { inline-size: 24px; block-size: 24px; }
+  .step::before {
+    top: var(--node);
+    bottom: calc(var(--gap) * -1);
+    left: calc(var(--node) / 2 - 1px);
+    right: auto;
+    inline-size: 2px;
+    block-size: auto;
+  }
+  .step:nth-child(1)::before { background: linear-gradient(180deg, var(--green), var(--blue)); }
+  .step:nth-child(3)::before { background: linear-gradient(180deg, var(--blue), var(--navy)); }
+  .step-text h3 { font-size: 20px; margin-bottom: 8px; }
+  .step-text p { font-size: 16px; max-width: 66ch; }
 }
 
 /* the closing call centres its buttons */
