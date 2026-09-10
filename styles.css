@@ -896,17 +896,24 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .hkit-t:hover::before { transform: scaleX(1); }
 
-/* This page's own arrangement, not the source's. Three identical bars flush
-   in a stack read as a default; two beside one, with the odd one out held at
-   the height between them, reads as something somebody set.
+/* This page's own arrangement, not the source's. Tiles flush in a stack read
+   as a default; two beside two, with the right-hand pair held at the height
+   between them, reads as something somebody set.
 
-   Only the third tile is placed. The other two flow into what is left, which
-   is the left column top and bottom, so a single rule undoes the whole thing
-   where the arrangement has to fold. */
-.hkit-t:nth-child(3) {
+   Only the right column is placed. The other two flow into what is left,
+   which is the left column top and bottom, so a single rule undoes the whole
+   thing where the arrangement has to fold. */
+.hkit-col {
   grid-column: 2;
   grid-row: 1 / 3;
-  align-self: center;
+  display: flex;
+  flex-direction: column;
+  /* the pair is shorter than the two tiles beside it, and sits centred on
+     them rather than hanging from the top — which is what puts the odd one
+     out at the height between */
+  justify-content: center;
+  gap: 18px;
+  min-inline-size: 0;
 }
 
 /* Each tile's one piece of content takes the height the floor gives it, so
@@ -1066,6 +1073,56 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ai-pass .is-no span { background: var(--danger-soft); color: var(--danger-ink); }
 .ai-pass .is-no i { inline-size: 44%; background: #dfe5ee; }
 
+/* ---- 4 · the sizes it has to hold up at ----
+   The page's own argument names four things AI still lacks judgment about,
+   and mobile nuance is one of them. The same layout at three widths, the
+   narrow one first, because that is the one a first pass gets wrong.
+
+   Small on purpose: it is a check, not a step, so it sits above the pass
+   rather than beside the other two, and it is sized by what is in it. */
+/* Small in both directions. Left at the column's full width it was a short
+   wide strip, and the widest frame in it stretched into a long thin box
+   rather than reading as a window. */
+.hkit-t--sm {
+  min-block-size: 0;
+  inline-size: 68%;
+  align-self: flex-start;
+}
+/* on a common baseline, so the three read as one page at three widths */
+.ai-sizes {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 9px;
+}
+.ai-sizes li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: none;
+  padding: 4px;
+  border-radius: 3px;
+  background: #f4f6fa;
+  box-shadow: inset 0 0 0 1px var(--border-soft);
+}
+.ai-sizes i { display: block; block-size: 4px; border-radius: 1px; background: #ccd5e2; }
+/* Each one carries its own bar of brand at the top, so the three read as the
+   same page and not as three empty frames. Capped in pixels as well as in
+   percent: at 60% of the wide frame it stopped being a mark on a page and
+   became a green line lying across the tile. */
+.ai-sizes i:first-child { inline-size: min(60%, 20px); background: var(--green); }
+/* A phone, a tablet and a window — narrower and taller, wider and shorter.
+   The narrow one is the one being checked, ringed the way the chosen variant
+   is ringed in the tile above it. */
+.ai-sizes .is-sm {
+  inline-size: 20px;
+  block-size: 32px;
+  box-shadow: inset 0 0 0 1.5px var(--green);
+}
+.ai-sizes .is-md { inline-size: 32px; block-size: 27px; }
+.ai-sizes .is-lg { inline-size: 46px; block-size: 23px; }
+
 @media (prefers-reduced-motion: reduce) {
   .ai-prompt__line { animation: none; inline-size: 100%; }
   .ai-prompt__caret { animation: none; }
@@ -1090,7 +1147,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   /* narrower than the room, so folding does not undo the shape: at the full
      300px they went back to being the flat rectangles this was fixing */
   .hkit { grid-template-columns: minmax(0, 1fr); inline-size: min(100%, 240px); }
-  .hkit-t:nth-child(3) { grid-column: 1; grid-row: auto; align-self: auto; }
+  .hkit-col { grid-column: 1; grid-row: auto; }
 }
 
 /* The reference sizes its hero to hold a headline, a paragraph, a credentials
