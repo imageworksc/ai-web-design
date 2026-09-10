@@ -1081,8 +1081,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
    Hover is the whole tile, so on a touch screen, where there is no hover, it
    runs on its own the way the prompt and the variants above it do. */
-/* Small in both directions. At the column's full width it was a short wide
-   strip, and a strip is short, not small. */
+/* The small one of the four. It is a size and nothing else — the hover the
+   layout tile carries hangs off --shot, so the two can be moved between
+   tiles independently. Small in both directions: at the column's full width
+   it is a short wide strip, and a strip is short, not small. */
 .hkit-t--sm {
   min-block-size: 0;
   inline-size: 68%;
@@ -1102,10 +1104,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   letter-spacing: inherit;
   color: var(--green-ink);
 }
-.hkit-t--sm:hover .ai-swap span,
-.hkit-t--sm:focus-within .ai-swap span { opacity: 0; }
-.hkit-t--sm:hover .ai-swap b,
-.hkit-t--sm:focus-within .ai-swap b { opacity: 1; }
+.hkit-t--shot:hover .ai-swap span,
+.hkit-t--shot:focus-within .ai-swap span { opacity: 0; }
+.hkit-t--shot:hover .ai-swap b,
+.hkit-t--shot:focus-within .ai-swap b { opacity: 1; }
 
 /* The grey state is the greys the variants tile above is drawn in — a light
    panel with a hairline, not the finished picture with the colour taken out
@@ -1134,10 +1136,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
     radial-gradient(115% 85% at 22% 12%, rgba(255, 255, 255, .24), transparent 62%),
     linear-gradient(150deg, #2a6fb0, #143f66);
 }
-.hkit-t--sm:hover .ai-shot,
-.hkit-t--sm:focus-within .ai-shot { box-shadow: inset 0 0 0 1px transparent; }
-.hkit-t--sm:hover .ai-shot::before,
-.hkit-t--sm:focus-within .ai-shot::before { opacity: 1; }
+.hkit-t--shot:hover .ai-shot,
+.hkit-t--shot:focus-within .ai-shot { box-shadow: inset 0 0 0 1px transparent; }
+.hkit-t--shot:hover .ai-shot::before,
+.hkit-t--shot:focus-within .ai-shot::before { opacity: 1; }
 /* the subject of it, centred and big enough to be one */
 .ai-shot__sheet {
   position: absolute;
@@ -1156,8 +1158,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   box-shadow: 0 2px 6px rgba(20, 40, 80, .10);
   transition: box-shadow .55s var(--ease);
 }
-.hkit-t--sm:hover .ai-shot__sheet,
-.hkit-t--sm:focus-within .ai-shot__sheet { box-shadow: 0 6px 16px rgba(6, 22, 44, .38); }
+.hkit-t--shot:hover .ai-shot__sheet,
+.hkit-t--shot:focus-within .ai-shot__sheet { box-shadow: 0 6px 16px rgba(6, 22, 44, .38); }
 
 /* The draft carries fewer marks than the finished page, so the hover has
    something to add and not only something to paint. The brand bar is not
@@ -1192,18 +1194,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* what the hover adds: the brand bar, the gap that splits the slab into three
    cards, and a colour on each of them */
-.hkit-t--sm:hover .ai-shot__nav,
-.hkit-t--sm:focus-within .ai-shot__nav { background: var(--green); opacity: 1; }
-.hkit-t--sm:hover .ai-shot__tiles,
-.hkit-t--sm:focus-within .ai-shot__tiles { gap: 3px; background: transparent; }
-.hkit-t--sm:hover .ai-shot__h,
-.hkit-t--sm:focus-within .ai-shot__h { background: #4b7fb4; }
-.hkit-t--sm:hover .ai-shot__tiles i:nth-child(1),
-.hkit-t--sm:focus-within .ai-shot__tiles i:nth-child(1) { background: #d5edbc; }
-.hkit-t--sm:hover .ai-shot__tiles i:nth-child(2),
-.hkit-t--sm:focus-within .ai-shot__tiles i:nth-child(2) { background: #c3dcf3; }
-.hkit-t--sm:hover .ai-shot__tiles i:nth-child(3),
-.hkit-t--sm:focus-within .ai-shot__tiles i:nth-child(3) { background: #b3c7dd; }
+.hkit-t--shot:hover .ai-shot__nav,
+.hkit-t--shot:focus-within .ai-shot__nav { background: var(--green); opacity: 1; }
+.hkit-t--shot:hover .ai-shot__tiles,
+.hkit-t--shot:focus-within .ai-shot__tiles { gap: 3px; background: transparent; }
+.hkit-t--shot:hover .ai-shot__h,
+.hkit-t--shot:focus-within .ai-shot__h { background: #4b7fb4; }
+.hkit-t--shot:hover .ai-shot__tiles i:nth-child(1),
+.hkit-t--shot:focus-within .ai-shot__tiles i:nth-child(1) { background: #d5edbc; }
+.hkit-t--shot:hover .ai-shot__tiles i:nth-child(2),
+.hkit-t--shot:focus-within .ai-shot__tiles i:nth-child(2) { background: #c3dcf3; }
+.hkit-t--shot:hover .ai-shot__tiles i:nth-child(3),
+.hkit-t--shot:focus-within .ai-shot__tiles i:nth-child(3) { background: #b3c7dd; }
 
 @media (prefers-reduced-motion: reduce) {
   .ai-prompt__line { animation: none; inline-size: 100%; }
