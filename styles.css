@@ -587,26 +587,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   text-wrap: pretty;
 }
 
-/* The four credentials the pane used to hold, back as one ruled line under
-   the copy. The separator is a pseudo-element rather than a character in the
-   markup, so a screen reader reads four items and not four pipes. */
-.hero-points {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 0;
-  font-size: 14.5px;
-  font-weight: 600;
-  letter-spacing: .01em;
-  color: var(--muted);
-}
-.hero-points li + li::before {
-  content: '|';
-  margin-inline: 12px;
-  color: var(--border);
-  font-weight: 500;
-}
-
 .hero .btn-row { margin-top: 10px; }
 
 /* The quiet button is transparent everywhere else, which here would let the
@@ -623,12 +603,12 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 @media (prefers-reduced-motion: no-preference) {
   .hero h1,
   .hero-sub,
-  .hero-points,
   .hero .btn-row { animation: hero-in .8s var(--ease) backwards; }
   .hero h1 { animation-delay: .06s; }
   .hero-sub { animation-delay: .26s; }
-  .hero-points { animation-delay: .40s; }
-  .hero .btn-row { animation-delay: .54s; }
+  /* the credential line used to hold this beat; with it gone the buttons
+     take its place rather than waiting out its delay */
+  .hero .btn-row { animation-delay: .40s; }
 
   /* inline-block only where the phrase can't be pushed off the measure */
   @media (min-width: 640px) {
@@ -833,17 +813,17 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   letter-spacing: -.8px;
   max-width: none;
 }
-.hero-sub { font-size: 18px; line-height: 1.75; max-width: 720px; }
-.sec-title { font-size: clamp(26px, 3vw, 38px); line-height: 1.15; letter-spacing: -.5px; }
-/* The separator trails the credential it follows rather than leading the next
-   one, so a wrapped line starts on a word instead of on a rule. */
-.hero-points li + li::before { content: none; }
-.hero-points li:not(:last-child)::after {
-  content: '|';
-  margin-inline: 12px;
-  color: var(--border);
-  font-weight: 500;
+/* Two lines, split evenly. The measure is set to the sentence rather than to
+   the column: at 720px it broke where it ran out of room, which left a long
+   line and a four-word one under it. `balance` divides the same two lines
+   between them instead of filling the first and spilling the rest. */
+.hero-sub {
+  font-size: 18px;
+  line-height: 1.75;
+  max-width: 640px;
+  text-wrap: balance;
 }
+.sec-title { font-size: clamp(26px, 3vw, 38px); line-height: 1.15; letter-spacing: -.5px; }
 .lead { font-size: 18px; line-height: 1.75; max-width: 720px; }
 .final .sec-title { font-size: clamp(19px, 3.1vw, 38px); }
 .cms-body dt { font-size: 20px; letter-spacing: -.3px; }
@@ -860,19 +840,15 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hl-set .hl:nth-of-type(4) { --i: 3; }
 
 /* --------------------------------------------------------------------------
-   HERO — one column, no graphic
-   A narrow column of parts sits beside the copy: the typeface, the palette
-   and the components the styles get applied to — the three things a design
-   system hands over, which is what the homepage step of this page's own
-   process is about.
+   HERO
+   A narrow column of parts sits beside the copy: the prompt, the variants it
+   comes back with, and the pass a person makes over them — the three beats
+   this page is about, and the reason the tiles are not the typeface, palette
+   and component ones the branding and web-design pages use.
 
-   The column is sized so the copy keeps the width its credentials need. That
-   run measures about 594px at 14.5px, so the graphic is held to a fixed
-   230-290px and the copy takes everything left; below 1000px, where the two
-   together stop clearing it, the graphic drops under the copy instead.
+   The graphic is held to a fixed 230-290px and the copy takes everything
+   left; below 1000px the graphic drops under the copy instead.
    -------------------------------------------------------------------------- */
-.hero-points { font-size: 14.5px; }
-
 .ai-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(230px, 20vw, 290px);
