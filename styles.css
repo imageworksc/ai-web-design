@@ -855,6 +855,13 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* The pair on the right is taller than the two on the left, and the extra
+     has to land somewhere. Left to `auto auto` it was split between the rows,
+     which left slack under the prompt: it sat at the top of a row taller than
+     it, so its gap down to the variants came out 34px against the 18 across
+     to the layout. The first row is its content and the second takes the
+     difference, so both of the prompt's gaps are the one grid gap. */
+  grid-template-rows: auto 1fr;
   gap: 18px;
   inline-size: min(100%, 490px);
 }
