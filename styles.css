@@ -857,7 +857,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
      means starting the column further left, which is widening it, and the
      stack inside is then held to less than the column so it does not just
      grow back into the room. */
-  grid-template-columns: minmax(0, 1fr) clamp(380px, 32vw, 450px);
+  grid-template-columns: minmax(0, 1fr) clamp(390px, 38vw, 490px);
   gap: clamp(30px, 3vw, 44px);
   align-items: center;
   width: 100%;
@@ -872,7 +872,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
-  inline-size: min(100%, 450px);
+  inline-size: min(100%, 490px);
 }
 
 /* ---- the shared tile, as the source builds it ---- */
@@ -881,11 +881,13 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   overflow: hidden;
   /* A column, and a floor under it. The tiles were three different flat
      rectangles — 2.25, 2.0 and 1.9 wide to tall — and read as rows in a list.
-     One height for all three squares them up and, more than that, makes them
-     the same shape as each other, which is most of what looks deliberate. */
+     One height for all three makes them the same shape as each other, which
+     is most of what looks deliberate; the floor sets what that shape is.
+     It cannot go under about 124px without the tallest tile's own content
+     pushing past it, and then the three stop matching. */
   display: flex;
   flex-direction: column;
-  min-block-size: 158px;
+  min-block-size: 130px;
   padding: 16px;
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
