@@ -1088,36 +1088,60 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   inline-size: 68%;
   align-self: flex-start;
 }
-/* the picture: the light off its top-left corner is what keeps it reading as
-   a photograph rather than a rectangle of brand blue */
+/* The word for the state you are looking at. Both are in the flow of the
+   label's own line — one absolutely over the other — so the box does not
+   change height as they cross. */
+.ai-swap { position: relative; }
+.ai-swap span,
+.ai-swap b { transition: opacity .3s var(--ease); }
+.ai-swap b {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--green-ink);
+}
+.hkit-t--sm:hover .ai-swap span,
+.hkit-t--sm:focus-within .ai-swap span { opacity: 0; }
+.hkit-t--sm:hover .ai-swap b,
+.hkit-t--sm:focus-within .ai-swap b { opacity: 1; }
+
+/* The grey state is the greys the variants tile above is drawn in — a light
+   panel with a hairline, not the finished picture with the colour taken out
+   of it, which is a dark box and reads as a different thing rather than as
+   the same thing unfinished. */
 .ai-shot {
   position: relative;
   margin-top: 9px;
   aspect-ratio: 5 / 2;
   border-radius: var(--r);
   overflow: hidden;
+  background: #f4f6fa;
+  box-shadow: inset 0 0 0 1px var(--border-soft);
+  transition: box-shadow .55s var(--ease);
+}
+/* The colour lies over the grey and fades in, because a flat colour and a
+   gradient do not interpolate — swapped on `background` the two states would
+   cut rather than cross. */
+.ai-shot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .55s var(--ease);
   background:
     radial-gradient(115% 85% at 22% 12%, rgba(255, 255, 255, .24), transparent 62%),
     linear-gradient(150deg, #2a6fb0, #143f66);
-  /* lifted and flattened as well as drained, so the grey state reads as a
-     draft rather than as the same picture with the colour turned down */
-  filter: grayscale(1) contrast(.82) brightness(1.28);
-  transition: filter .55s var(--ease);
 }
 .hkit-t--sm:hover .ai-shot,
-.hkit-t--sm:focus-within .ai-shot { filter: grayscale(0) contrast(1) brightness(1); }
-
-@media (hover: none) {
-  .ai-shot { animation: aiWarm 9s var(--ease) infinite; }
-}
-@keyframes aiWarm {
-  0%, 40%   { filter: grayscale(1) contrast(.82) brightness(1.28); }
-  55%, 88%  { filter: grayscale(0) contrast(1) brightness(1); }
-  100%      { filter: grayscale(1) contrast(.82) brightness(1.28); }
-}
+.hkit-t--sm:focus-within .ai-shot { box-shadow: inset 0 0 0 1px transparent; }
+.hkit-t--sm:hover .ai-shot::before,
+.hkit-t--sm:focus-within .ai-shot::before { opacity: 1; }
 /* the subject of it, centred and big enough to be one */
 .ai-shot__sheet {
   position: absolute;
+  z-index: 1;
   left: 50%;
   top: 50%;
   translate: -50% -50%;
@@ -1128,13 +1152,19 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   padding: 5px;
   border-radius: 2px;
   background: var(--white);
-  box-shadow: 0 6px 16px rgba(6, 22, 44, .38);
+  /* barely lifted on the light panel, properly lifted on the dark one */
+  box-shadow: 0 2px 6px rgba(20, 40, 80, .10);
+  transition: box-shadow .55s var(--ease);
 }
-/* Colour is the argument the picture is making, so what is on the page
-   carries brand tints rather than the grey a first pass fills it with. */
-.ai-shot i { display: block; border-radius: 1px; flex: none; }
-.ai-shot__nav { inline-size: 32%; block-size: 3px; background: var(--green); }
-.ai-shot__h { inline-size: 78%; block-size: 5px; background: #4b7fb4; }
+.hkit-t--sm:hover .ai-shot__sheet,
+.hkit-t--sm:focus-within .ai-shot__sheet { box-shadow: 0 6px 16px rgba(6, 22, 44, .38); }
+
+/* The layout is the same in both states — it is the part a first pass gets
+   right. What changes is the colour on it, so every mark carries the greys
+   the variants tile uses and takes a brand colour on the way through. */
+.ai-shot i { display: block; border-radius: 1px; flex: none; transition: background-color .55s var(--ease); }
+.ai-shot__nav { inline-size: 32%; block-size: 3px; background: #b6c4d6; }
+.ai-shot__h { inline-size: 78%; block-size: 5px; background: #ccd5e2; }
 .ai-shot__tiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1142,10 +1172,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   block-size: 13px;
   margin-top: 1px;
 }
-.ai-shot__tiles i { block-size: auto; border-radius: 1px; }
-.ai-shot__tiles i:nth-child(1) { background: #d5edbc; }
-.ai-shot__tiles i:nth-child(2) { background: #c3dcf3; }
-.ai-shot__tiles i:nth-child(3) { background: #b3c7dd; }
+.ai-shot__tiles i { block-size: auto; border-radius: 1px; background: #ccd5e2; }
+
+.hkit-t--sm:hover .ai-shot__nav,
+.hkit-t--sm:focus-within .ai-shot__nav { background: var(--green); }
+.hkit-t--sm:hover .ai-shot__h,
+.hkit-t--sm:focus-within .ai-shot__h { background: #4b7fb4; }
+.hkit-t--sm:hover .ai-shot__tiles i:nth-child(1),
+.hkit-t--sm:focus-within .ai-shot__tiles i:nth-child(1) { background: #d5edbc; }
+.hkit-t--sm:hover .ai-shot__tiles i:nth-child(2),
+.hkit-t--sm:focus-within .ai-shot__tiles i:nth-child(2) { background: #c3dcf3; }
+.hkit-t--sm:hover .ai-shot__tiles i:nth-child(3),
+.hkit-t--sm:focus-within .ai-shot__tiles i:nth-child(3) { background: #b3c7dd; }
 
 @media (prefers-reduced-motion: reduce) {
   .ai-prompt__line { animation: none; inline-size: 100%; }
@@ -1153,12 +1191,29 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .ai-vars li::after { animation: none; }
   .ai-vars li:nth-child(2)::after { opacity: 1; }
   /* the swap still happens on hover, it just happens at once */
-  .ai-shot { animation: none; transition: none; }
+  .ai-swap span,
+  .ai-swap b,
+  .ai-shot,
+  .ai-shot::before,
+  .ai-shot__sheet,
+  .ai-shot i { transition: none; }
 }
-/* and where there is no hover to make it happen, it rests in colour rather
-   than staying grey for good */
-@media (prefers-reduced-motion: reduce) and (hover: none) {
-  .ai-shot { filter: none; }
+
+/* No hover on a touch screen, so the tile rests where the hover arrives
+   rather than at the draft it starts from: the hero should be showing the
+   finished thing. Declared after the greys so it wins on order rather than
+   on weight. */
+@media (hover: none) {
+  .ai-swap span { opacity: 0; }
+  .ai-swap b { opacity: 1; }
+  .ai-shot { box-shadow: inset 0 0 0 1px transparent; }
+  .ai-shot::before { opacity: 1; }
+  .ai-shot__sheet { box-shadow: 0 6px 16px rgba(6, 22, 44, .38); }
+  .ai-shot__nav { background: var(--green); }
+  .ai-shot__h { background: #4b7fb4; }
+  .ai-shot__tiles i:nth-child(1) { background: #d5edbc; }
+  .ai-shot__tiles i:nth-child(2) { background: #c3dcf3; }
+  .ai-shot__tiles i:nth-child(3) { background: #b3c7dd; }
 }
 
 
