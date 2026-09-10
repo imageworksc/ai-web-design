@@ -857,20 +857,22 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
      means starting the column further left, which is widening it, and the
      stack inside is then held to less than the column so it does not just
      grow back into the room. */
-  grid-template-columns: minmax(0, 1fr) clamp(250px, 24vw, 330px);
+  grid-template-columns: minmax(0, 1fr) clamp(380px, 32vw, 450px);
   gap: clamp(30px, 3vw, 44px);
   align-items: center;
   width: 100%;
 }
 
-/* Held to less than the column it sits in, and sitting at that column's left
-   edge, so widening the column walks the whole arrangement toward the copy
-   instead of just making the tiles bigger. */
+/* Two columns, not one: the prompt and the variants stack on the left, and
+   the pass sits to their right, centred on the line between them. Held to
+   less than the grid column it is in and sitting at that column's left edge,
+   so the arrangement stays where it is put rather than growing into the room
+   the wider column gives it. */
 .hkit {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  inline-size: min(100%, 300px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  inline-size: min(100%, 450px);
 }
 
 /* ---- the shared tile, as the source builds it ---- */
@@ -883,7 +885,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
      the same shape as each other, which is most of what looks deliberate. */
   display: flex;
   flex-direction: column;
-  min-block-size: 148px;
+  min-block-size: 158px;
   padding: 16px;
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
@@ -909,17 +911,17 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t:hover::before { transform: scaleX(1); }
 
 /* This page's own arrangement, not the source's. Three identical bars flush
-   in a stack read as a default; these step off each other — left, right,
-   left — so the column reads as something somebody set.
+   in a stack read as a default; two beside one, with the odd one out held at
+   the height between them, reads as something somebody set.
 
-   Each tile is narrower than the column by the whole step, so the zigzag
-   happens inside the grid instead of pushing out of it, and the one that
-   sits right still lands on the shell's edge. Set with align-self rather
-   than a translate, because the hover lift is a translate and the two would
-   fight over the property. */
-.hkit-t { inline-size: 76%; }
-.hkit-t:nth-child(odd) { align-self: flex-start; }
-.hkit-t:nth-child(even) { align-self: flex-end; }
+   Only the third tile is placed. The other two flow into what is left, which
+   is the left column top and bottom, so a single rule undoes the whole thing
+   where the arrangement has to fold. */
+.hkit-t:nth-child(3) {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+}
 
 /* Each tile's one piece of content takes the height the floor gives it, so
    the extra room goes into the drawing rather than sitting under it as an
@@ -1093,6 +1095,16 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    stop leaving it room to hold its two lines. */
 @media (max-width: 1060px) {
   .ai-hero { grid-template-columns: 1fr; gap: 36px; }
+}
+
+/* Below the width two tiles side by side can carry what is drawn in them,
+   the arrangement folds back to one column. Undoing the third tile's
+   placement is all it takes, because the other two were never placed. */
+@media (max-width: 620px) {
+  /* narrower than the room, so folding does not undo the shape: at the full
+     300px they went back to being the flat rectangles this was fixing */
+  .hkit { grid-template-columns: minmax(0, 1fr); inline-size: min(100%, 240px); }
+  .hkit-t:nth-child(3) { grid-column: 1; grid-row: auto; align-self: auto; }
 }
 
 /* The reference sizes its hero to hold a headline, a paragraph, a credentials
