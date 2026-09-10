@@ -1073,11 +1073,14 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ai-pass .is-no span { background: var(--danger-soft); color: var(--danger-ink); }
 .ai-pass .is-no i { inline-size: 44%; background: #dfe5ee; }
 
-/* ---- 4 · what comes out the other end ----
-   One designed page on brand blue: the same picture the comparison further
-   down puts against the grey slot a first pass leaves in its place. It is a
-   result rather than a step, so it is the small one and it sits above the
-   pass instead of beside the other two. */
+/* ---- 4 · the pass itself, as one gesture ----
+   The same layout twice: grey until somebody works on it, and in colour once
+   somebody has. The structure is the part a first pass gets right — it is
+   there in both states — and what changes is everything type and colour do,
+   which is the argument this page spends the rest of its length making.
+
+   Hover is the whole tile, so on a touch screen, where there is no hover, it
+   runs on its own the way the prompt and the variants above it do. */
 /* Small in both directions. At the column's full width it was a short wide
    strip, and a strip is short, not small. */
 .hkit-t--sm {
@@ -1096,6 +1099,21 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   background:
     radial-gradient(115% 85% at 22% 12%, rgba(255, 255, 255, .24), transparent 62%),
     linear-gradient(150deg, #2a6fb0, #143f66);
+  /* lifted and flattened as well as drained, so the grey state reads as a
+     draft rather than as the same picture with the colour turned down */
+  filter: grayscale(1) contrast(.82) brightness(1.28);
+  transition: filter .55s var(--ease);
+}
+.hkit-t--sm:hover .ai-shot,
+.hkit-t--sm:focus-within .ai-shot { filter: grayscale(0) contrast(1) brightness(1); }
+
+@media (hover: none) {
+  .ai-shot { animation: aiWarm 9s var(--ease) infinite; }
+}
+@keyframes aiWarm {
+  0%, 40%   { filter: grayscale(1) contrast(.82) brightness(1.28); }
+  55%, 88%  { filter: grayscale(0) contrast(1) brightness(1); }
+  100%      { filter: grayscale(1) contrast(.82) brightness(1.28); }
 }
 /* the subject of it, centred and big enough to be one */
 .ai-shot__sheet {
@@ -1134,6 +1152,13 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .ai-prompt__caret { animation: none; }
   .ai-vars li::after { animation: none; }
   .ai-vars li:nth-child(2)::after { opacity: 1; }
+  /* the swap still happens on hover, it just happens at once */
+  .ai-shot { animation: none; transition: none; }
+}
+/* and where there is no hover to make it happen, it rests in colour rather
+   than staying grey for good */
+@media (prefers-reduced-motion: reduce) and (hover: none) {
+  .ai-shot { filter: none; }
 }
 
 
