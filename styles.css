@@ -1159,23 +1159,43 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t--sm:hover .ai-shot__sheet,
 .hkit-t--sm:focus-within .ai-shot__sheet { box-shadow: 0 6px 16px rgba(6, 22, 44, .38); }
 
-/* The layout is the same in both states — it is the part a first pass gets
-   right. What changes is the colour on it, so every mark carries the greys
-   the variants tile uses and takes a brand colour on the way through. */
+/* The draft carries fewer marks than the finished page, so the hover has
+   something to add and not only something to paint. The brand bar is not
+   there yet, and the three cards are still one undivided block — same three
+   elements, but at no gap and one grey they read as a single slab, and the
+   gap opening is what splits them. Nothing moves out of place either way:
+   the bar holds its room and the block holds its height. */
 .ai-shot i { display: block; border-radius: 1px; flex: none; transition: background-color .55s var(--ease); }
-.ai-shot__nav { inline-size: 32%; block-size: 3px; background: #b6c4d6; }
+.ai-shot__nav {
+  inline-size: 32%;
+  block-size: 3px;
+  background: #b6c4d6;
+  opacity: 0;
+  transition: background-color .55s var(--ease), opacity .55s var(--ease);
+}
 .ai-shot__h { inline-size: 78%; block-size: 5px; background: #ccd5e2; }
+/* The slab is painted on the row itself and the three cards inside it are
+   empty until the hover. Painted on the cards instead, three columns of 1fr
+   in a 49px row land on fractions of a pixel and the seams between them
+   showed — which is the block already reading as three things. */
 .ai-shot__tiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
+  gap: 0;
   block-size: 13px;
   margin-top: 1px;
+  border-radius: 1px;
+  background: #ccd5e2;
+  transition: gap .55s var(--ease), background-color .55s var(--ease);
 }
-.ai-shot__tiles i { block-size: auto; border-radius: 1px; background: #ccd5e2; }
+.ai-shot__tiles i { block-size: auto; border-radius: 1px; background: transparent; }
 
+/* what the hover adds: the brand bar, the gap that splits the slab into three
+   cards, and a colour on each of them */
 .hkit-t--sm:hover .ai-shot__nav,
-.hkit-t--sm:focus-within .ai-shot__nav { background: var(--green); }
+.hkit-t--sm:focus-within .ai-shot__nav { background: var(--green); opacity: 1; }
+.hkit-t--sm:hover .ai-shot__tiles,
+.hkit-t--sm:focus-within .ai-shot__tiles { gap: 3px; background: transparent; }
 .hkit-t--sm:hover .ai-shot__h,
 .hkit-t--sm:focus-within .ai-shot__h { background: #4b7fb4; }
 .hkit-t--sm:hover .ai-shot__tiles i:nth-child(1),
@@ -1196,6 +1216,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .ai-shot,
   .ai-shot::before,
   .ai-shot__sheet,
+  .ai-shot__tiles,
   .ai-shot i { transition: none; }
 }
 
@@ -1209,7 +1230,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .ai-shot { box-shadow: inset 0 0 0 1px transparent; }
   .ai-shot::before { opacity: 1; }
   .ai-shot__sheet { box-shadow: 0 6px 16px rgba(6, 22, 44, .38); }
-  .ai-shot__nav { background: var(--green); }
+  .ai-shot__nav { background: var(--green); opacity: 1; }
+  .ai-shot__tiles { gap: 3px; background: transparent; }
   .ai-shot__h { background: #4b7fb4; }
   .ai-shot__tiles i:nth-child(1) { background: #d5edbc; }
   .ai-shot__tiles i:nth-child(2) { background: #c3dcf3; }
