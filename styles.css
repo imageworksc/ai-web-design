@@ -857,7 +857,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   width: 100%;
 }
 
-.hkit { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+/* no gap: the tiles overlap rather than sit apart — see the arrangement below */
+.hkit { display: flex; flex-direction: column; gap: 0; width: 100%; }
 
 /* ---- the shared tile, as the source builds it ---- */
 .hkit-t {
@@ -888,15 +889,28 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t:hover::before { transform: scaleX(1); }
 
 /* This page's own arrangement, not the source's. Three identical bars flush
-   in a stack read as a default; each tile steps off the one above it —
-   right, left, right — so the column reads as something somebody set.
+   in a stack read as a default. These step off each other — left, right,
+   left — and tuck under each other rather than sitting in a gapped column,
+   so the three read as one thing somebody laid out.
 
-   Narrower than the column by exactly the step, so the zigzag happens inside
-   the grid instead of pushing out of it, and set with align-self rather than
-   a translate so the hover lift keeps the transform to itself. */
-.hkit-t { inline-size: 91%; }
-.hkit-t:nth-child(odd) { align-self: flex-end; }
-.hkit-t:nth-child(even) { align-self: flex-start; }
+   Each tile is narrower than the column by the whole step, so the zigzag
+   happens inside the grid instead of pushing out of it. Set with align-self
+   rather than a translate, because the hover lift is a translate and the two
+   would fight over the property. */
+.hkit-t { inline-size: 84%; }
+.hkit-t:nth-child(odd) { align-self: flex-start; }
+.hkit-t:nth-child(even) { align-self: flex-end; }
+
+/* The overlap. Each tile is laid over the one above it, so its own shadow
+   falls on that one and the three read as sheets on a desk rather than as
+   rows in a list — which is the whole difference between an arrangement and
+   a stack. The tiles being overlapped carry the extra bottom padding, so
+   what the next one covers is empty margin and never a line of content. */
+.hkit-t:not(:last-child) { padding-block-end: 27px; }
+.hkit-t + .hkit-t { margin-block-start: -15px; }
+.hkit-t:nth-child(1) { z-index: 1; }
+.hkit-t:nth-child(2) { z-index: 2; }
+.hkit-t:nth-child(3) { z-index: 3; }
 
 .hkit-label {
   font-size: 8.5px;
