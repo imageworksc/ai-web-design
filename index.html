@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=26">
+<link rel="stylesheet" href="styles.css?v=27">
 </head>
 <body>
 
@@ -405,11 +405,9 @@
                 <span class="mb mb--l1"></span>
                 <span class="mb mb--l2"></span>
                 <div class="mb-cta"><span></span><span></span></div>
-              </div>
-              <div class="mock__grid">
-                <div class="mock__cell"><i></i><span class="c-title"></span><span class="c-b1"></span><span class="c-b2"></span></div>
-                <div class="mock__cell"><i></i><span class="c-title"></span><span class="c-b1"></span><span class="c-b2"></span></div>
-                <div class="mock__cell"><i></i><span class="c-title"></span><span class="c-b1"></span><span class="c-b2"></span></div>
+                <!-- the slot where the stock picture goes, which is the one
+                     thing this page has in common with the refined one -->
+                <span class="mb-img"></span>
               </div>
             </div>
           </div>
@@ -454,20 +452,6 @@
                       <span class="ma-sheet__tiles"><i></i><i></i><i></i></span>
                     </span>
                   </span>
-                </div>
-              </div>
-              <div class="ma-cards">
-                <div class="ms-card">
-                  <i><svg><use href="#i-compass"/></svg></i>
-                  <b>Discovery</b><span class="s-b"></span><span class="s-b s-b--short"></span>
-                </div>
-                <div class="ms-card">
-                  <i><svg><use href="#i-layout"/></svg></i>
-                  <b>Homepage First</b><span class="s-b"></span><span class="s-b s-b--short"></span>
-                </div>
-                <div class="ms-card">
-                  <i><svg><use href="#i-wireframe"/></svg></i>
-                  <b>AI Wireframe</b><span class="s-b"></span><span class="s-b s-b--short"></span>
                 </div>
               </div>
             </div>
@@ -793,6 +777,6 @@
 
 </main>
 
-<script src="script.js?v=26" defer></script>
+<script src="script.js?v=27" defer></script>
 </body>
 </html>
