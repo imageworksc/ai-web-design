@@ -1073,55 +1073,61 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ai-pass .is-no span { background: var(--danger-soft); color: var(--danger-ink); }
 .ai-pass .is-no i { inline-size: 44%; background: #dfe5ee; }
 
-/* ---- 4 · the sizes it has to hold up at ----
-   The page's own argument names four things AI still lacks judgment about,
-   and mobile nuance is one of them. The same layout at three widths, the
-   narrow one first, because that is the one a first pass gets wrong.
-
-   Small on purpose: it is a check, not a step, so it sits above the pass
-   rather than beside the other two, and it is sized by what is in it. */
-/* Small in both directions. Left at the column's full width it was a short
-   wide strip, and the widest frame in it stretched into a long thin box
-   rather than reading as a window. */
+/* ---- 4 · what comes out the other end ----
+   One designed page on brand blue: the same picture the comparison further
+   down puts against the grey slot a first pass leaves in its place. It is a
+   result rather than a step, so it is the small one and it sits above the
+   pass instead of beside the other two. */
+/* Small in both directions. At the column's full width it was a short wide
+   strip, and a strip is short, not small. */
 .hkit-t--sm {
   min-block-size: 0;
   inline-size: 68%;
   align-self: flex-start;
 }
-/* on a common baseline, so the three read as one page at three widths */
-.ai-sizes {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 8px;
+/* the picture: the light off its top-left corner is what keeps it reading as
+   a photograph rather than a rectangle of brand blue */
+.ai-shot {
+  position: relative;
   margin-top: 9px;
+  aspect-ratio: 5 / 2;
+  border-radius: var(--r);
+  overflow: hidden;
+  background:
+    radial-gradient(115% 85% at 22% 12%, rgba(255, 255, 255, .24), transparent 62%),
+    linear-gradient(150deg, #2a6fb0, #143f66);
 }
-.ai-sizes li {
+/* the subject of it, centred and big enough to be one */
+.ai-shot__sheet {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  inline-size: 46%;
   display: flex;
   flex-direction: column;
   gap: 3px;
-  flex: none;
-  padding: 4px;
-  border-radius: 3px;
-  background: #f4f6fa;
-  box-shadow: inset 0 0 0 1px var(--border-soft);
+  padding: 5px;
+  border-radius: 2px;
+  background: var(--white);
+  box-shadow: 0 6px 16px rgba(6, 22, 44, .38);
 }
-.ai-sizes i { display: block; block-size: 4px; border-radius: 1px; background: #ccd5e2; }
-/* Each one carries its own bar of brand at the top, so the three read as the
-   same page and not as three empty frames. Capped in pixels as well as in
-   percent: at 60% of the wide frame it stopped being a mark on a page and
-   became a green line lying across the tile. */
-.ai-sizes i:first-child { inline-size: min(60%, 20px); background: var(--green); }
-/* A phone, a tablet and a window — narrower and taller, wider and shorter.
-   The narrow one is the one being checked, ringed the way the chosen variant
-   is ringed in the tile above it. */
-.ai-sizes .is-sm {
-  inline-size: 20px;
-  block-size: 32px;
-  box-shadow: inset 0 0 0 1.5px var(--green);
+/* Colour is the argument the picture is making, so what is on the page
+   carries brand tints rather than the grey a first pass fills it with. */
+.ai-shot i { display: block; border-radius: 1px; flex: none; }
+.ai-shot__nav { inline-size: 32%; block-size: 3px; background: var(--green); }
+.ai-shot__h { inline-size: 78%; block-size: 5px; background: #4b7fb4; }
+.ai-shot__tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  block-size: 13px;
+  margin-top: 1px;
 }
-.ai-sizes .is-md { inline-size: 32px; block-size: 27px; }
-.ai-sizes .is-lg { inline-size: 46px; block-size: 23px; }
+.ai-shot__tiles i { block-size: auto; border-radius: 1px; }
+.ai-shot__tiles i:nth-child(1) { background: #d5edbc; }
+.ai-shot__tiles i:nth-child(2) { background: #c3dcf3; }
+.ai-shot__tiles i:nth-child(3) { background: #b3c7dd; }
 
 @media (prefers-reduced-motion: reduce) {
   .ai-prompt__line { animation: none; inline-size: 100%; }
@@ -1252,9 +1258,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    above them; here each one sits at the height of the thing it describes. */
 .ba {
   display: grid;
-  /* the readings take a wider column than they did, which is the other half
-     of making the window smaller — it narrows without leaving a hole */
-  grid-template-columns: minmax(0, 1fr) clamp(260px, 31%, 380px);
+  grid-template-columns: minmax(0, 1fr) clamp(230px, 25%, 310px);
   gap: clamp(22px, 2.8vw, 46px);
   align-items: start;
   width: 100%;
@@ -1285,14 +1289,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
               0 1px 3px rgba(20, 40, 80, .07), 0 18px 44px rgba(20, 40, 80, .12);
 }
 /* the spacer: it draws nothing and only ever asks for the height 7:5 implies */
-/* the spacer: it draws nothing and only ever asks for the height the ratio
-   implies. 16:9 rather than 7:5 — each page is a hero and its nav now, and a
-   hero is a wide shape; at the taller ratio the window was mostly the air
-   under one. */
 .ba-stage::before {
   content: '';
   grid-area: 1 / 1;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 7 / 5;
 }
 
 /* The two drawings occupy the same box. Each needs its own ground: without
@@ -1466,11 +1466,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    what is drawn inside the window — the same two pages as before, at the
    size the wider stage can carry
    ========================================================================== */
-/* The window frame, and it belongs to both drawings equally — it is the same
-   browser. Set against the stage rather than in fixed pixels, so the frame
-   shrinks with what it holds: at fixed padding it kept its full margins while
-   the page inside got smaller, and below about 560px the first pass ran out
-   of the bottom of its own window. */
 .mock__chrome {
   display: flex;
   align-items: center;
@@ -1494,50 +1489,96 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   border-radius: 5px;
   background: var(--grey-soft);
 }
-/* A nav rail used to sit under the chrome on both pages. It went with
-   everything else that was a row of small marks: each page is a window, a
-   line of type and a picture now, and nothing else. */
-.mock__body {
-  flex: 1;
+.mock__nav {
   display: flex;
-  flex-direction: column;
-  gap: clamp(9px, 2.2cqw, 22px);
-  padding: clamp(13px, 3.31cqw, 30px) clamp(11px, 2.8cqw, 25px);
+  align-items: center;
+  gap: clamp(6px, 1.27cqw, 12px);
+  flex: none;
+  padding: clamp(8px, 1.91cqw, 17px) clamp(11px, 2.55cqw, 23px);
+  border-bottom: 1px solid var(--border-soft);
 }
+.mock__nav i { flex: none; border-radius: 2px; }
+.n-sp { flex: 1 !important; background: none !important; box-shadow: none !important; }
+.mock__body { flex: 1; display: flex; flex-direction: column; padding: clamp(13px, 3.31cqw, 30px) clamp(11px, 2.8cqw, 25px); }
 
 /* ---- 1 · the first pass ----
-   One grey, one weight, a centred axis, and a slot where the picture goes. */
+   One grey, one weight, a centred axis, and rows spread so every element sits
+   exactly as far from its neighbour as every other. */
+.mock--before .mock__nav i { block-size: clamp(5px, 1.15cqw, 10px); background: var(--grey-soft); }
+.mock--before .n-logo { inline-size: clamp(30px, 7.39cqw, 68px); block-size: clamp(7px, 1.66cqw, 15px); background: #ccd5e2; margin-right: clamp(5px, 1.27cqw, 12px); }
+.mock--before .n-link { inline-size: clamp(20px, 4.84cqw, 45px); }
+.mock--before .n-btn { inline-size: clamp(32px, 7.9cqw, 73px); block-size: clamp(14px, 3.31cqw, 31px); background: #d5dce7; }
 
-/* Same three parts as the refined page, in the same order and the same
-   proportions: type, then a picture that takes the rest. The whole comparison
-   is what each of them does with those parts. */
-.mb-hero {
-  flex: 1;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  /* the centred axis every template has, against the left one beside it */
-  align-items: center;
-  gap: clamp(9px, 2.2cqw, 22px);
+.mock--before .mock__body { align-items: center; justify-content: space-between; }
+.mb { block-size: clamp(7px, 1.66cqw, 15px); border-radius: 3px; background: var(--grey-soft); }
+.mb--l1 { inline-size: 68%; }
+.mb--l2 { inline-size: 88%; }
+.mb--l3 { inline-size: 88%; }
+.mb-cta { display: flex; gap: clamp(7px, 1.66cqw, 15px); }
+.mb-cta span { block-size: clamp(19px, 4.59cqw, 42px); inline-size: clamp(60px, 14.5cqw, 134px); border-radius: var(--r); background: #d5dce7; }
+
+.mock__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.91cqw, 18px);
   width: 100%;
 }
-.mb { block-size: clamp(9px, 2.17cqw, 20px); border-radius: 3px; background: var(--grey-soft); }
-.mb--l1 { inline-size: 54%; }
-.mb--l2 { inline-size: 74%; }
-.mb-cta { display: flex; margin-top: clamp(2px, 0.55cqw, 5px); }
-.mb-cta span { block-size: clamp(22px, 5.35cqw, 50px); inline-size: clamp(68px, 16.8cqw, 155px); border-radius: var(--r); background: #d5dce7; }
-/* the slot, against the picture in it on the other page */
-.mb-img {
-  flex: none;
-  block-size: 48%;
+.mock__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(5px, 1.15cqw, 11px);
+  padding: clamp(10px, 2.42cqw, 22px) clamp(8px, 1.91cqw, 18px);
   border-radius: var(--r);
+  background: #f4f6fa;
+}
+.mock__cell i {
+  inline-size: clamp(14px, 3.31cqw, 31px);
+  block-size: clamp(14px, 3.31cqw, 31px);
+  border-radius: 50%;
   background: var(--grey-soft);
 }
+.mock__cell span { block-size: clamp(3px, 0.76cqw, 7px); border-radius: 3px; background: var(--grey-soft); }
+.mock__cell .c-title { block-size: clamp(5px, 1.15cqw, 11px); inline-size: 74%; background: #ccd5e2; }
+.mock__cell .c-b1 { inline-size: 88%; }
+.mock__cell .c-b2 { inline-size: 66%; }
+.mock__cell .c-link { inline-size: 38%; margin-top: 3px; background: #ccd5e2; }
 
-/* A figures strip, a row of three cards and a four-column footer used to sit
-   under this. All three are gone. Each page is its nav and its hero now,
-   because that is where the difference between the two of them lives, and
-   every band under it was more of the same saying the same thing again. */
+/* A strip of figures, and every figure the same figure — the page has the
+   shape of a site that proves something, without proving anything. */
+.mock__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(7px, 1.78cqw, 16px);
+  width: 100%;
+}
+.mock__stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(4px, 0.89cqw, 8px);
+  padding: clamp(6px, 1.53cqw, 14px) clamp(5px, 1.27cqw, 12px);
+  border-radius: var(--r);
+  box-shadow: inset 0 0 0 1px var(--border-soft);
+}
+.mock__stats i { inline-size: 42%; block-size: clamp(7px, 1.78cqw, 16px); border-radius: 3px; background: #ccd5e2; }
+.mock__stats span { inline-size: 68%; block-size: clamp(3px, 0.76cqw, 7px); border-radius: 3px; background: var(--grey-soft); }
+
+/* A footer with columns, so it reads as a whole site and not a fragment —
+   and every column the same column, like everything above it. */
+.mock__foot {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(3, 1fr);
+  gap: clamp(7px, 1.78cqw, 16px);
+  width: 100%;
+  padding-top: clamp(7px, 1.78cqw, 16px);
+  border-top: 1px solid var(--border-soft);
+}
+.mock__foot div { display: flex; flex-direction: column; gap: clamp(4px, 0.89cqw, 8px); }
+.mock__foot i { block-size: clamp(3px, 0.76cqw, 7px); border-radius: 3px; background: var(--grey-soft); }
+.mock__foot .f-logo { inline-size: clamp(32px, 7.9cqw, 73px); block-size: clamp(6px, 1.4cqw, 13px); background: #ccd5e2; margin-bottom: 2px; }
+.mock__foot .f-l { inline-size: 80%; }
+.mock__foot .f-l--short { inline-size: 54%; }
 /* ---- 2 · after the team ----
    The refined page carries real words and real marks, because that is half of
    what makes a page look designed: the first pass has placeholder blocks
@@ -1570,29 +1611,116 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    rule, which is exactly what is wanted here. */
 .mock--after { color: var(--navy); }
 
-/* ---- the page: a line of type, then the picture ---- */
-.mock--after .mock__body { gap: clamp(9px, 2.2cqw, 22px); }
-/* Left, against the centred axis on the page beside it. That is the one
-   structural difference between the two now, and it does most of the work. */
+/* ---- the nav ---- */
+/* The frame scales with the window it is drawn in. Left at fixed pixels it
+   kept its full padding while everything inside it shrank, so at the narrow
+   end the page grew taller than the stage and the footer was cut off. Same
+   values as before at the widths where the stage is widest. */
+.mock--after .mock__chrome { padding: clamp(7px, 1.66cqw, 15px) clamp(10px, 2.29cqw, 21px); }
+.mock--after .mock__nav {
+  gap: clamp(6px, 1.05cqw, 12px);
+  padding: clamp(8px, 1.91cqw, 17px) clamp(11px, 2.55cqw, 23px);
+}
+.ma-brand { display: flex; align-items: center; gap: 6px; flex: none; }
+.ma-brand i {
+  inline-size: clamp(9px, 1.18cqw, 13px);
+  block-size: clamp(9px, 1.18cqw, 13px);
+  border-radius: 50%;
+  background: var(--green);
+  flex: none;
+}
+.ma-brand b {
+  font-size: clamp(8px, 1.02cqw, 12px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.ma-nav-link {
+  font-size: var(--t-small);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.ma-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: clamp(5px, 0.72cqw, 8px) clamp(7px, 1.05cqw, 12px);
+  border-radius: var(--r);
+  background: var(--green);
+  color: #fff;
+  font-size: var(--t-small);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+.ma-nav-btn svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
+
+/* ---- the hero: the argument, and the picture that carries it ---- */
+.mock--after .mock__body {
+  gap: clamp(9px, 1.7cqw, 18px);
+  padding: clamp(13px, 3.31cqw, 30px) clamp(11px, 2.8cqw, 25px);
+}
+/* The hero is sized by what it holds, not by what is left over. Stretched, it
+   centred a short stack of copy in a tall row and put the emptiness where the
+   eye lands first. The leftover height goes to the cards instead, which have
+   the anatomy to use it. */
+/* The hero takes the leftover height and the cards do not. Given to the
+   cards it opened a gap between their last line and their link that nothing
+   filled; given to the hero it makes the picture bigger, which is what a
+   picture is for. */
+.ma-hero { display: flex; gap: clamp(12px, 2.36cqw, 24px); align-items: stretch; flex: 1; }
 .ma-hero__copy {
-  flex: 1;
+  flex: 1.15;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  /* the copy sits against the middle of the image rather than hanging from
+     its top edge, now that the row takes the leftover height */
   justify-content: center;
   align-items: flex-start;
-  gap: clamp(7px, 1.7cqw, 17px);
+  gap: clamp(6px, 1.02cqw, 11px);
 }
-/* The headline runs the width of the page rather than half of it now that the
-   picture is under it and not beside it, so it can be set where a hero sets
-   it. "AI Website Design" holds one line at 6.6cqw against a page 15 per cent
-   wider than that, and the break after it is the one in the markup. */
+.ma-eyebrow { display: flex; align-items: center; gap: 5px; }
+.ma-eyebrow i {
+  inline-size: clamp(5px, 0.65cqw, 7px);
+  block-size: clamp(5px, 0.65cqw, 7px);
+  border-radius: 50%;
+  background: var(--green);
+  flex: none;
+}
+.ma-eyebrow b {
+  font-size: var(--t-label);
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--green-ink);
+  white-space: nowrap;
+}
+/* The headline is where this page spends its boldness. At the old size it
+   was one more grey-weight line among several and left half its column
+   empty; a hero on a designed page dominates its own band. */
 .ma-h {
-  font-size: clamp(13px, 6.6cqw, 60px);
+  font-size: clamp(12px, 5.2cqw, 46px);
   font-weight: 800;
   letter-spacing: -.035em;
   line-height: 1.05;
 }
 .ma-h em { font-style: normal; color: var(--green-ink); }
+/* Deck copy, not nav copy: set at the page's small size it was a 6px hairline
+   under a headline six times its height, which is most of what made the
+   column look empty. Wide enough for two lines, which is a paragraph. */
+.ma-p {
+  font-size: clamp(6.5px, 1.5cqw, 15px);
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 62ch;
+}
+
 .ma-cta { display: flex; flex-wrap: wrap; gap: clamp(6px, 0.92cqw, 10px); margin-top: 2px; }
 .ma-cta span {
   display: flex;
@@ -1606,16 +1734,49 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   white-space: nowrap;
 }
 .ma-cta .is-solid { background: var(--green); color: #fff; }
+.ma-cta .is-quiet { box-shadow: inset 0 0 0 1.5px var(--border); color: var(--navy); }
 .ma-cta svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
 
-/* The picture, in the same slot the first pass leaves grey and empty. It takes
-   the rest of the page exactly as that slot does, so the two line up when the
-   divider is between them. The light off its top-left corner is what keeps it
-   reading as a photograph rather than a rectangle of brand blue. */
+/* The three things this page claims about itself, which are the three things
+   its own hero claims, stacked the way a designed hero stacks them. One line
+   left the column short and the row it sits in half empty. */
+.ma-trust {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.59cqw, 7px);
+  margin-top: clamp(2px, 0.3cqw, 4px);
+}
+.ma-trust > span { display: flex; align-items: center; gap: 5px; }
+.ma-trust i {
+  display: grid;
+  place-items: center;
+  inline-size: clamp(9px, 1.2cqw, 14px);
+  block-size: clamp(9px, 1.2cqw, 14px);
+  border-radius: 50%;
+  background: var(--tint-green);
+  color: var(--green-ink);
+  flex: none;
+}
+.ma-trust svg { inline-size: 60%; block-size: 60%; }
+.ma-trust b {
+  font-size: var(--t-small);
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* the one filled area on the page, and the light off its top-left corner is
+   what keeps it reading as a photograph rather than a rectangle of brand blue */
 .ma-hero__art {
   position: relative;
-  flex: none;
-  block-size: 48%;
+  flex: 1;
+  min-inline-size: 0;
+  /* No ratio: it stretches to the row, and the row is as tall as the copy
+     beside it. Picture and argument end on the same line, which is the
+     alignment a designed hero is built on — and it was the fixed ratio that
+     left a band of empty blue under the copy in the first place. */
   border-radius: var(--r);
   overflow: hidden;
   background:
@@ -1633,50 +1794,216 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1;
   color: rgba(255, 255, 255, .92);
 }
-/* One page lifted onto the picture, where there used to be three on a stack.
-   It gives the frame a subject in a single object — the thing the grey slot
-   on the other page is missing — and it is the last drawn detail left in
-   either window. */
-.ma-sheet {
+/* What an agency puts in its own hero is the work. Three pages on a stack,
+   cascading out of the top-right corner, and the whole reason the frame is
+   no longer empty: a caption in one corner and a figure in the other left
+   the middle of the picture — where the eye lands — with nothing in it. */
+.ma-stack {
   position: absolute;
-  /* The subject of the picture, so it sits in the middle of it and is big
-     enough to be one. In the corner at a fifth of the width it was a detail
-     on a field of blue, and the field read as the empty slot on the other
-     page rather than as the answer to it. Inside the frame on every edge,
-     too: hung off the bottom it was cut in half by the frame's own overflow,
-     which reads as a mistake and not as a crop. */
   left: 50%;
-  top: 50%;
+  top: 54%;
   translate: -50% -50%;
-  inline-size: clamp(112px, 38cqw, 360px);
+  inline-size: 66%;
+  aspect-ratio: 4 / 3;
+}
+.ma-sheet { position: absolute; border-radius: 3px; }
+/* the two behind are glass, so they read as depth and not as content */
+.ma-sheet--back {
+  left: 17%; top: 0; right: 0; bottom: 27%;
+  background: rgba(255, 255, 255, .13);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
+}
+.ma-sheet--mid {
+  left: 8.5%; top: 11%; right: 8.5%; bottom: 14%;
+  background: rgba(255, 255, 255, .22);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3);
+}
+/* and the one in front is a page: white, lifted, and drawn far enough to
+   read as a layout somebody made */
+.ma-sheet--front {
+  left: 0; top: 24%; right: 17%; bottom: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(3px, 0.9cqw, 11px);
-  padding: clamp(5px, 1.5cqw, 18px);
-  border-radius: 3px;
+  gap: clamp(3px, 0.46cqw, 6px);
+  padding: clamp(5px, 0.79cqw, 9px);
   background: var(--white);
-  box-shadow: 0 14px 34px rgba(6, 22, 44, .42);
+  box-shadow: 0 12px 28px rgba(6, 22, 44, .4);
 }
 /* Colour is the argument this picture is making, so the bars inside carry
    brand tints rather than the grey the first pass fills its page with. */
 .ma-sheet i { border-radius: 2px; flex: none; }
-.ma-sheet__nav { inline-size: 32%; block-size: clamp(3px, 0.72cqw, 9px); background: var(--green); }
-.ma-sheet__h { inline-size: 78%; block-size: clamp(5px, 1.25cqw, 15px); background: #4b7fb4; }
+.ma-sheet__nav { inline-size: 38%; block-size: clamp(3px, 0.4cqw, 5px); background: var(--green); }
+.ma-sheet__h { inline-size: 84%; block-size: clamp(5px, 0.72cqw, 8px); background: #4b7fb4; }
+.ma-sheet__p { inline-size: 60%; block-size: clamp(3px, 0.4cqw, 5px); background: #cdddec; }
 .ma-sheet__tiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(3px, 0.9cqw, 11px);
-  /* the floor is what lets the whole sheet fit its frame at the narrow end:
-     at 22px the drawing was taller than the band it sits in */
-  block-size: clamp(14px, 4.2cqw, 50px);
-  margin-top: clamp(1px, 0.3cqw, 4px);
+  gap: clamp(3px, 0.46cqw, 6px);
+  flex: 1;
+  min-block-size: clamp(12px, 1.9cqw, 22px);
+  margin-top: auto;
 }
-/* Three washes rather than three greys: the page tints hold up at this size
-   on a blue ground where --tint-green and --tint-blue both went to paper. */
+/* Three washes rather than three greys: the page tints hold up at 40px on a
+   blue ground where --tint-green and --tint-blue both went to paper white. */
 .ma-sheet__tiles i { border-radius: 2px; block-size: auto; }
 .ma-sheet__tiles i:nth-child(1) { background: #d5edbc; }
 .ma-sheet__tiles i:nth-child(2) { background: #c3dcf3; }
 .ma-sheet__tiles i:nth-child(3) { background: #b3c7dd; }
+
+/* ---- three across, so the band reads at any x ---- */
+.ma-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.44cqw, 15px);
+  flex: none;
+}
+/* white with a hairline, the way a card on a real page is */
+.ms-card {
+  display: flex;
+  flex-direction: column;
+  /* icon, name and copy from the top; the link held at the foot. Centred, the
+     card's parts floated in the middle of whatever height it was given. */
+  justify-content: flex-start;
+  gap: clamp(5px, 0.79cqw, 9px);
+  padding: clamp(9px, 1.44cqw, 15px);
+  border-radius: var(--r);
+  background: var(--white);
+  /* a hairline and a little depth under it: the first pass has flat panels,
+     and depth is one of the things somebody decides to add */
+  box-shadow: inset 0 0 0 1px var(--border), 0 3px 10px rgba(20, 40, 80, .06);
+  min-width: 0;
+}
+.ms-card i {
+  display: grid;
+  place-items: center;
+  inline-size: clamp(15px, 2.09cqw, 23px);
+  block-size: clamp(15px, 2.09cqw, 23px);
+  border-radius: 5px;
+  background: var(--tint-green);
+  color: var(--green-ink);
+  flex: none;
+}
+.ms-card i svg { inline-size: 62%; block-size: 62%; }
+.ms-card:nth-child(2) i { background: var(--tint-blue); color: var(--blue); }
+.ms-card:nth-child(3) i { background: var(--chip-navy); color: var(--navy); }
+.ms-card b {
+  font-size: var(--t-title);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ms-card span { block-size: clamp(4px, 0.55cqw, 6px); border-radius: 3px; background: #cbd5e4; }
+.ms-card .s-b { inline-size: 94%; }
+.ms-card .s-b--mid { inline-size: 82%; }
+.ms-card .s-b--short { inline-size: 64%; }
+/* The link is the one line in a card that would be a colour on a real page,
+   and it sits at the foot with its arrow — a card that says where it goes. */
+.ms-card .s-link {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 0.62cqw, 7px);
+  margin-top: auto;
+  padding-top: clamp(7px, 1.05cqw, 12px);
+  inline-size: auto;
+  block-size: auto;
+  background: none;
+  color: var(--blue);
+}
+.ms-card .s-link em {
+  display: block;
+  inline-size: clamp(26px, 4.4cqw, 44px);
+  block-size: clamp(4px, 0.55cqw, 6px);
+  border-radius: 3px;
+  background: rgba(18, 102, 181, .55);
+}
+.ms-card .s-link svg { inline-size: clamp(8px, 1.15cqw, 12px); block-size: clamp(8px, 1.15cqw, 12px); }
+
+/* ---- the foot: the mark, then a real field with nothing written in it ---- */
+.ma-foot {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.6cqw, 20px);
+  width: 100%;
+  padding-top: clamp(9px, 1.3cqw, 15px);
+  border-top: 1px solid var(--border-soft);
+}
+.ma-foot__brand { display: flex; align-items: center; gap: 6px; flex: none; }
+.ma-foot__brand i {
+  inline-size: clamp(8px, 1.05cqw, 12px);
+  block-size: clamp(8px, 1.05cqw, 12px);
+  border-radius: 50%;
+  background: var(--green);
+  flex: none;
+}
+.ma-foot__brand b {
+  font-size: var(--t-label);
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--faint);
+  white-space: nowrap;
+}
+/* the same three names as the top nav, because a footer repeats the nav */
+.ma-foot__nav { display: flex; gap: clamp(7px, 1.05cqw, 12px); flex: none; min-width: 0; }
+.ma-foot__nav b {
+  font-size: var(--t-label);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--faint);
+  white-space: nowrap;
+}
+/* held to a width rather than given the rest of the row: full-bleed, the one
+   empty box on the page was also the widest thing on it */
+.ma-form {
+  display: flex;
+  gap: clamp(6px, 1.05cqw, 12px);
+  flex: none;
+  inline-size: clamp(150px, 38cqw, 380px);
+  margin-inline-start: auto;
+  min-width: 0;
+  align-items: stretch;
+}
+.f-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding-inline: clamp(8px, 1.18cqw, 14px);
+  block-size: clamp(21px, 2.88cqw, 31px);
+  border-radius: var(--r);
+  box-shadow: inset 0 0 0 1.5px var(--border);
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--faint);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.f-btn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding-inline: clamp(10px, 1.57cqw, 18px);
+  block-size: clamp(21px, 2.88cqw, 31px);
+  border-radius: var(--r);
+  background: var(--navy);
+  color: #fff;
+  font-size: var(--t-small);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Below the width the third card can carry a word, the page drops it — the
+   way a real one would, rather than squeezing three into the room for two. */
+@media (max-width: 700px) {
+  .ms-card:nth-child(3) { display: none; }
+  .ma-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mock--after .ma-nav-link:nth-of-type(3) { display: none; }
+}
 
 /* Below the width the column beside it can carry a sentence, the readings go
    back under the window. */
@@ -1693,17 +2020,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .compare-note { font-size: 15px; }
 }
 
-/* Both drawings used to drop nav links below the width their own window could
-   carry them. Neither has a nav any more, and nothing left in either one is
-   set in fixed pixels, so there is nothing to drop.
+/* Below the width its own window can carry them, each drawing drops what does
+   not fit — the way a real narrow layout would, and the way the refined one
+   already drops its third card. A container query rather than a media one:
+   these are sized against the window they are drawn in, not the viewport, and
+   the two part company as soon as the readings move under the window.
 
-   What they do need is a taller window on a phone. The type inside reaches
-   its clamp minimums while the window keeps narrowing, so past a point the
-   refined page's headline and call no longer fit the share of the height
-   16:9 leaves them and the picture ran past the frame. A phone is a tall
-   shape anyway. */
-@media (max-width: 480px) {
-  .ba-stage::before { aspect-ratio: 4 / 3; }
+   Left as they were, the first pass's call and the refined page's form ran
+   past the window's edge and were cut in half by it. */
+@container (max-width: 380px) {
+  .mock--before .n-link ~ .n-link ~ .n-link { display: none; }
+  .ma-foot__nav { display: none; }
+  .ma-form { inline-size: clamp(105px, 38cqw, 380px); }
 }
 
 /* --------------------------------------------------------------------------
