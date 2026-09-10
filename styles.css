@@ -1494,61 +1494,42 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   border-radius: 5px;
   background: var(--grey-soft);
 }
-.mock__nav {
-  display: flex;
-  align-items: center;
-  gap: clamp(6px, 1.27cqw, 12px);
-  flex: none;
-  padding: clamp(8px, 1.91cqw, 17px) clamp(11px, 2.55cqw, 23px);
-  border-bottom: 1px solid var(--border-soft);
-}
-.mock__nav i { flex: none; border-radius: 2px; }
-.n-sp { flex: 1 !important; background: none !important; box-shadow: none !important; }
-.mock__body { flex: 1; display: flex; flex-direction: column; padding: clamp(13px, 3.31cqw, 30px) clamp(11px, 2.8cqw, 25px); }
-
-/* ---- 1 · the first pass ----
-   One grey, one weight, a centred axis, and rows spread so every element sits
-   exactly as far from its neighbour as every other. */
-.mock--before .mock__nav i { block-size: clamp(5px, 1.15cqw, 10px); background: var(--grey-soft); }
-.mock--before .n-logo { inline-size: clamp(30px, 7.39cqw, 68px); block-size: clamp(7px, 1.66cqw, 15px); background: #ccd5e2; margin-right: clamp(5px, 1.27cqw, 12px); }
-.mock--before .n-link { inline-size: clamp(20px, 4.84cqw, 45px); }
-.mock--before .n-btn { inline-size: clamp(32px, 7.9cqw, 73px); block-size: clamp(14px, 3.31cqw, 31px); background: #d5dce7; }
-
-/* Same skeleton as the refined page: a hero band that takes the leftover
-   height, and a row of three under it. That is the point — the two pages are
-   built out of the same two bands, and every difference between them is a
-   decision somebody did or did not make. Spread with space-between instead,
-   the four remaining pieces sat a hundred pixels apart. */
-.mock--before .mock__body { align-items: center; }
-.mb-hero {
+/* A nav rail used to sit under the chrome on both pages. It went with
+   everything else that was a row of small marks: each page is a window, a
+   line of type and a picture now, and nothing else. */
+.mock__body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: clamp(9px, 2.2cqw, 22px);
+  padding: clamp(13px, 3.31cqw, 30px) clamp(11px, 2.8cqw, 25px);
+}
+
+/* ---- 1 · the first pass ----
+   One grey, one weight, a centred axis, and a slot where the picture goes. */
+
+/* Same three parts as the refined page, in the same order and the same
+   proportions: type, then a picture that takes the rest. The whole comparison
+   is what each of them does with those parts. */
+.mb-hero {
+  flex: 1;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  /* the centred axis every template has, against the left one beside it */
   align-items: center;
-  /* from the top, now that the image slot below takes the leftover height —
-     centred, the whole stack floated in the middle of the window */
-  justify-content: flex-start;
-  gap: clamp(10px, 2.55cqw, 24px);
+  gap: clamp(9px, 2.2cqw, 22px);
   width: 100%;
 }
-/* Bigger, now that there are fewer of them: the page has to carry the window
-   with a headline and a pair of calls, and at the old sizes they were small
-   marks floating in it. */
 .mb { block-size: clamp(9px, 2.17cqw, 20px); border-radius: 3px; background: var(--grey-soft); }
-.mb--l1 { inline-size: 62%; }
-.mb--l2 { inline-size: 84%; }
-.mb-cta { display: flex; gap: clamp(7px, 1.78cqw, 16px); margin-top: clamp(3px, 0.76cqw, 7px); }
+.mb--l1 { inline-size: 54%; }
+.mb--l2 { inline-size: 74%; }
+.mb-cta { display: flex; margin-top: clamp(2px, 0.55cqw, 5px); }
 .mb-cta span { block-size: clamp(22px, 5.35cqw, 50px); inline-size: clamp(68px, 16.8cqw, 155px); border-radius: var(--r); background: #d5dce7; }
-/* Where the picture goes on the refined page, this one has the slot for one.
-   That is the comparison in a single object: both pages give the same area to
-   an image, and only one of them has decided what goes in it. It also stops
-   the first pass reading as broken rather than as generic — three grey marks
-   floating in a white box is not a template, it is an empty page. */
+/* the slot, against the picture in it on the other page */
 .mb-img {
-  flex: 1;
-  align-self: stretch;
-  min-block-size: clamp(34px, 9cqw, 84px);
-  margin-top: clamp(6px, 1.53cqw, 14px);
+  flex: none;
+  block-size: 48%;
   border-radius: var(--r);
   background: var(--grey-soft);
 }
@@ -1589,97 +1570,29 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    rule, which is exactly what is wanted here. */
 .mock--after { color: var(--navy); }
 
-/* ---- the nav ----
-   The frame's own padding is up with .mock__chrome and .mock__nav now, shared
-   by both drawings; only the gap between this page's nav items is its own. */
-.mock--after .mock__nav { gap: clamp(6px, 1.05cqw, 12px); }
-.ma-brand { display: flex; align-items: center; gap: 6px; flex: none; }
-.ma-brand i {
-  inline-size: clamp(9px, 1.18cqw, 13px);
-  block-size: clamp(9px, 1.18cqw, 13px);
-  border-radius: 50%;
-  background: var(--green);
-  flex: none;
-}
-.ma-brand b {
-  font-size: clamp(8px, 1.02cqw, 12px);
-  font-weight: 800;
-  letter-spacing: -.02em;
-  line-height: 1;
-}
-.ma-nav-link {
-  font-size: var(--t-small);
-  font-weight: 600;
-  line-height: 1;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.ma-nav-btn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: none;
-  padding: clamp(5px, 0.72cqw, 8px) clamp(7px, 1.05cqw, 12px);
-  border-radius: var(--r);
-  background: var(--green);
-  color: #fff;
-  font-size: var(--t-small);
-  font-weight: 800;
-  line-height: 1;
-  white-space: nowrap;
-}
-.ma-nav-btn svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
-
-/* ---- the hero: the argument, and the picture that carries it ---- */
-.mock--after .mock__body { gap: clamp(9px, 1.7cqw, 18px); }
-/* The hero takes the leftover height and the cards do not. Given to the
-   cards it opened a gap between their last line and their link that nothing
-   filled; given to the hero it makes the picture bigger, which is what a
-   picture is for. */
-.ma-hero { display: flex; gap: clamp(12px, 2.36cqw, 24px); align-items: stretch; flex: 1; }
+/* ---- the page: a line of type, then the picture ---- */
+.mock--after .mock__body { gap: clamp(9px, 2.2cqw, 22px); }
+/* Left, against the centred axis on the page beside it. That is the one
+   structural difference between the two now, and it does most of the work. */
 .ma-hero__copy {
-  flex: 1.15;
-  min-width: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  /* the copy sits against the middle of the image rather than hanging from
-     its top edge, now that the row takes the leftover height */
   justify-content: center;
   align-items: flex-start;
-  /* headline, deck and calls set apart the way a hero sets them apart. At
-     7px they were stacked tight enough to read as one block, which is what a
-     first pass does with them. */
-  gap: clamp(8px, 2cqw, 20px);
+  gap: clamp(7px, 1.7cqw, 17px);
 }
-/* The headline is where this page spends its boldness. At the old size it
-   was one more grey-weight line among several and left half its column
-   empty; a hero on a designed page dominates its own band. */
-/* Sized so "AI Website Design" holds one line and the headline reads as the
-   two lines it is written as. At 6.3cqw the phrase was 376px against a 354px
-   column and broke after "Website", which put "Design" alone on a line of its
-   own. 5.5 leaves about six per cent in hand, and because the column and the
-   type both scale with the window that margin holds at every width. */
+/* The headline runs the width of the page rather than half of it now that the
+   picture is under it and not beside it, so it can be set where a hero sets
+   it. "AI Website Design" holds one line at 6.6cqw against a page 15 per cent
+   wider than that, and the break after it is the one in the markup. */
 .ma-h {
-  font-size: clamp(12px, 5.5cqw, 50px);
+  font-size: clamp(13px, 6.6cqw, 60px);
   font-weight: 800;
   letter-spacing: -.035em;
   line-height: 1.05;
 }
 .ma-h em { font-style: normal; color: var(--green-ink); }
-/* Deck copy, not nav copy: set at the page's small size it was a 6px hairline
-   under a headline six times its height, which is most of what made the
-   column look empty. Wide enough for two lines, which is a paragraph. */
-.ma-p {
-  font-size: clamp(7px, 1.85cqw, 18px);
-  font-weight: 500;
-  line-height: 1.6;
-  color: var(--muted);
-  max-width: 62ch;
-  /* two lines of the same length rather than a full one and a short one:
-     it broke where it ran out of room, at 332px and then 224 */
-  text-wrap: balance;
-}
-
 .ma-cta { display: flex; flex-wrap: wrap; gap: clamp(6px, 0.92cqw, 10px); margin-top: 2px; }
 .ma-cta span {
   display: flex;
@@ -1693,19 +1606,16 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   white-space: nowrap;
 }
 .ma-cta .is-solid { background: var(--green); color: #fff; }
-.ma-cta .is-quiet { box-shadow: inset 0 0 0 1.5px var(--border); color: var(--navy); }
 .ma-cta svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
 
-/* the one filled area on the page, and the light off its top-left corner is
-   what keeps it reading as a photograph rather than a rectangle of brand blue */
+/* The picture, in the same slot the first pass leaves grey and empty. It takes
+   the rest of the page exactly as that slot does, so the two line up when the
+   divider is between them. The light off its top-left corner is what keeps it
+   reading as a photograph rather than a rectangle of brand blue. */
 .ma-hero__art {
   position: relative;
-  flex: 1;
-  min-inline-size: 0;
-  /* No ratio: it stretches to the row, and the row is as tall as the copy
-     beside it. Picture and argument end on the same line, which is the
-     alignment a designed hero is built on — and it was the fixed ratio that
-     left a band of empty blue under the copy in the first place. */
+  flex: none;
+  block-size: 48%;
   border-radius: var(--r);
   overflow: hidden;
   background:
@@ -1723,71 +1633,50 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1;
   color: rgba(255, 255, 255, .92);
 }
-/* What an agency puts in its own hero is the work. Three pages on a stack,
-   cascading out of the top-right corner, and the whole reason the frame is
-   no longer empty: a caption in one corner and a figure in the other left
-   the middle of the picture — where the eye lands — with nothing in it. */
-.ma-stack {
+/* One page lifted onto the picture, where there used to be three on a stack.
+   It gives the frame a subject in a single object — the thing the grey slot
+   on the other page is missing — and it is the last drawn detail left in
+   either window. */
+.ma-sheet {
   position: absolute;
+  /* The subject of the picture, so it sits in the middle of it and is big
+     enough to be one. In the corner at a fifth of the width it was a detail
+     on a field of blue, and the field read as the empty slot on the other
+     page rather than as the answer to it. Inside the frame on every edge,
+     too: hung off the bottom it was cut in half by the frame's own overflow,
+     which reads as a mistake and not as a crop. */
   left: 50%;
-  top: 54%;
+  top: 50%;
   translate: -50% -50%;
-  inline-size: 66%;
-  aspect-ratio: 4 / 3;
-}
-.ma-sheet { position: absolute; border-radius: 3px; }
-/* the two behind are glass, so they read as depth and not as content */
-.ma-sheet--back {
-  left: 17%; top: 0; right: 0; bottom: 27%;
-  background: rgba(255, 255, 255, .13);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
-}
-.ma-sheet--mid {
-  left: 8.5%; top: 11%; right: 8.5%; bottom: 14%;
-  background: rgba(255, 255, 255, .22);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3);
-}
-/* and the one in front is a page: white, lifted, and drawn far enough to
-   read as a layout somebody made */
-.ma-sheet--front {
-  left: 0; top: 24%; right: 17%; bottom: 0;
+  inline-size: clamp(112px, 38cqw, 360px);
   display: flex;
   flex-direction: column;
-  gap: clamp(3px, 0.46cqw, 6px);
-  padding: clamp(5px, 0.79cqw, 9px);
+  gap: clamp(3px, 0.9cqw, 11px);
+  padding: clamp(5px, 1.5cqw, 18px);
+  border-radius: 3px;
   background: var(--white);
-  box-shadow: 0 12px 28px rgba(6, 22, 44, .4);
+  box-shadow: 0 14px 34px rgba(6, 22, 44, .42);
 }
 /* Colour is the argument this picture is making, so the bars inside carry
    brand tints rather than the grey the first pass fills its page with. */
 .ma-sheet i { border-radius: 2px; flex: none; }
-.ma-sheet__nav { inline-size: 38%; block-size: clamp(3px, 0.4cqw, 5px); background: var(--green); }
-.ma-sheet__h { inline-size: 84%; block-size: clamp(5px, 0.72cqw, 8px); background: #4b7fb4; }
-.ma-sheet__p { inline-size: 60%; block-size: clamp(3px, 0.4cqw, 5px); background: #cdddec; }
+.ma-sheet__nav { inline-size: 32%; block-size: clamp(3px, 0.72cqw, 9px); background: var(--green); }
+.ma-sheet__h { inline-size: 78%; block-size: clamp(5px, 1.25cqw, 15px); background: #4b7fb4; }
 .ma-sheet__tiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(3px, 0.46cqw, 6px);
-  flex: 1;
-  min-block-size: clamp(12px, 1.9cqw, 22px);
-  margin-top: auto;
+  gap: clamp(3px, 0.9cqw, 11px);
+  /* the floor is what lets the whole sheet fit its frame at the narrow end:
+     at 22px the drawing was taller than the band it sits in */
+  block-size: clamp(14px, 4.2cqw, 50px);
+  margin-top: clamp(1px, 0.3cqw, 4px);
 }
-/* Three washes rather than three greys: the page tints hold up at 40px on a
-   blue ground where --tint-green and --tint-blue both went to paper white. */
+/* Three washes rather than three greys: the page tints hold up at this size
+   on a blue ground where --tint-green and --tint-blue both went to paper. */
 .ma-sheet__tiles i { border-radius: 2px; block-size: auto; }
 .ma-sheet__tiles i:nth-child(1) { background: #d5edbc; }
 .ma-sheet__tiles i:nth-child(2) { background: #c3dcf3; }
 .ma-sheet__tiles i:nth-child(3) { background: #b3c7dd; }
-
-/* The row of three cards that used to close this page, and its footer before
-   that, are both gone: the page is its nav and its hero, which is where the
-   difference between the two drawings actually shows. */
-
-/* Below the width its nav can carry the word, the refined page drops one —
-   the way a real narrow layout would. */
-@media (max-width: 700px) {
-  .mock--after .ma-nav-link:nth-of-type(3) { display: none; }
-}
 
 /* Below the width the column beside it can carry a sentence, the readings go
    back under the window. */
@@ -1804,16 +1693,17 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .compare-note { font-size: 15px; }
 }
 
-/* Below the width its own window can carry them, each drawing drops what does
-   not fit — the way a real narrow layout would, and the way the refined one
-   already drops its third card. A container query rather than a media one:
-   these are sized against the window they are drawn in, not the viewport, and
-   the two part company as soon as the readings move under the window.
+/* Both drawings used to drop nav links below the width their own window could
+   carry them. Neither has a nav any more, and nothing left in either one is
+   set in fixed pixels, so there is nothing to drop.
 
-   Left as it was, the first pass's call ran past the window's edge and was
-   cut in half by it. */
-@container (max-width: 380px) {
-  .mock--before .n-link ~ .n-link ~ .n-link { display: none; }
+   What they do need is a taller window on a phone. The type inside reaches
+   its clamp minimums while the window keeps narrowing, so past a point the
+   refined page's headline and call no longer fit the share of the height
+   16:9 leaves them and the picture ran past the frame. A phone is a tall
+   shape anyway. */
+@media (max-width: 480px) {
+  .ba-stage::before { aspect-ratio: 4 / 3; }
 }
 
 /* --------------------------------------------------------------------------
