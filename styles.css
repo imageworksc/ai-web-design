@@ -887,6 +887,17 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .hkit-t:hover::before { transform: scaleX(1); }
 
+/* This page's own arrangement, not the source's. Three identical bars flush
+   in a stack read as a default; each tile steps off the one above it —
+   right, left, right — so the column reads as something somebody set.
+
+   Narrower than the column by exactly the step, so the zigzag happens inside
+   the grid instead of pushing out of it, and set with align-self rather than
+   a translate so the hover lift keeps the transform to itself. */
+.hkit-t { inline-size: 91%; }
+.hkit-t:nth-child(odd) { align-self: flex-end; }
+.hkit-t:nth-child(even) { align-self: flex-start; }
+
 .hkit-label {
   font-size: 8.5px;
   font-weight: 800;
@@ -1034,10 +1045,11 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 
 
-/* Measured rather than guessed: the credentials run 658px, not the ~594 I
-   first estimated, and at 1001px the copy column is 655 — it broke by three
-   pixels. The stack starts at 1060, where the column still leaves the copy
-   just over 710. */
+/* The breakpoint was measured against the credential line, which the hero no
+   longer carries: it ran 658px and the copy column fell three pixels short of
+   it at 1001px, so the stack started at 1060. It stays there — the sentence
+   under the headline is set to 640px, and 1060 is still where the two columns
+   stop leaving it room to hold its two lines. */
 @media (max-width: 1060px) {
   .ai-hero { grid-template-columns: 1fr; gap: 36px; }
   .hkit { max-width: 340px; }
