@@ -1646,13 +1646,21 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
      its top edge, now that the row takes the leftover height */
   justify-content: center;
   align-items: flex-start;
-  gap: clamp(6px, 1.02cqw, 11px);
+  /* headline, deck and calls set apart the way a hero sets them apart. At
+     7px they were stacked tight enough to read as one block, which is what a
+     first pass does with them. */
+  gap: clamp(8px, 2cqw, 20px);
 }
 /* The headline is where this page spends its boldness. At the old size it
    was one more grey-weight line among several and left half its column
    empty; a hero on a designed page dominates its own band. */
+/* Sized so "AI Website Design" holds one line and the headline reads as the
+   two lines it is written as. At 6.3cqw the phrase was 376px against a 354px
+   column and broke after "Website", which put "Design" alone on a line of its
+   own. 5.5 leaves about six per cent in hand, and because the column and the
+   type both scale with the window that margin holds at every width. */
 .ma-h {
-  font-size: clamp(12px, 6.3cqw, 56px);
+  font-size: clamp(12px, 5.5cqw, 50px);
   font-weight: 800;
   letter-spacing: -.035em;
   line-height: 1.05;
@@ -1667,6 +1675,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1.6;
   color: var(--muted);
   max-width: 62ch;
+  /* two lines of the same length rather than a full one and a short one:
+     it broke where it ran out of room, at 332px and then 224 */
+  text-wrap: balance;
 }
 
 .ma-cta { display: flex; flex-wrap: wrap; gap: clamp(6px, 0.92cqw, 10px); margin-top: 2px; }
