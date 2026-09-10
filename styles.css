@@ -1088,11 +1088,14 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t--sm {
   min-block-size: 0;
   inline-size: 68%;
-  /* one of these lands depending on which container the tile is in: the pair
-     on the right is a flex column, where the cross axis is the horizontal
-     one, and the two on the left are grid cells, where it is not */
+  /* One of these lands depending on which container the tile is in, and only
+     one small tile is in each. In the pair on the right, a flex column, the
+     cross axis is the horizontal one, so align-self puts the pass tile on the
+     left of it. In the grid on the left it is the vertical one, so the same
+     declaration only pins the prompt to the top of its row and justify-self
+     is what sets its side: right, against the column's own edge. */
   align-self: flex-start;
-  justify-self: start;
+  justify-self: end;
 }
 /* The word for the state you are looking at. Both are in the flow of the
    label's own line — one absolutely over the other — so the box does not
