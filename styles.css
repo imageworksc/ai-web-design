@@ -1719,6 +1719,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   line-height: 1.6;
   color: var(--muted);
   max-width: 62ch;
+  /* two lines of the same length rather than a full one and a short one:
+     left to break where it ran out of room it came out 332px and then 224 */
+  text-wrap: balance;
 }
 
 .ma-cta { display: flex; flex-wrap: wrap; gap: clamp(6px, 0.92cqw, 10px); margin-top: 2px; }
@@ -1737,35 +1740,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ma-cta .is-quiet { box-shadow: inset 0 0 0 1.5px var(--border); color: var(--navy); }
 .ma-cta svg { inline-size: clamp(7px, 0.81cqw, 10px); block-size: clamp(7px, 0.81cqw, 10px); }
 
-/* The three things this page claims about itself, which are the three things
-   its own hero claims, stacked the way a designed hero stacks them. One line
-   left the column short and the row it sits in half empty. */
-.ma-trust {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(4px, 0.59cqw, 7px);
-  margin-top: clamp(2px, 0.3cqw, 4px);
-}
-.ma-trust > span { display: flex; align-items: center; gap: 5px; }
-.ma-trust i {
-  display: grid;
-  place-items: center;
-  inline-size: clamp(9px, 1.2cqw, 14px);
-  block-size: clamp(9px, 1.2cqw, 14px);
-  border-radius: 50%;
-  background: var(--tint-green);
-  color: var(--green-ink);
-  flex: none;
-}
-.ma-trust svg { inline-size: 60%; block-size: 60%; }
-.ma-trust b {
-  font-size: var(--t-small);
-  font-weight: 700;
-  letter-spacing: .04em;
-  line-height: 1;
-  color: var(--muted);
-  white-space: nowrap;
-}
+/* A checklist of three credentials used to close this column. It came out of
+   the page's own hero some time ago and it is out of the drawing of it now. */
 
 /* the one filled area on the page, and the light off its top-left corner is
    what keeps it reading as a photograph rather than a rectangle of brand blue */
