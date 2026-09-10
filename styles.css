@@ -851,20 +851,40 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    -------------------------------------------------------------------------- */
 .ai-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(230px, 20vw, 290px);
-  gap: clamp(36px, 3.6vw, 52px);
+  /* The graphic column is flush to the shell's right edge, so the gap between
+     the two columns cannot move the tiles — a fixed column beside a 1fr one
+     stays where it is whatever the gap. Bringing the tiles nearer the copy
+     means starting the column further left, which is widening it, and the
+     stack inside is then held to less than the column so it does not just
+     grow back into the room. */
+  grid-template-columns: minmax(0, 1fr) clamp(250px, 24vw, 330px);
+  gap: clamp(30px, 3vw, 44px);
   align-items: center;
   width: 100%;
 }
 
-/* no gap: the tiles overlap rather than sit apart — see the arrangement below */
-.hkit { display: flex; flex-direction: column; gap: 0; width: 100%; }
+/* Held to less than the column it sits in, and sitting at that column's left
+   edge, so widening the column walks the whole arrangement toward the copy
+   instead of just making the tiles bigger. */
+.hkit {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  inline-size: min(100%, 300px);
+}
 
 /* ---- the shared tile, as the source builds it ---- */
 .hkit-t {
   position: relative;
   overflow: hidden;
-  padding: 13px 15px;
+  /* A column, and a floor under it. The tiles were three different flat
+     rectangles — 2.25, 2.0 and 1.9 wide to tall — and read as rows in a list.
+     One height for all three squares them up and, more than that, makes them
+     the same shape as each other, which is most of what looks deliberate. */
+  display: flex;
+  flex-direction: column;
+  min-block-size: 148px;
+  padding: 16px;
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
   box-shadow: 0 1px 3px rgba(20, 40, 80, .07), 0 12px 28px rgba(20, 40, 80, .1);
@@ -889,28 +909,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t:hover::before { transform: scaleX(1); }
 
 /* This page's own arrangement, not the source's. Three identical bars flush
-   in a stack read as a default. These step off each other — left, right,
-   left — and tuck under each other rather than sitting in a gapped column,
-   so the three read as one thing somebody laid out.
+   in a stack read as a default; these step off each other — left, right,
+   left — so the column reads as something somebody set.
 
    Each tile is narrower than the column by the whole step, so the zigzag
-   happens inside the grid instead of pushing out of it. Set with align-self
-   rather than a translate, because the hover lift is a translate and the two
-   would fight over the property. */
-.hkit-t { inline-size: 84%; }
+   happens inside the grid instead of pushing out of it, and the one that
+   sits right still lands on the shell's edge. Set with align-self rather
+   than a translate, because the hover lift is a translate and the two would
+   fight over the property. */
+.hkit-t { inline-size: 76%; }
 .hkit-t:nth-child(odd) { align-self: flex-start; }
 .hkit-t:nth-child(even) { align-self: flex-end; }
 
-/* The overlap. Each tile is laid over the one above it, so its own shadow
-   falls on that one and the three read as sheets on a desk rather than as
-   rows in a list — which is the whole difference between an arrangement and
-   a stack. The tiles being overlapped carry the extra bottom padding, so
-   what the next one covers is empty margin and never a line of content. */
-.hkit-t:not(:last-child) { padding-block-end: 27px; }
-.hkit-t + .hkit-t { margin-block-start: -15px; }
-.hkit-t:nth-child(1) { z-index: 1; }
-.hkit-t:nth-child(2) { z-index: 2; }
-.hkit-t:nth-child(3) { z-index: 3; }
+/* Each tile's one piece of content takes the height the floor gives it, so
+   the extra room goes into the drawing rather than sitting under it as an
+   empty band. That is `flex: 1` on the three blocks below, declared in their
+   own rules rather than here — written here they would sit above the rules
+   they override and lose to them on order. */
 
 .hkit-label {
   font-size: 8.5px;
@@ -929,11 +944,14 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    machine being told what to build. */
 .ai-prompt {
   display: flex;
-  align-items: flex-start;
+  /* the field takes the tile's spare height and centres what is in it: a
+     prompt is a place you write into, and a tall one says so */
+  flex: 1;
+  align-items: center;
   gap: 8px;
   overflow: hidden;
   margin-top: 9px;
-  padding: 9px;
+  padding: 9px 10px;
   border-radius: var(--r);
   box-shadow: inset 0 0 0 1.5px var(--border);
 }
@@ -980,14 +998,14 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    Three layouts, each with its own nav rail and its own arrangement under it,
    and the green ring visits each in turn — the machine hands over choices and
    somebody still has to make the choice. */
-.ai-vars { display: flex; gap: 7px; margin-top: 9px; }
+.ai-vars { display: flex; flex: 1; gap: 7px; margin-top: 9px; }
 .ai-vars li {
   position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  block-size: 56px;
+  /* the options fill the row rather than sitting at a fixed 56px in it */
   padding: 5px;
   border-radius: var(--r);
   background: #f4f6fa;
@@ -1032,7 +1050,16 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    Three verdicts, not one: a line kept, a line adjusted, a line refused. The
    page's own FAQ puts it exactly there — what a website turns out to be comes
    down to the team reviewing it, and what they refuse to let through. */
-.ai-pass { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+.ai-pass {
+  display: flex;
+  flex-direction: column;
+  /* the three verdicts spread over the tile's height instead of bunching at
+     the top of it */
+  flex: 1;
+  justify-content: space-between;
+  gap: 7px;
+  margin-top: 10px;
+}
 .ai-pass li { display: flex; align-items: center; gap: 9px; }
 .ai-pass span {
   flex: none;
@@ -1066,7 +1093,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    stop leaving it room to hold its two lines. */
 @media (max-width: 1060px) {
   .ai-hero { grid-template-columns: 1fr; gap: 36px; }
-  .hkit { max-width: 340px; }
 }
 
 /* The reference sizes its hero to hold a headline, a paragraph, a credentials
