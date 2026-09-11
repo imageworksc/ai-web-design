@@ -272,29 +272,32 @@ a { color: inherit; }
 .lead em { font-style: italic; }
 .band--cta .lead { color: rgba(226, 238, 252, .82); }
 .band--cta .lead strong { color: #fff; }
-/* A marker stroke drawn under each promise, one after the next, the first
+/* A line drawn under each of the four terms, one after the next, the first
    time the section is read. Painted as a background so it survives a line
-   break instead of leaving a floating box behind the text. */
+   break instead of leaving a floating box behind the text.
+
+   A line, not a marker stroke, and the words are not bold. They were both —
+   a .34em wash of green under 700-weight navy — and four of those in one
+   sentence is what the sentence looked like to the client: heavy, and
+   done by a machine. One device is enough, and the thin one is the one that
+   still reads as a sentence with four things pointed out in it. */
 .hl {
   color: var(--navy);
-  font-weight: 700;
-  /* the inline box is only about 1.25em tall, so it needs padding below the
-     baseline for the stroke to sit under the text instead of through it */
-  padding: 0 .06em .16em;
-  background-image: linear-gradient(rgba(128, 195, 74, .42), rgba(128, 195, 74, .42));
+  padding: 0 .02em .1em;
+  background-image: linear-gradient(var(--green), var(--green));
   background-repeat: no-repeat;
   background-position: 0 100%;
-  background-size: 0 .34em;
+  background-size: 0 2px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   transition: background-size .75s var(--ease);
   transition-delay: calc(var(--i) * .24s + .3s);
 }
-.is-revealed .hl { background-size: 100% .34em; }
+.is-revealed .hl { background-size: 100% 2px; }
 
 /* Without the reveal script there is nothing to trigger the sweep, so the
-   strokes are simply there from the start. */
-html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
+   lines are simply there from the start. */
+html:not([data-anim="on"]) .hl { background-size: 100% 2px; }
 
 /* --------------------------------------------------------------------------
    BUTTONS AND LINKS
@@ -766,8 +769,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .cms-row::after { display: none; }
   .cms-row:hover .cms-icon { transform: none; }
   .cms-row:hover .cms-body dt { transform: none; }
-  /* the strokes stay, they just stop being drawn */
-  .hl { background-size: 100% .34em; transition: none; }
+  /* the lines stay, they just stop being drawn */
+  .hl { background-size: 100% 2px; transition: none; }
 }
 
 @media print {
@@ -825,13 +828,14 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* --------------------------------------------------------------------------
    HERO
-   A narrow column of parts sits beside the copy: the prompt, the variants it
-   comes back with, and the pass a person makes over them — the three beats
-   this page is about, and the reason the tiles are not the typeface, palette
-   and component ones the branding and web-design pages use.
+   One tile beside the copy: the same page twice, grey until somebody works
+   on it and in colour once somebody has, and the label says which one you
+   are looking at. It used to be four — the prompt, the variants it comes
+   back with, the pass — and the client did not follow it. This is the one
+   beat a visitor gets without being told: AI made it, a person made it good.
 
-   The graphic is held to a fixed 230-290px and the copy takes everything
-   left; below 1000px the graphic drops under the copy instead.
+   The graphic column is flush to the shell's right edge; below 1060px it
+   drops under the copy instead.
    -------------------------------------------------------------------------- */
 .ai-hero {
   display: grid;
@@ -847,39 +851,19 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   width: 100%;
 }
 
-/* Two columns, not one: the prompt and the variants stack on the left, and
-   the pass sits to their right, centred on the line between them. Held to
-   less than the grid column it is in and sitting at that column's left edge,
-   so the arrangement stays where it is put rather than growing into the room
-   the wider column gives it. */
-.hkit {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  /* The pair on the right is taller than the two on the left, and the extra
-     has to land somewhere. Left to `auto auto` it was split between the rows,
-     which left slack under the prompt: it sat at the top of a row taller than
-     it, so its gap down to the variants came out 34px against the 18 across
-     to the layout. The first row is its content and the second takes the
-     difference, so both of the prompt's gaps are the one grid gap. */
-  grid-template-rows: auto 1fr;
-  gap: 18px;
-  inline-size: min(100%, 490px);
-}
+/* held to the column, and to a ceiling below it, so it does not run away on
+   a wide screen */
+.hkit { inline-size: min(100%, 490px); }
 
 /* ---- the shared tile, as the source builds it ---- */
 .hkit-t {
   position: relative;
   overflow: hidden;
-  /* A column, and a floor under it. The tiles were three different flat
-     rectangles — 2.25, 2.0 and 1.9 wide to tall — and read as rows in a list.
-     One height for all three makes them the same shape as each other, which
-     is most of what looks deliberate; the floor sets what that shape is.
-     It cannot go under about 124px without the tallest tile's own content
-     pushing past it, and then the three stop matching. */
   display: flex;
   flex-direction: column;
-  min-block-size: 130px;
-  padding: 16px;
+  /* the one tile is the whole graphic now, so it carries a hero's padding
+     and a label a hero can read from across the room */
+  padding: clamp(18px, 2vw, 26px);
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
   box-shadow: 0 1px 3px rgba(20, 40, 80, .07), 0 12px 28px rgba(20, 40, 80, .1);
@@ -903,34 +887,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .hkit-t:hover::before { transform: scaleX(1); }
 
-/* This page's own arrangement, not the source's. Tiles flush in a stack read
-   as a default; two beside two, with the right-hand pair held at the height
-   between them, reads as something somebody set.
-
-   Only the right column is placed. The other two flow into what is left,
-   which is the left column top and bottom, so a single rule undoes the whole
-   thing where the arrangement has to fold. */
-.hkit-col {
-  grid-column: 2;
-  grid-row: 1 / 3;
-  display: flex;
-  flex-direction: column;
-  /* the pair is shorter than the two tiles beside it, and sits centred on
-     them rather than hanging from the top — which is what puts the odd one
-     out at the height between */
-  justify-content: center;
-  gap: 18px;
-  min-inline-size: 0;
-}
-
-/* Each tile's one piece of content takes the height the floor gives it, so
-   the extra room goes into the drawing rather than sitting under it as an
-   empty band. That is `flex: 1` on the three blocks below, declared in their
-   own rules rather than here — written here they would sit above the rules
-   they override and lose to them on order. */
-
 .hkit-label {
-  font-size: 8.5px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: .18em;
   text-transform: uppercase;
@@ -939,171 +897,10 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .hkit-t:hover .hkit-label { color: var(--navy); }
 
-/* ---- 1 · the prompt going in ----
-   Two lines of instruction typing themselves out in turn, a caret that keeps
-   blinking after the second, and the send beside them. Nothing on the
-   branding or web-design pages has one, because neither of them is about a
-   machine being told what to build. */
-.ai-prompt {
-  display: flex;
-  /* the field takes the tile's spare height and centres what is in it: a
-     prompt is a place you write into, and a tall one says so */
-  flex: 1;
-  align-items: center;
-  gap: 8px;
-  overflow: hidden;
-  margin-top: 9px;
-  padding: 9px 10px;
-  border-radius: var(--r);
-  box-shadow: inset 0 0 0 1.5px var(--border);
-}
-.ai-prompt__mark { flex: none; display: grid; place-items: center; block-size: 14px; color: var(--green-ink); }
-.ai-prompt__mark svg { inline-size: 14px; block-size: 14px; }
-.ai-prompt__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; padding-top: 4px; }
-.ai-prompt__row { display: flex; align-items: center; gap: 3px; }
-.ai-prompt__line {
-  block-size: 5px;
-  border-radius: 2px;
-  background: #cbd5e4;
-  inline-size: 0;
-  animation: aiType 13s var(--ease) infinite;
-}
-/* the second line only starts once the first has run */
-.ai-prompt__line--2 { animation-delay: 1.7s; background: #d7dfea; }
-.ai-prompt__caret {
-  flex: none;
-  inline-size: 1.5px;
-  block-size: 11px;
-  background: var(--blue);
-  animation: aiCaret 1.1s steps(2, start) infinite;
-}
-/* the send, which is the only thing in the field that is a control */
-.ai-prompt__send {
-  flex: none;
-  display: grid;
-  place-items: center;
-  inline-size: 20px;
-  block-size: 20px;
-  border-radius: var(--r);
-  background: var(--green);
-  color: #fff;
-}
-.ai-prompt__send svg { inline-size: 11px; block-size: 11px; }
-@keyframes aiType {
-  0%        { inline-size: 0; }
-  32%, 76%  { inline-size: 100%; }
-  96%, 100% { inline-size: 0; }
-}
-@keyframes aiCaret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-
-/* ---- 2 · what it returns: options, not an answer ----
-   Three layouts, each with its own nav rail and its own arrangement under it,
-   and the green ring visits each in turn — the machine hands over choices and
-   somebody still has to make the choice. */
-.ai-vars { display: flex; flex: 1; gap: 7px; margin-top: 9px; }
-.ai-vars li {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  /* the options fill the row rather than sitting at a fixed 56px in it */
-  padding: 5px;
-  border-radius: var(--r);
-  background: #f4f6fa;
-  box-shadow: inset 0 0 0 1px var(--border-soft);
-}
-/* every option is a page, so every option gets a nav */
-.ai-vars li b {
-  display: block;
-  block-size: 4px;
-  border-radius: 1px;
-  background: #b6c4d6;
-}
-.ai-vars li i { display: block; border-radius: 1px; background: #ccd5e2; }
-.ai-vars__set { display: flex; flex-direction: column; gap: 4px; flex: 1; min-block-size: 0; }
-/* each option is laid out differently, or they are not options */
-.ai-vars li:nth-child(1) i:nth-child(1) { block-size: 11px; }
-.ai-vars li:nth-child(1) i:nth-child(2) { flex: 1; }
-.ai-vars li:nth-child(1) i:nth-child(3) { block-size: 5px; inline-size: 70%; }
-.ai-vars li:nth-child(2) .ai-vars__set { flex-direction: row; }
-.ai-vars li:nth-child(2) i:nth-child(1) { inline-size: 11px; }
-.ai-vars li:nth-child(2) i:nth-child(2) { flex: 1; }
-.ai-vars li:nth-child(2) i:nth-child(3) { display: none; }
-/* the third puts its weight at the foot, or it reads as the first one again */
-.ai-vars li:nth-child(3) i:nth-child(1) { block-size: 5px; inline-size: 62%; }
-.ai-vars li:nth-child(3) i:nth-child(2) { block-size: 5px; }
-.ai-vars li:nth-child(3) i:nth-child(3) { flex: 1; }
-
-.ai-vars li::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 3px;
-  box-shadow: 0 0 0 1.5px var(--green);
-  opacity: 0;
-  animation: aiPick 12s var(--ease) infinite;
-}
-.ai-vars li:nth-child(2)::after { animation-delay: -8s; }
-.ai-vars li:nth-child(3)::after { animation-delay: -4s; }
-@keyframes aiPick { 0% { opacity: 0; } 3%, 27% { opacity: 1; } 31%, 100% { opacity: 0; } }
-
-/* ---- 3 · the pass a person makes over it ----
-   Three verdicts, not one: a line kept, a line adjusted, a line refused. The
-   page's own FAQ puts it exactly there — what a website turns out to be comes
-   down to the team reviewing it, and what they refuse to let through. */
-.ai-pass {
-  display: flex;
-  flex-direction: column;
-  /* the three verdicts spread over the tile's height instead of bunching at
-     the top of it */
-  flex: 1;
-  justify-content: space-between;
-  gap: 7px;
-  margin-top: 10px;
-}
-.ai-pass li { display: flex; align-items: center; gap: 9px; }
-.ai-pass span {
-  flex: none;
-  display: grid;
-  place-items: center;
-  inline-size: 18px;
-  block-size: 18px;
-  border-radius: 50%;
-}
-.ai-pass span svg { inline-size: 10px; block-size: 10px; }
-.ai-pass i { display: block; block-size: 5px; border-radius: 2px; }
-.ai-pass .is-yes span { background: var(--tint-green); color: var(--green-ink); }
-.ai-pass .is-yes i { inline-size: 80%; background: #bfcbdb; }
-.ai-pass .is-edit span { background: var(--tint-blue); color: var(--blue); }
-.ai-pass .is-edit i { inline-size: 62%; background: #cbd5e4; }
-.ai-pass .is-no span { background: var(--danger-soft); color: var(--danger-ink); }
-.ai-pass .is-no i { inline-size: 44%; background: #dfe5ee; }
-
-/* ---- 4 · the pass itself, as one gesture ----
-   The same layout twice: grey until somebody works on it, and in colour once
-   somebody has. The structure is the part a first pass gets right — it is
-   there in both states — and what changes is everything type and colour do,
-   which is the argument this page spends the rest of its length making.
-
-   Hover is the whole tile, so on a touch screen, where there is no hover, it
-   runs on its own the way the prompt and the variants above it do. */
-/* The small one of the four. It is a size and nothing else — the hover the
-   layout tile carries hangs off --shot, so the two can be moved between
-   tiles independently. Small in both directions: at the column's full width
-   it is a short wide strip, and a strip is short, not small. */
-.hkit-t--sm {
-  min-block-size: 0;
-  inline-size: 68%;
-  /* One of these lands depending on which container the tile is in, and only
-     one small tile is in each. In the pair on the right, a flex column, the
-     cross axis is the horizontal one, so align-self puts the pass tile on the
-     left of it. In the grid on the left it is the vertical one, so the same
-     declaration only pins the prompt to the top of its row and justify-self
-     is what sets its side: right, against the column's own edge. */
-  align-self: flex-start;
-  justify-self: end;
-}
+/* ---- the pass, as one gesture ----
+   The structure is identical in both states — it is the part a first pass
+   gets right — and what the hover adds is everything type and colour do,
+   which is the argument this page spends the rest of its length making. */
 /* The word for the state you are looking at. Both are in the flow of the
    label's own line — one absolutely over the other — so the box does not
    change height as they cross. */
@@ -1123,14 +920,19 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t--shot:hover .ai-swap b,
 .hkit-t--shot:focus-within .ai-swap b { opacity: 1; }
 
-/* The grey state is the greys the variants tile above is drawn in — a light
-   panel with a hairline, not the finished picture with the colour taken out
-   of it, which is a dark box and reads as a different thing rather than as
-   the same thing unfinished. */
+/* The grey state is light — a panel with a hairline, in the greys the rest
+   of the page draws its placeholders in — not the finished picture with the
+   colour taken out, which is a dark box and reads as a different thing
+   rather than as the same thing unfinished.
+
+   A container, so the page drawn inside it is sized against it and the whole
+   thing scales with the column instead of staying at the size it was drawn
+   at when it was one tile of four. */
 .ai-shot {
   position: relative;
-  margin-top: 9px;
-  aspect-ratio: 5 / 2;
+  container-type: inline-size;
+  margin-top: clamp(10px, 1.2vw, 14px);
+  aspect-ratio: 16 / 10;
   border-radius: var(--r);
   overflow: hidden;
   background: #f4f6fa;
@@ -1161,19 +963,19 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   left: 50%;
   top: 50%;
   translate: -50% -50%;
-  inline-size: 46%;
+  inline-size: 54%;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 5px;
+  gap: 1.6cqw;
+  padding: 2.6cqw;
   border-radius: 2px;
   background: var(--white);
   /* barely lifted on the light panel, properly lifted on the dark one */
-  box-shadow: 0 2px 6px rgba(20, 40, 80, .10);
+  box-shadow: 0 2px 8px rgba(20, 40, 80, .10);
   transition: box-shadow .55s var(--ease);
 }
 .hkit-t--shot:hover .ai-shot__sheet,
-.hkit-t--shot:focus-within .ai-shot__sheet { box-shadow: 0 6px 16px rgba(6, 22, 44, .38); }
+.hkit-t--shot:focus-within .ai-shot__sheet { box-shadow: 0 3cqw 7cqw rgba(6, 22, 44, .38); }
 
 /* The draft carries fewer marks than the finished page, so the hover has
    something to add and not only something to paint. The brand bar is not
@@ -1184,22 +986,22 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .ai-shot i { display: block; border-radius: 1px; flex: none; transition: background-color .55s var(--ease); }
 .ai-shot__nav {
   inline-size: 32%;
-  block-size: 3px;
+  block-size: 1.2cqw;
   background: #b6c4d6;
   opacity: 0;
   transition: background-color .55s var(--ease), opacity .55s var(--ease);
 }
-.ai-shot__h { inline-size: 78%; block-size: 5px; background: #ccd5e2; }
+.ai-shot__h { inline-size: 78%; block-size: 2.4cqw; background: #ccd5e2; }
 /* The slab is painted on the row itself and the three cards inside it are
    empty until the hover. Painted on the cards instead, three columns of 1fr
-   in a 49px row land on fractions of a pixel and the seams between them
+   in a narrow row land on fractions of a pixel and the seams between them
    showed — which is the block already reading as three things. */
 .ai-shot__tiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
-  block-size: 13px;
-  margin-top: 1px;
+  block-size: 13cqw;
+  margin-top: .4cqw;
   border-radius: 1px;
   background: #ccd5e2;
   transition: gap .55s var(--ease), background-color .55s var(--ease);
@@ -1211,7 +1013,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t--shot:hover .ai-shot__nav,
 .hkit-t--shot:focus-within .ai-shot__nav { background: var(--green); opacity: 1; }
 .hkit-t--shot:hover .ai-shot__tiles,
-.hkit-t--shot:focus-within .ai-shot__tiles { gap: 3px; background: transparent; }
+.hkit-t--shot:focus-within .ai-shot__tiles { gap: 1.3cqw; background: transparent; }
 .hkit-t--shot:hover .ai-shot__h,
 .hkit-t--shot:focus-within .ai-shot__h { background: #4b7fb4; }
 .hkit-t--shot:hover .ai-shot__tiles i:nth-child(1),
@@ -1222,10 +1024,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .hkit-t--shot:focus-within .ai-shot__tiles i:nth-child(3) { background: #b3c7dd; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ai-prompt__line { animation: none; inline-size: 100%; }
-  .ai-prompt__caret { animation: none; }
-  .ai-vars li::after { animation: none; }
-  .ai-vars li:nth-child(2)::after { opacity: 1; }
   /* the swap still happens on hover, it just happens at once */
   .ai-swap span,
   .ai-swap b,
@@ -1245,9 +1043,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .ai-swap b { opacity: 1; }
   .ai-shot { box-shadow: inset 0 0 0 1px transparent; }
   .ai-shot::before { opacity: 1; }
-  .ai-shot__sheet { box-shadow: 0 6px 16px rgba(6, 22, 44, .38); }
+  .ai-shot__sheet { box-shadow: 0 3cqw 7cqw rgba(6, 22, 44, .38); }
   .ai-shot__nav { background: var(--green); opacity: 1; }
-  .ai-shot__tiles { gap: 3px; background: transparent; }
+  .ai-shot__tiles { gap: 1.3cqw; background: transparent; }
   .ai-shot__h { background: #4b7fb4; }
   .ai-shot__tiles i:nth-child(1) { background: #d5edbc; }
   .ai-shot__tiles i:nth-child(2) { background: #c3dcf3; }
@@ -1264,15 +1062,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   .ai-hero { grid-template-columns: 1fr; gap: 36px; }
 }
 
-/* Below the width two tiles side by side can carry what is drawn in them,
-   the arrangement folds back to one column. Undoing the third tile's
-   placement is all it takes, because the other two were never placed. */
-@media (max-width: 620px) {
-  /* narrower than the room, so folding does not undo the shape: at the full
-     300px they went back to being the flat rectangles this was fixing */
-  .hkit { grid-template-columns: minmax(0, 1fr); inline-size: min(100%, 240px); }
-  .hkit-col { grid-column: 1; grid-row: auto; }
-}
 
 /* The reference sizes its hero to hold a headline, a paragraph, a credentials
    pane and two buttons. With the pane and the graphic both gone this one has
@@ -1305,9 +1094,11 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .answer-card {
   display: flex;
   flex-direction: column;
-  max-width: 820px;
+  /* wider again — at 820 it read as a note in the middle of the band rather
+     than as the band's own statement */
+  max-width: 980px;
   margin-inline: auto;
-  padding: clamp(26px, 3vw, 38px);
+  padding: clamp(28px, 3.4vw, 48px) clamp(28px, 3.6vw, 52px);
   border-radius: var(--r);
   border-top: 3px solid var(--blue);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
@@ -1324,8 +1115,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .answer-card__title em { font-style: normal; color: var(--green-ink); }
 
-/* Set in body ink rather than navy: the four marked terms are navy and bold,
-   and they only stand out from the sentence if the sentence is not. */
+/* Set in body ink rather than navy: the four marked terms are navy, and they
+   only stand out from the sentence if the sentence is not. */
 .answer-card__def {
   font-size: 18px;
   font-weight: 500;
@@ -1353,7 +1144,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 
 /* the link lines up with the card's left edge rather than the band's */
-.answer-more { max-width: 820px; margin: 22px auto 0; }
+.answer-more { max-width: 980px; margin: 22px auto 0; }
 
 /* --------------------------------------------------------------------------
    BEFORE / AFTER — one window, wiped
@@ -2140,7 +1931,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    sits on the tint band, not on white — the relationship between strip, live
    tab and panel is what makes the thing read, and that relationship is kept.
    -------------------------------------------------------------------------- */
-.steps { width: 100%; margin-top: 34px; }
+/* More room all through, at the client's word: the component was right and it
+   was tight. The gaps below are the old ones up by about a third. */
+.steps { width: 100%; margin-top: 48px; }
 
 .steps-tabs {
   position: relative;
@@ -2156,8 +1949,8 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   position: relative;
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 18px 22px;
+  gap: 14px;
+  padding: 22px 26px;
   border: 0;
   border-right: 1px solid #e0e7f0;
   background: transparent;
@@ -2257,23 +2050,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   background: var(--white);
   box-shadow: 0 1px 2px rgba(20, 40, 80, .05), 0 10px 30px rgba(20, 40, 80, .06);
 }
-.steps-panel { padding: clamp(30px, 3.2vw, 46px) clamp(24px, 3vw, 44px) clamp(32px, 3.4vw, 48px); }
+.steps-panel { padding: clamp(40px, 4.4vw, 64px) clamp(32px, 4vw, 60px) clamp(44px, 4.6vw, 66px); }
 /* the box is as tall as the longest step, so shorter ones would sit high and
    leave a hole underneath — both columns centre in the space instead */
 .steps-copy, .steps-out { display: flex; flex-direction: column; justify-content: center; }
 .steps-title {
-  margin: 0 0 18px;
+  margin: 0 0 22px;
   font-size: clamp(24px, 1.5vw + 18px, 30px);
   line-height: 1.22;
   letter-spacing: -.5px;
   text-wrap: balance;
 }
 .steps-body { font-size: 18px; line-height: 1.7; color: var(--muted); }
-.steps-body + .steps-body { margin-top: 14px; }
+.steps-body + .steps-body { margin-top: 18px; }
 
 /* what the step hands over, set behind a rule so it hangs off the story.
    Green on purpose: blue is the step you are on, green is what it delivers. */
-.steps-out { border-left: 1px solid #eaeff6; padding-left: clamp(24px, 2.8vw, 40px); }
+.steps-out { border-left: 1px solid #eaeff6; padding-left: clamp(30px, 3.4vw, 52px); }
 .steps-out::before {
   content: "What you get";
   display: block;
@@ -2282,14 +2075,14 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--green-ink);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
-.steps-list { display: grid; gap: 10px; }
+.steps-list { display: grid; gap: 12px; }
 .steps-list li {
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 12px 14px;
+  gap: 14px;
+  padding: 14px 16px;
   border: 1px solid #e9eef4;
   border-radius: 12px;
   background: #fbfcfe;
@@ -2330,7 +2123,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   grid-area: 1 / 1;
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
-  gap: clamp(30px, 3.8vw, 56px);
+  gap: clamp(40px, 5vw, 76px);
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
@@ -2353,7 +2146,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .plate {
   width: 100%;
   max-width: 780px;
-  margin-top: 14px;
+  margin-top: 30px;
   padding: 4px 0 4px clamp(20px, 2vw, 28px);
   border-left: 3px solid var(--green);
 }
@@ -2374,42 +2167,41 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* --------------------------------------------------------------------------
    SPEC ROWS — what a page costs is the time it takes
-   The shared system's service list, with the hours brought out to the right
-   as the figure the row is really about.
+   The shared system's service list, with the hours off to the right of each
+   row. Off to the right and quiet: they were a 22px figure over an uppercase
+   label, which is a statistic being announced, and the client does not want
+   the hours announced — read, but not announced. The row is about the kind
+   of page; the hours are a note on it.
    -------------------------------------------------------------------------- */
 .spec-row { align-items: center; }
 .spec-body { flex: 1; }
+/* The titles without the weight the shared list gives them. At 800 the eye
+   went to the three names and not to what they say; at 500 and one size up
+   from the copy they are still the first thing read, by colour and by
+   position, without being the loudest. */
+.spec-body dt { font-size: 19px; font-weight: 500; }
+.spec-body dd { font-size: 16px; }
 .spec-hours {
   flex: none;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
   padding-left: 20px;
   margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+  color: var(--faint);
+  white-space: nowrap;
   text-align: right;
 }
-.spec-hours b {
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -.03em;
-  font-variant-numeric: tabular-nums;
-  color: var(--navy);
-  white-space: nowrap;
-}
-.spec-hours span {
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
+
+/* The call under the list, centred under it rather than hung off its left
+   edge, where it was reading as one more row. The shared rule above sets it
+   left; this one sits later and wins on order. */
+.quote-rail { justify-content: center; text-align: center; margin-top: 10px; padding-top: 26px; }
 
 @media (max-width: 560px) {
   .spec-row { flex-wrap: wrap; }
   .spec-hours {
-    align-items: flex-start;
     text-align: left;
     padding-left: 68px;
     margin-left: 0;
@@ -2534,31 +2326,25 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .price-turn h3 { font-size: clamp(20px, 1.1vw + 16px, 24px); letter-spacing: -.3px; }
 
 /* ---- what the one rate buys ----
-   Four tiles instead of four ruled rows. On the deep ground a hairline list
-   ran the full 1180 and read as thin; tiles give the team the same weight the
-   figure beside it has. Each takes the green rule the page wipes under every
-   other card. */
+   One panel with four parts, not four cards. As four bordered tiles with a
+   gap between them they read as four separate offers, and the point of the
+   line above them is that the rate buys the whole team at once. The border,
+   the ground and the green rule belong to the panel; the parts are divided
+   by hairlines inside it and nothing lifts on its own. */
 .team {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  width: 100%;
-  margin-top: 4px;
-}
-.team-tile {
   position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  padding: clamp(22px, 2.2vw, 28px) clamp(20px, 2vw, 24px);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+  margin-top: 4px;
   border-radius: var(--r);
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, .06);
-  transition: transform .4s var(--ease), background-color .4s var(--ease);
+  transition: background-color .4s var(--ease);
 }
-.team-tile::before {
+.team::before {
   content: '';
   position: absolute;
   top: 0;
@@ -2569,10 +2355,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   transform-origin: left;
   transition: transform .45s var(--ease);
 }
-.team-tile:hover { transform: translateY(-4px); background: rgba(255, 255, 255, .10); }
-.team-tile:hover::before { transform: scaleX(1); }
+.team:hover { background: rgba(255, 255, 255, .10); }
+.team:hover::before { transform: scaleX(1); }
+.team-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: clamp(22px, 2.2vw, 28px) clamp(20px, 2vw, 24px);
+}
+.team-tile + .team-tile { border-left: 1px solid var(--border); }
 .team-tile .chip { transition: background-color .35s var(--ease); }
-.team-tile:hover .chip { background: var(--green); color: #14300a; }
+.team:hover .chip { background: var(--green); color: #14300a; }
 .team-tile h4 { font-size: 16.5px; font-weight: 800; letter-spacing: -.01em; line-height: 1.3; }
 .team-tile p { font-size: 14.5px; line-height: 1.6; color: var(--text, var(--muted)); }
 
@@ -2590,8 +2384,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .team-tile:nth-child(4) { --i: 3; }
 
 @media (prefers-reduced-motion: reduce) {
-  .team-tile { transition: none; }
-  .team-tile:hover { transform: none; }
+  .team, .team::before, .team-tile .chip { transition: none; }
 }
 
 /* The deep band re-points its tokens but never its own colour, so anything
@@ -2668,9 +2461,14 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 @media (max-width: 900px) {
   .price { grid-template-columns: 1fr; }
   .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* two-up, the hairlines follow: the third part starts a row, so it loses
+     its left rule and the second row takes a top one */
+  .team-tile:nth-child(3) { border-left: 0; }
+  .team-tile:nth-child(n+3) { border-top: 1px solid var(--border); }
 }
 @media (max-width: 560px) {
   .team { grid-template-columns: 1fr; }
+  .team-tile + .team-tile { border-left: 0; border-top: 1px solid var(--border); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -149,7 +149,7 @@
      holding a ten-minute-old stylesheet renders new markup against old rules
      — which looks like nothing changed, or worse, like the page is broken. A
      name it has never fetched cannot be answered from cache. -->
-<link rel="stylesheet" href="styles.css?v=38">
+<link rel="stylesheet" href="styles.css?v=39">
 </head>
 <body>
 
@@ -159,9 +159,6 @@
   <defs>
     <symbol id="i-check" viewBox="0 0 16 16">
       <path d="M3.6 8.4 6.4 11.2 12.4 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-    <symbol id="i-x" viewBox="0 0 16 16">
-      <path d="M4.7 4.7 11.3 11.3M11.3 4.7 4.7 11.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
     </symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24">
       <line x1="5" y1="12" x2="19" y2="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
@@ -289,61 +286,20 @@
         </div>
       </div>
 
-      <!-- The beats this page is about, and only this page: the machine is
-           told what to build, it returns options rather than an answer, the
-           work is checked at the width that catches a first pass out, and a
-           person decides what gets through. The typeface, palette and
-           component tiles belong to the branding and web-design pages;
-           repeating them here would say nothing about AI.
-
-           Two beside two: the prompt and the variants stack on the left, and
-           the sizes check and the pass sit to their right, held at the height
-           between them. Only the right column is placed; the other two flow
-           into what is left. -->
+      <!-- One tile, one gesture: the same page grey until somebody works on it
+           and in colour once somebody has, and the label says which of the two
+           you are looking at. It used to be four tiles telling the whole
+           workflow; the client did not follow it, and a visitor would not
+           either. This is the beat they get without being told. -->
       <div class="hkit" aria-hidden="true">
-        <div class="hkit-t hkit-t--sm">
-          <p class="hkit-label">Prompt</p>
-          <div class="ai-prompt">
-            <span class="ai-prompt__mark"><svg><use href="#i-spark"/></svg></span>
-            <span class="ai-prompt__body">
-              <span class="ai-prompt__line ai-prompt__line--1"></span>
-              <span class="ai-prompt__row">
-                <span class="ai-prompt__line ai-prompt__line--2"></span>
-                <i class="ai-prompt__caret"></i>
-              </span>
+        <div class="hkit-t hkit-t--shot">
+          <p class="hkit-label ai-swap"><span>AI Layout</span><b>Humanized</b></p>
+          <div class="ai-shot">
+            <span class="ai-shot__sheet">
+              <i class="ai-shot__nav"></i>
+              <i class="ai-shot__h"></i>
+              <span class="ai-shot__tiles"><i></i><i></i><i></i></span>
             </span>
-            <span class="ai-prompt__send"><svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </div>
-        <div class="hkit-t">
-          <p class="hkit-label">Variants</p>
-          <ul class="ai-vars">
-            <li><b></b><span class="ai-vars__set"><i></i><i></i><i></i></span></li>
-            <li><b></b><span class="ai-vars__set"><i></i><i></i><i></i></span></li>
-            <li><b></b><span class="ai-vars__set"><i></i><i></i><i></i></span></li>
-          </ul>
-        </div>
-        <div class="hkit-col">
-          <!-- The pass itself, as one gesture: the same layout in grey until
-               somebody works on it and in colour once somebody has, and the
-               label says which of the two you are looking at. -->
-          <div class="hkit-t hkit-t--shot">
-            <p class="hkit-label ai-swap"><span>AI Layout</span><b>Humanized</b></p>
-            <div class="ai-shot">
-              <span class="ai-shot__sheet">
-                <i class="ai-shot__nav"></i>
-                <i class="ai-shot__h"></i>
-                <span class="ai-shot__tiles"><i></i><i></i><i></i></span>
-              </span>
-            </div>
-          </div>
-          <div class="hkit-t hkit-t--sm">
-            <p class="hkit-label">Human pass</p>
-            <ul class="ai-pass">
-              <li class="is-yes"><span><svg><use href="#i-check"/></svg></span><i></i></li>
-              <li class="is-edit"><span><svg><use href="#i-sliders"/></svg></span><i></i></li>
-              <li class="is-no"><span><svg><use href="#i-x"/></svg></span><i></i></li>
-            </ul>
           </div>
         </div>
       </div>
@@ -636,7 +592,7 @@
               <dt>Simple AI-assisted pages</dt>
               <dd>Little or no customization needed — the design system does the work.</dd>
             </div>
-            <span class="spec-hours"><b>1–2</b><span>Hours</span></span>
+            <span class="spec-hours">1–2 hours</span>
           </div>
           <div class="cms-row spec-row">
             <span class="cms-icon"><svg aria-hidden="true"><use href="#i-layers"/></svg></span>
@@ -644,7 +600,7 @@
               <dt>More refined pages</dt>
               <dd>More time for stronger design, content, UX, or functionality.</dd>
             </div>
-            <span class="spec-hours"><b>Varies</b><span>Hours</span></span>
+            <span class="spec-hours">Varies</span>
           </div>
           <div class="cms-row spec-row">
             <span class="cms-icon"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>
@@ -652,7 +608,7 @@
               <dt>Highly customized pages</dt>
               <dd>Substantial custom creative or development involved.</dd>
             </div>
-            <span class="spec-hours"><b>10–15+</b><span>Hours</span></span>
+            <span class="spec-hours">10–15+ hours</span>
           </div>
         </dl>
 
@@ -678,11 +634,11 @@
           <span class="platform-icon"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>
           <div class="platform-name">
             <p class="platform-badge">Smaller websites</p>
-            <!-- TODO: replace with the stack name once it is decided. -->
-            <h3>[Stack name]</h3>
+            <!-- Named for what it is, which is what this page is built on. -->
+            <h3>Static HTML, CSS &amp; JavaScript</h3>
           </div>
           <div class="platform-copy">
-            <p>For smaller websites, we can deploy on a fast, modern AI-friendly stack that keeps things simple and efficient.</p>
+            <p>For smaller websites, we deploy plain HTML, CSS and JavaScript as static files — no framework, no database, nothing to patch. It's the fastest thing a browser can load, and it's what this page is built on.</p>
           </div>
         </div>
         <div class="platform-half platform-half--large">
@@ -710,8 +666,8 @@
 
       <div class="price">
         <div class="price-copy">
-          <p class="lead">There is no honest package price for a website before we understand it. So we work at a single team rate of <strong>$175 per hour</strong> — and the total comes down to how much website you actually need.</p>
-          <p class="lead">A simple AI-assisted site can be built very efficiently and kept affordable. If you want the best site in your industry, we can keep pushing the strategy, design, content, animation, and functionality as far as the project needs to go. <strong>What it costs depends entirely on how far you take it.</strong></p>
+          <p class="lead">There is no honest package price for a website before we understand it. So we work at a single team rate of $175 per hour — and the total comes down to how much website you actually need.</p>
+          <p class="lead">A simple AI-assisted site can be built very efficiently and kept affordable. If you want the best site in your industry, we can keep pushing the strategy, design, content, animation, and functionality as far as the project needs to go. What it costs depends entirely on how far you take it.</p>
         </div>
 
         <div class="rate">
@@ -817,6 +773,6 @@
 
 </main>
 
-<script src="script.js?v=38" defer></script>
+<script src="script.js?v=39" defer></script>
 </body>
 </html>
